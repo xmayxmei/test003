@@ -1,0 +1,302 @@
+import win.ui;
+import win.ui.menu;
+import win.ui.atom;
+import win.ui.minmax;
+import win.util.tray;
+import win.reg;
+import fsys.lnk;
+/*DSG{{*/
+mainForm = ..win.form(text="喝水闹钟，定时提醒您该喝水啦。";right=464;bottom=216;image=$"\res\drink2.jpg";border="thin";max=false;topmost=1)
+mainForm.add(
+button={cls="button";text="我马上喝";left=160;top=176;right=248;bottom=206;z=2};
+button2={cls="button";text="今天别烦我";left=368;top=176;right=456;bottom=206;z=3};
+button3={cls="button";text="5分钟后提醒我";left=262;top=176;right=354;bottom=206;z=4};
+text1={cls="static";left=160;top=8;right=472;bottom=48;font=LOGFONT( h=-32 );notify=1;transparent=1;z=1};
+text2={cls="static";left=160;top=64;right=480;bottom=104;font=LOGFONT( h=-27 );transparent=1;z=5}
+)
+/*}}*/
+
+var atom,hwnd = mainForm.atom("D443D5F9-EC78-4276-9FEE-677B564DB9D2");
+if(!atom){ //重复打开激活
+    win.show(hwnd, true);
+    win.setForeground(hwnd);
+    win.quitMessage();
+    return;
+}
+
+import config;
+mainForm.bindConfig( config.user,{
+	remdTimeTab = {"7:30";"8:30";"9:30";"11:00";"12:50";"14:00";"16:00";"17:00";"19:30";"22:00"};
+	remdAmtTab = {"150";"200";"200";"200";"150";"200";"200";"200";"150";"150"};
+} );
+var isTaskOpen = true;//全局开关
+var isShowRemdWin = true;//显示窗口
+var isAlertTime = false;//时间到
+var remdTimeTab = {"7:50";"8:00";"8:05";"8:10";"12:50";"14:00";"16:00";"17:04";"19:30";"24:00"};//10次
+var remdAmtTab = {"150";"200";"200";"200";"150";"200";"200";"200";"150";"150"};//1800ml
+var remdIntv = 5;//延迟提醒时间间隔
+var remdTimes = 0;//延迟提醒次数
+var nowRemdTimes = 0;//当前已延迟提醒次数
+var remdedTimes = 0;//当天已提醒次数
+var curId=1;//现在提醒哪一个时间？
+var nextTimeDist = 0;//距离下次喝水时间
+var nameStr = "喝水闹钟";//
+var titlRemdStr = "^_^亲，该喝水啦！";
+//var currRemdStr;//建议喝水
+//var nextRemdStr;//下次喝水
+var currRemdStr = "{currTime},建议喝水{currAmt}ML";//建议喝水
+var nextRemdStr = "距离下次喝水还有{nextTimeDist}分钟";//下次喝水
+var restRemStr = "^_^亲，该休息啦！";
+var frmTitle = "喝水闹钟，定时提醒您该喝水啦。";
+var tray = null; //创建托盘图标
+//创建快捷方式
+var createLnk = function(){
+	var lnk = fsys.lnk(); 
+	lnk.description = frmTitle; 
+	
+	lnk.path = io._exepath //设置目标路径
+	lnk.setIcon(io._exepath,1); //设置图标
+	
+	lnk.save(
+		fsys.joinpath( 
+			fsys.getSpecial(0x0010 /*_CSIDL_DESKTOPDIRECTORY*/ )
+			,nameStr+".lnk" 
+			)
+	) 
+}
+
+//自动启动
+var regAutoRun = function(){
+	var reg = win.reg("HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run");
+	reg.setSzValue("Water Clock", io._exepath );
+	reg.close();
+}
+
+//查询第几次提醒，距离下一次提醒时间距离
+var getCurRemind = function(){
+	var curId = 1,nextTimeDist=0,isAlertTime=false;//时间到
+	var nowTime=time.now();
+	nowTime.format="%H:%M";
+	for(k,v in remdTimeTab){
+		var nextSetterTime = time(v,"%H:%M");
+		if(nowTime<=nextSetterTime){
+			curId = k;
+			if(nowTime ==nextSetterTime){
+				isAlertTime = true;
+			}else{
+				isAlertTime = false;
+			}
+			break ;
+		}
+	}
+	nextTimeDist = (tonumber(time(remdTimeTab[curId],"%H:%M")) -  tonumber(nowTime))/60;	
+	return curId,nextTimeDist,isAlertTime;
+}
+
+//查询是否提醒以及提醒语
+var getCurRemindInfo = function(){
+
+	var pcurrRemdStr = string.replace(currRemdStr,"@@{currTime}",remdTimeTab[curId]);//remdTimeTab[curId]+",建议喝水"+remdAmtTab[curId]+"ML";
+	var pnextRemdStr = string.replace(nextRemdStr,"@@{nextTimeDist}",tostring(nextTimeDist));//"距离下次喝水还有"+nextTimeDist+"分钟";//下次提醒内容
+	io.print(pcurrRemdStr);
+	if(nextTimeDist<0){
+		pnextRemdStr = restRemStr;//"^_^亲，该休息啦！";
+	}
+	return pcurrRemdStr,pnextRemdStr;
+}
+//创建托盘程序
+var createWinTray = function(tray,nextRemdStr,nameStr,nextRemdStr){
+	if(tray == null){
+		tray = win.util.tray(mainForm.hwnd);
+		tray.message = 0x400+9981/*_WM_TRAYMESSAGE*/
+		tray.tip = nextRemdStr //设置鼠标提示 
+		tray.pop(nextRemdStr,nameStr,2,0xFFFFFFFF);
+	}
+}
+
+//第一次运行
+createLnk();//创建快捷方式
+regAutoRun();//注册到自动启动
+
+
+RegisterWindowMessage := ::User32.api( "RegisterWindowMessageA", "Long(String lpString)");
+var msgTaskbarRestart = RegisterWindowMessage("taskbarcreated")
+
+
+
+//mainForm.text1.text = nextTime;
+
+
+mainForm.popmenu = win.ui.popmenu(mainForm);//创建弹出菜单
+mainForm.popmenu.add('&打开',function(id){
+	//在下面输入菜单响应代码
+	mainForm.show(true);	
+});
+mainForm.popmenu.add();//分隔线
+mainForm.popmenu.add('&退出',function(id){ mainForm.close() })
+
+mainForm.wndproc = function(hwnd,message,wParam,lParam){
+		
+        
+        select(message) {//判断消息类型
+                case msgTaskbarRestart/*任务栏重建*/{
+                        win.util.tray.Shell_NotifyIcon(0x2/*_NIM_DELETE*/,tray.m_tnd)
+                        win.util.tray.Shell_NotifyIcon(0x0/*_NIM_ADD*/,tray.m_tnd)
+                }
+                case 0x10/*_WM_CLOSE窗口关闭消息*/{
+                    //这里可以写窗口关闭时回调信息
+                    //::PostMessage(mainForm.hwnd, 0x112,0xF020, 0);
+    				//mainForm.show( false );
+    				//return false;
+    				if(tray != null){
+    					tray.delete();
+    				}
+                }
+                case (0x400+9981/*_WM_TRAYMESSAGE*/) { //托盘图标消息
+                		
+                    select(lparam){
+                    	
+                        case (0x203 ){//双击托盘图标打开窗口
+                               stat = win.isVisible(mainForm.hwnd);
+                                if(stat){
+                                    ::PostMessage(mainForm.hwnd, 0x112,0xF020, 0);
+                                    //最小化窗口 
+                                    mainForm.show(true);
+                                }else {
+                                    
+                                 }
+                                  ::PostMessage(mainForm.hwnd, 0x112, 0xF120, 0)；
+                                     //还原窗口
+                                     win.setForeground(mainForm.hwnd);
+                                     mainForm.show(true);
+                        }
+                        case (0x205/*_WM_RBUTTONUP*/){//单击鼠标右键弹出菜单
+                           io.open();
+                           io.print(lparam);
+	    					x,y = mouse.getPos();
+	    					
+	    					//弹出托盘菜单以前，一定要前置主窗口中，不然不点击菜单不会消失
+	    					win.setForeground(mainForm.hwnd)
+	    					mainForm.popmenu.popup( x,y,true );
+                        }
+                        case (0x0202){//单击鼠标左键前置窗口
+                            win.setForeground(mainForm.hwnd)
+                            
+                        }        
+                    }                                                  
+                } 
+                case( 0x112/*_WM_SYSCOMMAND*/ ){ //系统命令消息
+					if( wParam == 0xF020/*_SC_MINIMIZE*/ ){ //用户点击了最小化按钮
+            			mainForm.show(false); //隐藏窗口
+            			return true;//阻击默认消息传递，取消最小化过程
+					} 
+				}
+				
+        }
+        //无返回值则继续调用默认回调函数
+}
+
+
+/**
+全屏不提醒
+屏幕宽,高 = win.getScreen() // 屏幕宽度，高度
+左,上,宽,高 = win.getPos(窗口句柄)
+**/
+
+//喝了（马上喝）
+mainForm.button.oncommand = function(id,event){
+	//记录本次喝水时间
+	isShowRemdWin = false;
+	mainForm.show( isShowRemdWin );
+}
+
+//5分钟后再次提醒
+mainForm.button3.oncommand = function(id,event){
+	//mainForm.msgbox( mainForm.button3.text );
+	remdTimes++;//延迟提醒次数
+	isShowRemdWin = false;
+	mainForm.show( isShowRemdWin );
+	//mainForm.close();
+	
+}
+
+//今天别烦我（今天不会主动提醒）
+mainForm.button2.oncommand = function(id,event){
+	//mainForm.msgbox( mainForm.button2.text );
+	isTaskOpen = false;
+	isShowRemdWin = false;
+	mainForm.show( false );
+	//mainForm.close();
+	
+}
+
+mainForm.text1.oncommand = function(id,event){
+	//mainForm.msgbox( mainForm.text1.text );
+	
+	
+}
+//关闭时最小化
+/***
+mainForm.onClose = function(hwnd,message,wParam,lParam){
+	::PostMessage(mainForm.hwnd, 0x112,0xF020, 0);
+    mainForm.show( false );
+    return false;
+}***/
+
+/***
+import config;
+mainForm.bindConfig( config.mainForm,{
+	edit = "text"; //绑定edit控件的text属性值到配置文件
+	radiobutton = "checked";
+	checkbox = "checked";
+	combobox = "selIndex";
+} );
+***/
+
+
+
+//定时器，每分钟探测一次是否到时间点了。
+if(isTaskOpen){
+	var tmId = mainForm.addtimer( 
+    	1000,
+    	function(hwnd,msg,id,tick){
+        	//io.print(id,"开始")
+        	//win.delay(1000*60*5);
+        	
+        	curId,nextTimeDist,isAlertTime = getCurRemind();
+        	
+			//io.open();
+			//io.print(nextTimeDist);
+        	//nextTimeDist--;//下次提醒时间减一分钟
+        	//如果是同一天，如果当前时间和预设提醒时间相同，则提醒；如果不相同，静默运行，并不显示提醒信息。
+        	//如果不是同一天，预设的提醒时间列表初始化第一次，	
+        	currRemdStr,nextRemdStr = getCurRemindInfo();
+        	
+        	io.print(currRemdStr);
+        	io.print(nextRemdStr);
+        	
+        	createWinTray(tray,nextRemdStr,nameStr,nextRemdStr);
+			if(isAlertTime){
+				mainForm.text1.text=titlRemdStr;
+        		mainForm.text2.text=currRemdStr;
+        		tray.tip = currRemdStr ;
+        		win.setForeground(hwnd);
+        		//mainForm.button.disabled = 1 ;
+        		//mainForm.button2.disabled = 1 ;
+        		//mainForm.button3.disabled = 1 ;
+        	}else{
+        		mainForm.text1.text="";
+        		mainForm.text2.text=nextRemdStr;
+        		//tray.tip = nextRemdStr ;
+        		//mainForm.button.disabled = 0 ;
+        		//mainForm.button2.disabled = 0 ;
+        		//mainForm.button3.disabled = 0 ;
+        	}
+        	isShowRemdWin = true;
+        	mainForm.show( isShowRemdWin );//isShowRemdWin
+        	
+        	return 1000*60;
+    	} 
+	)
+}
+win.loopMessage(); 
