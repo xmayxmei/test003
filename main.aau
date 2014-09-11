@@ -74,7 +74,7 @@ var regAutoRun = function(){
 
 //查询第几次提醒，距离下一次提醒时间距离
 var getCurRemind = function(){
-	var curId = 1,nextTimeDist=0,isAlertTime=false;//时间到
+	curId = 1,nextTimeDist=0,isAlertTime=false;//时间到
 	var nowTime=time.now();
 	nowTime.format="%H:%M";
 	for(k,v in remdTimeTab){
@@ -90,19 +90,16 @@ var getCurRemind = function(){
 		}
 	}
 	nextTimeDist = (tonumber(time(remdTimeTab[curId],"%H:%M")) -  tonumber(nowTime))/60;	
-	return curId,nextTimeDist,isAlertTime;
 }
 
 //查询是否提醒以及提醒语
 var getCurRemindInfo = function(){
-
-	var pcurrRemdStr = string.replace(currRemdStr,"@@{currTime}",remdTimeTab[curId]);//remdTimeTab[curId]+",建议喝水"+remdAmtTab[curId]+"ML";
-	var pnextRemdStr = string.replace(nextRemdStr,"@@{nextTimeDist}",tostring(nextTimeDist));//"距离下次喝水还有"+nextTimeDist+"分钟";//下次提醒内容
-	io.print(pcurrRemdStr);
+	currRemdStr = string.replace(currRemdStr,"\{currTime\}",remdTimeTab[curId]);//remdTimeTab[curId]+",建议喝水"+remdAmtTab[curId]+"ML";
+	currRemdStr = string.replace(currRemdStr,"\{currAmt\}",remdAmtTab[curId]);//remdTimeTab[curId]+",建议喝水"+remdAmtTab[curId]+"ML";
+	nextRemdStr = string.replace(nextRemdStr,"\{nextTimeDist\}",tostring(nextTimeDist));//"距离下次喝水还有"+nextTimeDist+"分钟";//下次提醒内容
 	if(nextTimeDist<0){
-		pnextRemdStr = restRemStr;//"^_^亲，该休息啦！";
+		nextRemdStr = restRemStr;//"^_^亲，该休息啦！";
 	}
-	return pcurrRemdStr,pnextRemdStr;
 }
 //创建托盘程序
 var createWinTray = function(tray,nextRemdStr,nameStr,nextRemdStr){
@@ -225,7 +222,7 @@ mainForm.button2.oncommand = function(id,event){
 	//mainForm.msgbox( mainForm.button2.text );
 	isTaskOpen = false;
 	isShowRemdWin = false;
-	mainForm.show( false );
+	mainForm.show( isShowRemdWin );
 	//mainForm.close();
 	
 }
@@ -253,6 +250,29 @@ mainForm.bindConfig( config.mainForm,{
 } );
 ***/
 
+var aa = function(){
+	if(isAlertTime){//到点提醒
+		mainForm.text1.text=titlRemdStr;
+        mainForm.text2.text=currRemdStr;
+        tray = win.util.tray(mainForm.hwnd);
+        tray.tip = currRemdStr ;
+        win.setForeground(hwnd);
+        //mainForm.button.disabled = 1 ;
+        //mainForm.button2.disabled = 1 ;
+        //mainForm.button3.disabled = 1 ;
+    }else{ //未到点
+        mainForm.text1.text="";
+        mainForm.text2.text=nextRemdStr;
+        tray = win.util.tray(mainForm.hwnd);
+		tray.tip = nextRemdStr //设置鼠标提示 
+        //tray.tip = nextRemdStr ;
+        //mainForm.button.disabled = 0 ;
+        //mainForm.button2.disabled = 0 ;
+        //mainForm.button3.disabled = 0 ;
+    }
+    isShowRemdWin = true;
+    mainForm.show( isShowRemdWin );//isShowRemdWin
+}
 
 
 //定时器，每分钟探测一次是否到时间点了。
@@ -260,40 +280,10 @@ if(isTaskOpen){
 	var tmId = mainForm.addtimer( 
     	1000,
     	function(hwnd,msg,id,tick){
-        	//io.print(id,"开始")
-        	//win.delay(1000*60*5);
-        	
-        	curId,nextTimeDist,isAlertTime = getCurRemind();
-        	
-			//io.open();
-			//io.print(nextTimeDist);
-        	//nextTimeDist--;//下次提醒时间减一分钟
-        	//如果是同一天，如果当前时间和预设提醒时间相同，则提醒；如果不相同，静默运行，并不显示提醒信息。
-        	//如果不是同一天，预设的提醒时间列表初始化第一次，	
-        	currRemdStr,nextRemdStr = getCurRemindInfo();
-        	
-        	io.print(currRemdStr);
-        	io.print(nextRemdStr);
-        	
-        	createWinTray(tray,nextRemdStr,nameStr,nextRemdStr);
-			if(isAlertTime){
-				mainForm.text1.text=titlRemdStr;
-        		mainForm.text2.text=currRemdStr;
-        		tray.tip = currRemdStr ;
-        		win.setForeground(hwnd);
-        		//mainForm.button.disabled = 1 ;
-        		//mainForm.button2.disabled = 1 ;
-        		//mainForm.button3.disabled = 1 ;
-        	}else{
-        		mainForm.text1.text="";
-        		mainForm.text2.text=nextRemdStr;
-        		//tray.tip = nextRemdStr ;
-        		//mainForm.button.disabled = 0 ;
-        		//mainForm.button2.disabled = 0 ;
-        		//mainForm.button3.disabled = 0 ;
-        	}
-        	isShowRemdWin = true;
-        	mainForm.show( isShowRemdWin );//isShowRemdWin
+			getCurRemind(); //获取是否提醒，及提醒次数，数据
+        	getCurRemindInfo();//获取提醒提示信息
+        	createWinTray(tray,nextRemdStr,nameStr,nextRemdStr); //电脑托盘
+			
         	
         	return 1000*60;
     	} 
