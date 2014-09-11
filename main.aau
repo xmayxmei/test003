@@ -89,6 +89,9 @@ var getCurRemind = function(){
 			break ;
 		}
 	}
+	if(curId==1){//如果是当天第一次提醒
+		isTaskOpen = true;
+	}
 	nextTimeDist = (tonumber(time(remdTimeTab[curId],"%H:%M")) -  tonumber(nowTime))/60;	
 }
 
@@ -250,28 +253,32 @@ mainForm.bindConfig( config.mainForm,{
 } );
 ***/
 
-var aa = function(){
+//窗口提醒或提示
+var remindByAlertOrTip = function(){
 	if(isAlertTime){//到点提醒
-		mainForm.text1.text=titlRemdStr;
-        mainForm.text2.text=currRemdStr;
         tray = win.util.tray(mainForm.hwnd);
         tray.tip = currRemdStr ;
         win.setForeground(hwnd);
-        //mainForm.button.disabled = 1 ;
-        //mainForm.button2.disabled = 1 ;
-        //mainForm.button3.disabled = 1 ;
+     	if(isTaskOpen){//全局是否开启
+        	if(isShowRemdWin){//是否显示窗口
+    			mainForm.show( isShowRemdWin );
+    			mainForm.text1.text=titlRemdStr;
+        		mainForm.text2.text=currRemdStr;
+    			mainForm.button.disabled = 1 ;
+        		mainForm.button2.disabled = 1 ;
+        		mainForm.button3.disabled = 1 ;
+    		}
+    	}
     }else{ //未到点
         mainForm.text1.text="";
         mainForm.text2.text=nextRemdStr;
         tray = win.util.tray(mainForm.hwnd);
 		tray.tip = nextRemdStr //设置鼠标提示 
-        //tray.tip = nextRemdStr ;
-        //mainForm.button.disabled = 0 ;
-        //mainForm.button2.disabled = 0 ;
-        //mainForm.button3.disabled = 0 ;
+        tray.tip = nextRemdStr ;
+        mainForm.button.disabled = 0 ;
+        mainForm.button2.disabled = 0 ;
+        mainForm.button3.disabled = 0 ;
     }
-    isShowRemdWin = true;
-    mainForm.show( isShowRemdWin );//isShowRemdWin
 }
 
 
@@ -283,8 +290,7 @@ if(isTaskOpen){
 			getCurRemind(); //获取是否提醒，及提醒次数，数据
         	getCurRemindInfo();//获取提醒提示信息
         	createWinTray(tray,nextRemdStr,nameStr,nextRemdStr); //电脑托盘
-			
-        	
+			remindByAlertOrTip();//提醒
         	return 1000*60;
     	} 
 	)
