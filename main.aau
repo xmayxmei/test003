@@ -26,13 +26,13 @@ if(!atom){ //重复打开激活
 
 import config;
 mainForm.bindConfig( config.user,{
-	remdTimeTab = {"7:30";"8:30";"9:30";"11:00";"12:50";"14:00";"16:00";"17:00";"19:30";"22:00"};
+	remdTimeTab = {"7:30";"8:30";"9:30";"11:00";"12:50";"14:00";"16:00";"17:20";"19:30";"22:00"};
 	remdAmtTab = {"150";"200";"200";"200";"150";"200";"200";"200";"150";"150"};
 } );
 var isTaskOpen = true;//当日全局开关（别烦我时不显示）
 var isShowRemdWin = true;//显示窗口（延后提醒时不显示）
 var isAlertTime = false;//时间到
-var remdTimeTab = {"7:50";"8:00";"8:05";"8:10";"12:50";"14:00";"16:00";"16:12";"17:30";"24:00"};//10次
+var remdTimeTab = {"7:50";"8:00";"8:05";"8:10";"09:40";"14:00";"16:00";"16:12";"17:20";"24:00"};//10次
 var remdAmtTab = {"150";"200";"200";"200";"150";"200";"200";"200";"150";"150"};//1800ml
 var remdDelayIntv = 5;//延迟提醒时间间隔
 var remdDelayTimes = 0;//延迟提醒次数
@@ -42,10 +42,10 @@ var nextTimeDist = 0;//距离下次喝水时间
 var rollIntv = 1000*60;
 var nameStr = "喝水闹钟";//
 var titlRemdStr = "^_^亲，该喝水啦！";
-//var currRemdStr;//建议喝水
-//var nextRemdStr;//下次喝水
-var currRemdStr = "{currTime},建议喝水{currAmt}ML";//建议喝水
-var nextRemdStr = "距离下次喝水还有{nextTimeDist}分钟";//下次喝水
+var currRemdStr;//建议喝水
+var nextRemdStr;//下次喝水
+var currRemdTempl = "{currTime},建议喝水{currAmt}ML";//建议喝水模板
+var nextRemdTempl = "距离下次喝水还有{nextTimeDist}分钟";//下次喝水模板
 var restRemStr = "^_^亲，该休息啦！";
 var frmTitle = "喝水闹钟，定时提醒您该喝水啦。";
 var tray = null; //创建托盘图标
@@ -98,12 +98,16 @@ var getCurRemind = function(){
 
 //查询是否提醒以及提醒语
 var getCurRemindInfo = function(){
-	currRemdStr = string.replace(currRemdStr,"\{currTime\}",remdTimeTab[curId]);//remdTimeTab[curId]+",建议喝水"+remdAmtTab[curId]+"ML";
-	currRemdStr = string.replace(currRemdStr,"\{currAmt\}",remdAmtTab[curId]);//remdTimeTab[curId]+",建议喝水"+remdAmtTab[curId]+"ML";
-	nextRemdStr = string.replace(nextRemdStr,"\{nextTimeDist\}",tostring(nextTimeDist));//"距离下次喝水还有"+nextTimeDist+"分钟";//下次提醒内容
+	var pCurrRemdStr = currRemdTempl;
+	var pNextRemdStr = nextRemdTempl;
+	pCurrRemdStr = string.replace(pCurrRemdStr,"\{currTime\}",remdTimeTab[curId]);//
+	pCurrRemdStr = string.replace(pCurrRemdStr,"\{currAmt\}",remdAmtTab[curId]);//
+	pNextRemdStr = string.replace(pNextRemdStr,"\{nextTimeDist\}",tostring(nextTimeDist));//下次提醒内容
 	if(nextTimeDist<0){
-		nextRemdStr = restRemStr;//"^_^亲，该休息啦！";
+		pNextRemdStr = restRemStr;//"^_^亲，该休息啦！";
 	}
+	currRemdStr = pCurrRemdStr;
+	nextRemdStr = pNextRemdStr;
 }
 //创建托盘程序
 var createWinTray = function(tray,nextRemdStr,nameStr,nextRemdStr){
@@ -115,9 +119,8 @@ var createWinTray = function(tray,nextRemdStr,nameStr,nextRemdStr){
 	}
 }
 
-//第一次运行
-createLnk();//创建快捷方式
-regAutoRun();//注册到自动启动
+
+
 
 
 RegisterWindowMessage := ::User32.api( "RegisterWindowMessageA", "Long(String lpString)");
@@ -253,11 +256,11 @@ mainForm.bindConfig( config.mainForm,{
 	combobox = "selIndex";
 } );
 ***/
-
 //窗口提醒或提示
 var remindByAlertOrTip = function(){
 	if(isAlertTime){//到点提醒
         tray = win.util.tray(mainForm.hwnd);
+        tray.pop(nextRemdStr,nameStr,2,0xFFFFFFFF);
         tray.tip = currRemdStr ;
      	if(isTaskOpen){//全局是否开启
         	if(isShowRemdWin){//是否显示窗口
@@ -265,10 +268,10 @@ var remindByAlertOrTip = function(){
     			mainForm.show( isShowRemdWin );
     			mainForm.text1.text=titlRemdStr;
         		mainForm.text2.text=currRemdStr;
-    			mainForm.button.disabled = 0 ;
-    			mainForm.button2.disabled = 0 ;
+    			mainForm.button.show(isShowRemdWin) ;
+    			mainForm.button2.show(isShowRemdWin) ;
     			if(remdDelayTimes<2){//如果延迟2次以后，不容许再延迟
-        			mainForm.button3.disabled = 0 ;
+        			mainForm.button3.show(isShowRemdWin);
         		}
     		}
     	}
@@ -276,23 +279,28 @@ var remindByAlertOrTip = function(){
         mainForm.text1.text="";
         mainForm.text2.text=nextRemdStr;
         tray = win.util.tray(mainForm.hwnd);
-		tray.tip = nextRemdStr //设置鼠标提示 
+		io.print("=="+nextRemdStr);
         tray.tip = nextRemdStr ;
-        mainForm.button.disabled = 1 ;
-        mainForm.button2.disabled = 1 ;
-        mainForm.button3.disabled = 1 ;
+        mainForm.button.show(isShowRemdWin) ;
+        mainForm.button2.show(isShowRemdWin) ;
+        mainForm.button3.show(isShowRemdWin) ;
     }
 }
-
+//第一次运行
+createLnk();//创建快捷方式
+regAutoRun();//注册到自动启动
 
 //定时器，每分钟探测一次是否到时间点了。
 if(isTaskOpen){
+	getCurRemind(); //获取是否提醒，及提醒次数，数据
+    getCurRemindInfo();//获取提醒提示信息
+	createWinTray(tray,nextRemdStr,nameStr,nextRemdStr);
 	var tmId = mainForm.addtimer( 
     	1000,
     	function(hwnd,msg,id,tick){
 			getCurRemind(); //获取是否提醒，及提醒次数，数据
         	getCurRemindInfo();//获取提醒提示信息
-        	createWinTray(tray,nextRemdStr,nameStr,nextRemdStr); //电脑托盘
+        	//createWinTray(tray,nextRemdStr,nameStr,nextRemdStr); //电脑托盘
 			remindByAlertOrTip();//提醒
 			if(remdDelayIntv>0){//延迟倒计时
 				remdDelayIntv--;
