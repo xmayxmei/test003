@@ -29,15 +29,16 @@ mainForm.bindConfig( config.user,{
 	remdTimeTab = {"7:30";"8:30";"9:30";"11:00";"12:50";"14:00";"16:00";"17:20";"19:30";"22:00"};
 	remdAmtTab = {"150";"200";"200";"200";"150";"200";"200";"200";"150";"150"};
 } );
-var isTaskOpen = true;//当日全局开关（别烦我时不显示）
+var isTaskOpen = true;//当日全局开关
+var isNoNoice = false;//是否静默提醒（别烦我时不显示）
 var isShowRemdWin = true;//显示窗口（延后提醒时不显示）
 var isAlertTime = false;//时间到
-var remdTimeTab = {"7:50";"8:00";"8:05";"8:10";"09:40";"14:00";"16:00";"16:12";"17:20";"24:00"};//10次
+var remdTimeTab = {"7:50";"8:00";"8:05";"8:10";"09:40";"14:00";"16:00";"16:12";"22:14";"22:25"};//10次
 var remdAmtTab = {"150";"200";"200";"200";"150";"200";"200";"200";"150";"150"};//1800ml
 var remdDelayIntv = 5;//延迟提醒时间间隔
 var remdDelayTimes = 0;//延迟提醒次数
 var delayDown = 0;//延迟5分钟倒计时
-var curId=1;//现在提醒哪一个时间？
+var curId=0;//现在提醒哪一个时间？
 var nextTimeDist = 0;//距离下次喝水时间
 var rollIntv = 1000*60;
 var nameStr = "喝水闹钟";//
@@ -74,7 +75,7 @@ var regAutoRun = function(){
 
 //查询第几次提醒，距离下一次提醒时间距离
 var getCurRemind = function(){
-	curId = 1,nextTimeDist=0,isAlertTime=false;//时间到
+	curId = 0,nextTimeDist=0,isAlertTime=false;//时间到
 	var nowTime=time.now();
 	nowTime.format="%H:%M";
 	for(k,v in remdTimeTab){
@@ -89,39 +90,59 @@ var getCurRemind = function(){
 			break ;
 		}
 	}
+	if(curId==0){ //大于最大的时间点
+		isShowRemdWin = false;
+		isAlertTime = false;
+	}
 	if(curId==1){//如果是当天第一次提醒
-		isTaskOpen = true;
+		isNoNoice = false;
 		isShowRemdWin = true;
 	}
-	nextTimeDist = (tonumber(time(remdTimeTab[curId],"%H:%M")) -  tonumber(nowTime))/60;	
+	if(curId>0){
+		nextTimeDist = (tonumber(time(remdTimeTab[curId],"%H:%M")) -  tonumber(nowTime))/60;
+		if(nextTimeDist==0){
+			isAlertTime = true;
+		}
+	}
 }
 
 //查询是否提醒以及提醒语
 var getCurRemindInfo = function(){
 	var pCurrRemdStr = currRemdTempl;
 	var pNextRemdStr = nextRemdTempl;
-	pCurrRemdStr = string.replace(pCurrRemdStr,"\{currTime\}",remdTimeTab[curId]);//
-	pCurrRemdStr = string.replace(pCurrRemdStr,"\{currAmt\}",remdAmtTab[curId]);//
-	pNextRemdStr = string.replace(pNextRemdStr,"\{nextTimeDist\}",tostring(nextTimeDist));//下次提醒内容
-	if(nextTimeDist<0){
-		pNextRemdStr = restRemStr;//"^_^亲，该休息啦！";
+	if(curId>0){
+		pCurrRemdStr = string.replace(pCurrRemdStr,"\{currTime\}",remdTimeTab[curId]);//
+		pCurrRemdStr = string.replace(pCurrRemdStr,"\{currAmt\}",remdAmtTab[curId]);//
+		pNextRemdStr = string.replace(pNextRemdStr,"\{nextTimeDist\}",tostring(nextTimeDist));//下次提醒内容
+	}else{
+		pCurrRemdStr = restRemStr;//
+		pNextRemdStr = restRemStr;//
 	}
 	currRemdStr = pCurrRemdStr;
 	nextRemdStr = pNextRemdStr;
 }
+
 //创建托盘程序
 var createWinTray = function(tray,nextRemdStr,nameStr,nextRemdStr){
 	if(tray == null){
 		tray = win.util.tray(mainForm.hwnd);
 		tray.message = 0x400+9981/*_WM_TRAYMESSAGE*/
 		tray.tip = nextRemdStr //设置鼠标提示 
-		tray.pop(nextRemdStr,nameStr,2,0xFFFFFFFF);
+		//tray.pop(nextRemdStr,nameStr,2,0xFFFFFFFF);
 	}
 }
 
-
-
-
+//窗口显示
+var formShowNow = function(titlRemdStr,currRemdStr,isShowRemdWin,remdDelayTimes){
+	mainForm.show( isShowRemdWin );
+    mainForm.text1.text=titlRemdStr;
+    mainForm.text2.text=currRemdStr;
+    mainForm.button.show(isShowRemdWin) ;
+    mainForm.button2.show(isShowRemdWin) ;
+    if(remdDelayTimes<2){//如果延迟2次以后，不容许再延迟
+        mainForm.button3.show(isShowRemdWin);
+    }
+}
 
 RegisterWindowMessage := ::User32.api( "RegisterWindowMessageA", "Long(String lpString)");
 var msgTaskbarRestart = RegisterWindowMessage("taskbarcreated")
@@ -229,8 +250,9 @@ mainForm.button3.oncommand = function(id,event){
 //今天别烦我（今天不会主动提醒）
 mainForm.button2.oncommand = function(id,event){
 	//mainForm.msgbox( mainForm.button2.text );
-	isTaskOpen = false;//当日全局关闭
+	isNoNoice = true;//静默提醒
 	remdDelayTimes = 0;//延迟次数清零
+	isShowRemdWin = false;
 	mainForm.show( isShowRemdWin );	
 }
 
@@ -259,31 +281,30 @@ mainForm.bindConfig( config.mainForm,{
 //窗口提醒或提示
 var remindByAlertOrTip = function(){
 	if(isAlertTime){//到点提醒
-        tray = win.util.tray(mainForm.hwnd);
-        tray.pop(nextRemdStr,nameStr,2,0xFFFFFFFF);
-        tray.tip = currRemdStr ;
-     	if(isTaskOpen){//全局是否开启
-        	if(isShowRemdWin){//是否显示窗口
+     	if(isNoNoice){//是否静默提醒
+        	tray = win.util.tray(mainForm.hwnd);
+        	tray.pop(currRemdStr,nameStr,2,0xFFFFFFFF);
+        	tray.tip = currRemdStr ;	
+    	}else{
+    		tray = win.util.tray(mainForm.hwnd);
+    		//tray.pop("","")
+        	tray.tip = currRemdStr ;
+    		if(isShowRemdWin){//是否显示窗口
         		win.setForeground(mainForm.hwnd);
-    			mainForm.show( isShowRemdWin );
-    			mainForm.text1.text=titlRemdStr;
-        		mainForm.text2.text=currRemdStr;
-    			mainForm.button.show(isShowRemdWin) ;
-    			mainForm.button2.show(isShowRemdWin) ;
-    			if(remdDelayTimes<2){//如果延迟2次以后，不容许再延迟
-        			mainForm.button3.show(isShowRemdWin);
-        		}
+    			formShowNow(titlRemdStr,currRemdStr,isShowRemdWin,remdDelayTimes);//窗口显示
     		}
     	}
     }else{ //未到点
+    	tray = win.util.tray(mainForm.hwnd);
+        tray.tip = nextRemdStr ;
+        /**
         mainForm.text1.text="";
         mainForm.text2.text=nextRemdStr;
-        tray = win.util.tray(mainForm.hwnd);
-		io.print("=="+nextRemdStr);
-        tray.tip = nextRemdStr ;
         mainForm.button.show(isShowRemdWin) ;
         mainForm.button2.show(isShowRemdWin) ;
         mainForm.button3.show(isShowRemdWin) ;
+        **/
+        formShowNow("",nextRemdStr,isShowRemdWin,0);//窗口显示
     }
 }
 //第一次运行
@@ -302,10 +323,12 @@ if(isTaskOpen){
         	getCurRemindInfo();//获取提醒提示信息
         	//createWinTray(tray,nextRemdStr,nameStr,nextRemdStr); //电脑托盘
 			remindByAlertOrTip();//提醒
-			if(remdDelayIntv>0){//延迟倒计时
-				remdDelayIntv--;
-				if(remdDelayIntv==0){//倒计时完
-					isShowRemdWin = true;//恢复窗口显示
+			if(!isNoNoice){//非静默提醒下才恢复窗口显示
+				if(remdDelayIntv>0){//延迟倒计时
+					remdDelayIntv--;
+					if(remdDelayIntv==0){//倒计时完
+						isShowRemdWin = true;//恢复窗口显示
+					}
 				}
 			}
         	return rollIntv;
