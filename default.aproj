@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="gb2312"?>
 <project ver="3" name="WaterClock" libEmbed="true" icon="res\icon32.ico" ProductName="DrinkWaterRemind" InternalName="DrinkWaterRemind" FileDescription="DrinkWaterRemind" FileVersion="0.0.0.10" ProductVersion="0.0.0.10" LegalCopyright="Copyright (C) 作者 2014" ui="win" output="WaterClock.exe" CompanyName="单位名称" publishDir="/Publish/">
-	<file name="next.aau" path="next.aau" comment="next.aau"/>
 	<file name="main.aau" path="main.aau"/>
-	<folder name="资源文件" path="res" embed="true"/>
+	<folder name="资源文件" path="res" embed="true">
+		<file name="next.aau" path="res\next.aau" comment="res\next.aau"/>
+		<file name="next3.aau" path="res\next3.aau" comment="res\next3.aau"/>
+		<file name="next2.aau" path="res\next2.aau" comment="res\next2.aau"/>
+	</folder>
 </project>

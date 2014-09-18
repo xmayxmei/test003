@@ -1,0 +1,47 @@
+import win.ui;
+/*DSG{{*/
+var nextform3 = ..win.form(text="设置";right=441;bottom=362;max=false;parent=...)
+nextform3.add(
+button={cls="button";text="常规设置";left=11;top=88;right=81;bottom=115;z=6};
+button3={cls="button";text="保存";left=136;top=327;right=225;bottom=353;z=2};
+button4={cls="button";text="还原为默认值";left=274;top=327;right=363;bottom=353;z=3};
+button5={cls="button";text="时间设置";left=11;top=14;right=81;bottom=41;z=4};
+button6={cls="button";text="提醒设置";left=11;top=51;right=81;bottom=78;z=5};
+checkbox={cls="checkbox";text="开机时自动启动本程序";left=126;top=37;right=299;bottom=60;z=7};
+checkbox2={cls="checkbox";text="创建桌面快捷方式";left=126;top=66;right=249;bottom=80;z=8};
+groupbox5={cls="groupbox";text="设置常规项";left=100;top=7;right=426;bottom=319;edge=1;z=1}
+)
+/*}}*/
+
+nextform3.button5.oncommand = function(id,event){
+	//nextform.msgbox( nextform.button5.text );
+	var nextform,wb = nextform3.loadForm("next.aau", );
+	nextform3.show(false);	
+}
+
+nextform3.button6.oncommand = function(id,event){
+	//winform.msgbox( winform.button6.text );
+	var nextform2,wb = nextform3.loadForm("next2.aau", );
+	nextform3.show(false);
+}
+
+
+nextform3.button.oncommand = function(id,event){
+	//nextform.msgbox( nextform.button.text );
+	return false;
+}
+
+
+
+
+nextform3.wndproc = function(hwnd,message,wparam,lparam){	
+    select(message) {//判断消息类型
+        case 0x10/*_WM_CLOSE窗口关闭消息*/{
+    		
+        }
+    }
+    //无返回值则继续调用默认回调函数
+}
+
+nextform3.show() 
+win.loopMessage();
