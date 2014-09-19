@@ -1,0 +1,67 @@
+import win.ui;
+/*DSG{{*/
+var nextform3 = ..win.form(text="设置";right=441;bottom=362;max=false;parent=...)
+nextform3.add(
+button={cls="button";text="常规设置";left=11;top=88;right=81;bottom=115;z=6};
+button3={cls="button";text="保存";left=136;top=327;right=225;bottom=353;z=2};
+button4={cls="button";text="还原为默认值";left=274;top=327;right=363;bottom=353;z=3};
+button5={cls="button";text="时间设置";left=11;top=14;right=81;bottom=41;z=4};
+button6={cls="button";text="提醒设置";left=11;top=51;right=81;bottom=78;z=5};
+combobox={cls="combobox";left=185;top=29;right=362;bottom=49;edge=1;items={"男性";"女性";"怀孕女性";"哺乳女性"};mode="dropdown";tabstop=1;z=8};
+combobox2={cls="combobox";left=185;top=93;right=362;bottom=113;edge=1;items={"办公室不运动";"运动"};mode="dropdown";tabstop=1;z=13};
+edit={cls="edit";text="55";left=185;top=61;right=265;bottom=82;edge=1;tabstop=1;z=10};
+edit2={cls="edit";text="8:30";left=185;top=125;right=255;bottom=144;edge=1;tabstop=1;z=15};
+edit3={cls="edit";text="12:00";left=293;top=125;right=363;bottom=145;edge=1;tabstop=1;z=17};
+edit4={cls="edit";text="14:00";left=185;top=156;right=254;bottom=175;edge=1;tabstop=1;z=19};
+edit5={cls="edit";text="18:00";left=294;top=155;right=362;bottom=176;edge=1;tabstop=1;z=21};
+groupbox5={cls="groupbox";text="个人设置";left=99;top=7;right=425;bottom=319;edge=1;z=1};
+static={cls="static";text="性      别：";left=119;top=34;right=192;bottom=55;transparent=1;z=7};
+static2={cls="static";text="体      重：";left=119;top=65.75;right=189;bottom=85.75;transparent=1;z=9};
+static3={cls="static";text="千克（或公斤）";left=273;top=64;right=361;bottom=82;transparent=1;z=11};
+static4={cls="static";text="生活方式：";left=119;top=96.5;right=193;bottom=117.5;notify=1;transparent=1;z=12};
+static6={cls="static";text="上午上班：";left=119;top=128.25;right=192;bottom=148.25;transparent=1;z=14};
+static7={cls="static";text="下班：";left=259;top=129;right=314;bottom=148;transparent=1;z=16};
+static8={cls="static";text="下午上班：";left=119;top=160;right=180;bottom=177;transparent=1;z=18};
+static9={cls="static";text="下班：";left=259;top=158;right=302;bottom=175;transparent=1;z=20}
+)
+/*}}*/
+
+nextform3.static4.oncommand = function(id,event){
+	//nextform3.msgbox( nextform3.static4.text );
+	
+	
+}
+
+
+nextform3.button5.oncommand = function(id,event){
+	//nextform.msgbox( nextform.button5.text );
+	var nextform,wb = nextform3.loadForm("next.aau", );
+	nextform3.show(false);	
+}
+
+nextform3.button6.oncommand = function(id,event){
+	//winform.msgbox( winform.button6.text );
+	var nextform2,wb = nextform3.loadForm("next2.aau", );
+	nextform3.show(false);
+}
+
+
+nextform3.button.oncommand = function(id,event){
+	//nextform.msgbox( nextform.button.text );
+	return false;
+}
+
+
+
+
+nextform3.wndproc = function(hwnd,message,wparam,lparam){	
+    select(message) {//判断消息类型
+        case 0x10/*_WM_CLOSE窗口关闭消息*/{
+    		
+        }
+    }
+    //无返回值则继续调用默认回调函数
+}
+
+nextform3.show() 
+win.loopMessage();

@@ -31,6 +31,7 @@ var isTaskOpen = true;//当日全局开关
 var isNoNoice = false;//是否静默提醒（别烦我时不显示）
 var isShowRemdWin = false;//显示窗口（延后提醒时不显示）
 var isAlertTime = false;//时间到
+var showDelayIntv = 5*60;//界面显示延时
 var remdDelayIntv = 5;//延迟提醒时间间隔
 var remdDelayTimes = 0;//延迟提醒次数
 var delayDown = 0;//延迟[5]分钟倒计时
@@ -163,9 +164,12 @@ var getCurRemind = function(){
 	}
 	if(curId>0){
 		nextTimeDist = (tonumber(time(remdTimeTab[curId],"%H:%M")) -  tonumber(nowTime))/60;
-		if(isAlertTime){//时间到
+		if(isAlertTime){
 			isShowRemdWin = true;
-		}else{
+		}
+		showDelayIntv--;
+		if(showDelayIntv==0){
+			//时间到
 			isShowRemdWin = false;
 		}
 	}
@@ -202,7 +206,7 @@ var formShowNow = function(titleText,remdText,isShow,delays){
     }
 }
 
-//窗口提醒或提示
+//窗口提醒或提示(显示或消失)
 var remindByAlertOrTip = function(){
 	if(isAlertTime){//到点提醒
      	if(isNoNoice){//是否静默提醒
@@ -330,9 +334,9 @@ mainForm.popmenu.add('退出',function(id){
 //喝了（马上喝）
 mainForm.button.oncommand = function(id,event){
 	//记录本次喝水时间
-	isShow = false;
+	isShowRemdWin = false;
 	remdDelayTimes = 0;//延迟次数清零
-	mainForm.show(isShow);
+	mainForm.show(isShowRemdWin);
 	var remarkTime=time.now();
 	remarkTime.format="%Y-%m-%d %H:%M";
 }

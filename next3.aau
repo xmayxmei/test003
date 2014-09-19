@@ -7,8 +7,10 @@ button3={cls="button";text="保存";left=136;top=327;right=225;bottom=353;z=2};
 button4={cls="button";text="还原为默认值";left=274;top=327;right=363;bottom=353;z=3};
 button5={cls="button";text="时间设置";left=11;top=14;right=81;bottom=41;z=4};
 button6={cls="button";text="提醒设置";left=11;top=51;right=81;bottom=78;z=5};
-checkbox={cls="checkbox";text="开机时自动启动本程序";left=126;top=37;right=299;bottom=60;z=7};
-checkbox2={cls="checkbox";text="创建桌面快捷方式";left=126;top=66;right=249;bottom=80;z=8};
+checkbox={cls="checkbox";text="开机时自动启动本程序（不自动启动无法每天提醒）";left=120;top=33;right=421;bottom=47;z=7};
+checkbox2={cls="checkbox";text="创建桌面快捷方式";left=120;top=63;right=243;bottom=77;z=8};
+checkbox3={cls="checkbox";text="闹钟时间到时使用声音提醒";left=120;top=94;right=353;bottom=108;z=9};
+checkbox4={cls="checkbox";text="闹钟时间到时使用桌面右下角弹窗提醒";left=120;top=124;right=364;bottom=138;z=10};
 groupbox5={cls="groupbox";text="设置常规项";left=100;top=7;right=426;bottom=319;edge=1;z=1}
 )
 /*}}*/
