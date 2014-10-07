@@ -1,0 +1,205 @@
+<html>
+<head>
+<style>
+
+
+.tabs 
+{
+  font:system;
+  behavior:tabs; /*指定这是一个选项卡控件*/
+  flow: horizontal; /*修改默认的垂直布局为横向布局,这样strip就跑左侧去了*/
+  height:100%;
+  width:100%;
+  overflow:hidden;
+}
+
+.tabs > .strip /* 选项卡容器 */
+{
+  flow: vertical; /*选项卡按钮改成垂直布局*/
+  margin-bottom:-1px;
+  padding: 2px 0 2px 2px;
+  width:60px; 
+}
+
+.tabs > .strip > [panel] /* 选项卡按钮默认样式 */
+{
+  padding: 3px 8px;
+  margin-bottom:1px;
+  height: 100%%;
+  width:80px; 
+  background-color:rgb(237,238,238);
+}
+.tabs > .strip > [panel]:hover /* 鼠标悬停选项卡样式*/
+{
+  background-color:rgb(223,236,249) rgb(223,236,249) rgb(201,256,221) rgb(201,256,221);
+  transition:blend;
+}
+.tabs > .strip > [panel]:current  /*当前选项卡样式*/
+{
+  background-color:#0099FF;
+  padding: 4px 8px 5px 8px; 
+  position:relative;
+}
+.tabs > .strip > [panel]:current:hover /*点击当前选项卡的样式*/
+{
+  background-image:url(theme:tab-item-selected);
+  transition:none;
+}
+
+.tabs > .strip > [panel]:current:first-child,
+.tabs > .strip > [panel]:current:hover:first-child
+{
+  background-image:url(theme:tab-item-leftmost-selected);
+} 
+
+.tabs:focus .strip [panel]:current 
+{
+  background-image:url(theme:tab-item-focused);
+} 
+
+.tabs > [name] { display:none; }
+
+
+.tabs > iframe[name]:busy { 
+  foreground-repeat: no-repeat;
+  foreground-position: 2px 2px;
+}
+
+.tabs > [name]:expanded 
+{ 
+  background-image:url(theme:tab-panel);
+  background-repeat:stretch;
+  padding:7px;
+  margin:2px;
+  display:block; 
+  height:100%;
+  width:100%;
+} 
+
+
+.tabs > .strip > [panel] .close-panel{
+	display:none;
+}
+.tabs > .strip > [panel]:current .close-panel{ 
+	display:block;  
+	float:right;
+	width:10px;
+	height:10px;
+	padding:1px;
+	font-family:"Marlett"; 
+	content:"r";
+}
+.tabs > .strip > [panel]:current .close-panel:hover{ 
+    background:#999;
+}
+.tabs > .strip > [panel]:current .close-panel:active{ 
+    background:red;
+}
+
+body {
+	margin-left: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+}
+.title-bar{
+	width:100%;
+	height:25px;
+	text-align:right;
+	background-color:#0099FF;
+	behavior:windowCommand; 
+}
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312"></head>
+<body>
+	<div class="title-bar" command = "window-caption">
+		<a href="" id="minisize">-</a>&nbsp;&nbsp;<a href="" id="close">X</a>&nbsp;&nbsp;
+	</div>
+   <div class="tabs">
+      <div class="strip" > 
+        <!-- 选项卡,可以随意放到哪一侧,必须使用DIV标签 -->
+         <div panel="panel1" selected>个人设置</div>
+         <div panel="panel2">常规设置</div>
+		 <!--
+         <div panel="panel3">选项三</div>
+		 -->
+      </div>
+      
+      <div name="panel1"> 
+			<table width="350" border="0">
+			  <tr>
+				<td width="80">性别：</td>
+				<td><label>
+				  <select name="sex" id="b">
+					<option selected>男性</option>
+					<option>女性</option>
+					<option>怀孕女性</option>
+					<option>哺乳女性</option>
+				  </select>
+				</label></td>
+			  </tr>
+			  <tr>
+				<td>体重：</td>
+				<td><input type="text" name="weight">
+				  千克</td>
+			  </tr>
+			  <tr>
+				<td>生活方式：</td>
+				<td>
+					<select name="lifestyle">
+					  <option selected>办公室不运动</option>
+					  <option>运动</option>
+					</select>
+				</td>
+			  </tr>
+			  <tr>
+				<td>上午上班：</td>
+				<td>
+				  
+				  <input type="time" name="mornin" no-seconds/> 
+				  下班：
+				  <input type="time" name="mornout" no-seconds/></td>
+			  </tr>
+			  <tr>
+				<td>下午上班：</td>
+				<td>
+					<input type="time" name="afterin" no-seconds/>
+				  下班：
+				  <input type="time" name="afterout" no-seconds/>
+				  </td>
+			  </tr>
+			</table>
+			<input type="button" value="保存" id="userConfigSave"/>
+      </div> 
+      <div name="panel2"> 
+
+			<table width="350" border="0">
+			  <tr>
+				<td><input type="checkbox" name="startup"></td>
+				<td>开机时自动启动本程序</td>
+			  </tr>
+			  <tr>
+				<td><input type="checkbox" name="filelink"></td>
+				<td>
+				  创建桌面快捷方式</td>
+			  </tr>
+			  <tr>
+				<td><input type="checkbox" name="remsound"></td>
+				<td>闹钟时间到时使用声音提醒<input type="file" name="wavefile" size="2" filter="Wav files:*.wav,*.mp3" novalue="clock.wav"/></td>
+			  </tr>
+			  <tr>
+				<td><input type="checkbox" name="remwin"></td>
+				<td>闹钟时间到时使用桌面右下角弹窗提醒</td>
+			  </tr>
+			  
+			</table>
+			<input type="button" value="保存" id="sysConfigSave"/>
+
+      </div>
+      <div name="panel3"> 
+          
+
+      </div>  
+   </div> 
+</body>   
+</html>  

@@ -1,0 +1,163 @@
+import win.ui;
+import win.region.round;
+/*DSG{{*/
+var winform = ..win.form(text="设置";right=599;bottom=399;border="none";exmode="none";mode="popup";parent=...)
+winform.add()
+/*}}*/
+
+import web.layout;
+import web.layout.behavior.windowCommand;
+import web.layout.behavior.windowSizer;
+import web.layout.behavior.tabs; //导入behavior
+import sqlite;
+//创建网页浏览器
+var wbLayout = web.layout( winform )
+
+var ahtml = string.load("/res/config.html");
+wbLayout.html = ahtml;
+ 
+var sex = wbLayout.getEle("sex");
+sex.setValueObject(configMap['sex']);
+var weight = wbLayout.getEle("weight");
+weight.setValueObject(configMap['weight']);
+var lifestyle = wbLayout.getEle("lifestyle");
+lifestyle.setValueObject(configMap['lifestyle']);
+var mornin = wbLayout.getEle("mornin");
+mornin.setValueObject(configMap['mornin']);
+var mornout = wbLayout.getEle("mornout");
+mornout.setValueObject(configMap['mornout']);
+var afterin = wbLayout.getEle("afterin");
+afterin.setValueObject(configMap['afterin']);
+var afterout = wbLayout.getEle("afterout");
+afterout.setValueObject(configMap['afterout']);
+
+var startup = wbLayout.getEle("startup");
+startup.setValueObject(configMap['startup']=='true'?true:false);
+var filelink = wbLayout.getEle("filelink");
+filelink.setValueObject(configMap['filelink']=='true'?true:false);
+var remsound = wbLayout.getEle("remsound");
+remsound.setValueObject(configMap['remsound']=='true'?true:false);
+var wavefile = wbLayout.getEle("wavefile");
+
+wavefile.setAttribute("novalue",configMap['wavefile']);
+var remwin = wbLayout.getEle("remwin");
+remwin.setValueObject(configMap['remwin']=='true'?true:false);
+
+
+
+
+wbLayout.onHyperlinkClick = function (ltTarget,ltEle,reason,behaviorParams) {
+    if(ltEle.id="minisize"){
+    	winform.hitmin();
+    }
+    if(ltEle.id="close"){
+    	winform.close();
+    }
+    if(ltEle.id="okay"){
+    	winform.close();
+    }
+}
+
+wbLayout.onButtonClick = function (ltTarget,ltEle,reason,behaviorParams) {
+	var db = sqlite("\waterclock.db");
+	if(ltEle.id="userConfigSave"){
+		var  sex = wbLayout.getEle("sex");
+		var  weight = wbLayout.getEle("weight");
+		var  lifestyle = wbLayout.getEle("lifestyle");
+		var  mornin = wbLayout.getEle("mornin");
+		var  mornout = wbLayout.getEle("mornout");
+		var  afterin = wbLayout.getEle("afterin");
+		var  afterout = wbLayout.getEle("afterout");
+		//先保存，再执行相应函数
+		console.log(mornin.getValueObject());
+
+		var sql = string.concat("update config set value='",sex.value,"' where code = 'sex' and parent='user'");
+		db.exec(sql);
+		var sql = string.concat("update config set value='",weight.value,"' where code = 'weight' and parent='user'");
+		db.exec(sql);
+		var sql = string.concat("update config set value='",lifestyle.value,"' where code = 'lifestyle' and parent='user'");
+		db.exec(sql);
+		var sql = string.concat("update config set value='",mornin.value,"' where code = 'mornin' and parent='user'");
+		db.exec(sql);
+		var sql = string.concat("update config set value='",mornout.value,"' where code = 'mornout' and parent='user'");
+		db.exec(sql);
+		var sql = string.concat("update config set value='",afterin.value,"' where code = 'afterin' and parent='user'");
+		db.exec(sql);
+		var sql = string.concat("update config set value='",afterout.value,"' where code = 'afterout' and parent='user'");
+		db.exec(sql);
+		win.msgbox("保存成功！");
+	}
+	if(ltEle.id="sysConfigSave"){
+		var  startup = wbLayout.getEle("startup");
+		var  filelink = wbLayout.getEle("filelink");
+		var  remsound = wbLayout.getEle("remsound");
+		var  wavefile = wbLayout.getEle("wavefile");
+		var  remwin = wbLayout.getEle("remwin");
+		var sql = string.concat("update config set value='",(startup.value==true?"true":"false"),"' where code = 'startup' and parent='sys'");
+		db.exec(sql);
+		var sql = string.concat("update config set value='",(filelink.value==true?"true":"false"),"' where code = 'filelink' and parent='sys'");
+		db.exec(sql);
+		var sql = string.concat("update config set value='",(remsound.value==true?"true":"false"),"' where code = 'remsound' and parent='sys'");
+		db.exec(sql);
+		var sql = string.concat("update config set value='",wavefile.value,"' where code = 'wavefile' and parent='sys'");
+		db.exec(sql);
+		var sql = string.concat("update config set value='",(remwin.value==true?"true":"false"),"' where code = 'remwin' and parent='sys'");
+		db.exec(sql);
+		win.msgbox("保存成功！");
+	}
+	if(ltEle.id="userConfigSave" || ltEle.id="userConfigSave"){
+		//重新加载
+		var configTab = db.getTable("SELECT parent,code,value,desc FROM config where parent='user' or parent='sys'");
+		for(row,item in configTab){
+			//console.log(item['parent'],item['code'],item['value'],item['desc']);
+			configMap[item['code']] = item['value'];
+		}
+		var sex = wbLayout.getEle("sex");
+		sex.setValueObject(configMap['sex']);
+		var weight = wbLayout.getEle("weight");
+		weight.setValueObject(configMap['weight']);
+		var lifestyle = wbLayout.getEle("lifestyle");
+		lifestyle.setValueObject(configMap['lifestyle']);
+		var mornin = wbLayout.getEle("mornin");
+		mornin.setValueObject(configMap['mornin']);
+		var mornout = wbLayout.getEle("mornout");
+		mornout.setValueObject(configMap['mornout']);
+		var afterin = wbLayout.getEle("afterin");
+		afterin.setValueObject(configMap['afterin']);
+		var afterout = wbLayout.getEle("afterout");
+		afterout.setValueObject(configMap['afterout']);
+		
+		var startup = wbLayout.getEle("startup");
+		startup.setValueObject(configMap['startup']=='true'?true:false);
+		var filelink = wbLayout.getEle("filelink");
+		filelink.setValueObject(configMap['filelink']=='true'?true:false);
+		var remsound = wbLayout.getEle("remsound");
+		remsound.setValueObject(configMap['remsound']=='true'?true:false);
+		var wavefile = wbLayout.getEle("wavefile");
+		wavefile.setValueObject(configMap['wavefile']);
+		var remwin = wbLayout.getEle("remwin");
+		remwin.setValueObject(configMap['remwin']=='true'?true:false);
+	}
+}
+
+// 响应菜单点击事件
+wbLayout.onMenuItemClick =  {
+
+	// 事件可以是一个函数或列表,如果是列表键名匹配节点的id或name属性 
+	exit = function (ltTarget,ltOwner,reason,behaviorParams) {
+		winform.close();
+	}
+	
+	// 在这里没有匹配不到id的节点会触发default函数*/
+	default = function (ltTarget,ltOwner,reason,behaviorParams) {
+		var ltPopupOwner = web.layout.element( behaviorParams.he );//这是弹出菜单的按钮节点
+		winform.msgbox( ltTarget.innerText )
+	}
+}
+
+import win.ui.shadow;
+win.ui.shadow(winform); //添加阴影边框
+win.region.round(winform);
+winform.show();
+win.loopMessage();
+

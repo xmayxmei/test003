@@ -1,0 +1,50 @@
+import win.ui;
+import win.ui.menu;
+import com.picture;
+/*DSG{{*/
+var winform = win.form(parent=...; right=572;text="AAuto Form";bottom=515 )
+winform.add( 
+button={ bottom=395;color=0;text="绘
+制
+曲
+线";left=496;top=119;font=LOGFONT( name="Microsoft Sans Serif";h=-32;out=3;family=34;clip=2;quality=1 );z=1;right=545;cls="button" }
+)
+/*}}*/
+
+winform.wndproc = function(hwnd,message,wparam,lparam){
+    select(message) {//判断消息类型
+        case 0x10/*_WM_CLOSE窗口关闭消息*/{
+            
+        }
+        case 0x205/*_WM_RBUTTONUP 鼠标右键弹起，弹出菜单*/begin
+            //var x,y = ::LOWORD(lparam), ::HIWORD(lparam)
+            //winform.popmenu.popup();//弹出菜单
+        end
+        else{
+            
+        }
+    }
+    //无返回值则继续调用默认回调函数
+}
+import gdip;//导入GDI+库 
+ 
+winform.button.oncommand = function(id,event){
+    //图形对象graphics（可以看作是画板）
+    var graphics = gdip.graphics(  winform )  
+    
+        var re,Pen = gdip.CreatePen1( 0xFFFF0000, 5, 2/*_GdipUnitPixel*/);
+  
+        
+    graphics.drawLine( Pen, 20, 500, 50, 450,)
+    graphics.drawLine( Pen, 50, 450, 100, 300)
+    graphics.drawLine( Pen, 100, 300, 200, 350)
+    graphics.drawLine( Pen, 200,350, 260, 200)
+    graphics.drawLine( Pen, 260, 200, 450, 160)
+    gdip.DeletePen(Pen)
+    
+}//endproc
+  
+winform.show(true) 
+win.loopMessage(); 
+
+return winform;
