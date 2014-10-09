@@ -1,5 +1,6 @@
 import win.ui;
 import win.util.round;
+import win.ui.menu;
 import win.region.round;
 import web.layout;
 import web.layout.behavior.windowCommand;
@@ -11,6 +12,7 @@ import win.ui.atom;
 import win.util.tray;
 import win.reg;
 import fsys.lnk;
+import mouse;
 /*DSG{{*/
 var mainForm = ..win.form(text="喝水闹钟";right=549;bottom=399;border="none";parent=...;topmost=1)
 mainForm.add()
@@ -172,7 +174,7 @@ var startUp = function(){
 RegisterWindowMessage := ::User32.api( "RegisterWindowMessageA", "Long(String lpString)");
 var msgTaskbarRestart = RegisterWindowMessage("taskbarcreated");
 
-var atom,hwnd = mainForm.atom("13F0297F-F7AD-267E-142E-722AED89671D");
+var atom,hwnd1 = mainForm.atom("13F0297F-F7AD-267E-142E-722AED89671D");
 
 //重复打开激活
 var reOpen = function(){
@@ -301,7 +303,7 @@ var getCurRemindInfo = function(){
 var taskRun = function(){
 	getCurRemind(); //获取是否提醒，及提醒次数，数据
     getCurRemindInfo();//获取提醒提示信息
-	createWinTray(tray,nextRemdStr,frmName,nextRemdStr);
+	
 	remindByAlertOrTip();
 	if(showDelayIntv>0){//显示时长
 		showDelayIntv--;
@@ -318,6 +320,22 @@ var taskRun = function(){
 	)
 }
 
+mainForm.popmenu = win.ui.popmenu(mainForm);//创建弹出菜单
+
+mainForm.popmenu.add('打开',function(id){
+	//在下面输入菜单响应代码
+	mainForm.show(true);
+});
+mainForm.popmenu.add();//分隔线
+mainForm.popmenu.add('退出',function(id){ 
+	if(tray != null){
+    	tray.delete();
+    }
+	mainForm.close() ;
+});
+
+createWinTray(tray,"",mainForm,"");
+
 //事件监听器
 mainForm.wndproc = function(hwnd,message,wparam,lparam){	
     select(message) {//判断消息类型
@@ -326,9 +344,7 @@ mainForm.wndproc = function(hwnd,message,wparam,lparam){
             //::PostMessage(mainForm.hwnd, 0x112,0xF020, 0);
     		//mainForm.show( false );
     		//return false;
-    		if(tray != null){
-    			tray.delete();
-    		}
+    		
         }
         case (0x400+9981/*_WM_TRAYMESSAGE*/) { //托盘图标消息
             select(lparam){
@@ -369,9 +385,10 @@ mainForm.wndproc = function(hwnd,message,wparam,lparam){
     }
     //无返回值则继续调用默认回调函数
 }
+
 playSound();//
 startUp();//
 reOpen();//探测重新打开
-taskRun();//执行任务
+//taskRun();//执行任务
 win.loopMessage();
 
