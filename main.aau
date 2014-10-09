@@ -110,6 +110,16 @@ wbLayout.onHyperlinkClick = function (ltTarget,ltEle,reason,behaviorParams) {
     	mainForm.hitmin();
     }
 }
+
+//播放声音
+var playSound = function(){
+	import win.mm
+	win.mm.playMp3("/res/yy-gaiheshui.mp3");
+}
+
+
+
+
 //按钮
 wbLayout.onButtonClick = function (ltTarget,ltEle,reason,behaviorParams) {
 	if(ltEle.id="settings"){
@@ -132,24 +142,31 @@ wbLayout.onMenuItemClick =  {
 		mainForm.msgbox( ltTarget.innerText )
 	}
 }
-import win.ui.shadow;
-win.ui.shadow(mainForm); //添加阴影边框
-win.region.round(mainForm);
-//win.util.popup(mainForm);
-var w = ::GetSystemMetrics(0x10/*_SM_CXFULLSCREEN*/); 
-var h = ::GetSystemMetrics(0x11/*_SM_CYFULLSCREEN*/) ;
-mainForm.setPos(w-552,h-400,550,400);
-mainForm.transparent(0);
-mainForm.show();
 
-//import win.ui.glass;
-//win.ui.glass( mainForm);//玻璃效果
 
-for(i=1;51;1){
-     mainForm.transparent(i*5);
-     win.delay(40);
-     // mainForm.show();
- }; 
+
+var startUp = function(){
+	import win.ui.shadow;
+	win.ui.shadow(mainForm); //添加阴影边框
+	win.region.round(mainForm);
+	//win.util.popup(mainForm);
+	var w = ::GetSystemMetrics(0x10/*_SM_CXFULLSCREEN*/); 
+	var h = ::GetSystemMetrics(0x11/*_SM_CYFULLSCREEN*/) ;
+	mainForm.setPos(w-552,h-400,550,400);
+	mainForm.transparent(0);
+	mainForm.show();
+	
+	//import win.ui.glass;
+	//win.ui.glass( mainForm);//玻璃效果
+	
+	for(i=1;51;1){
+     	mainForm.transparent(i*5);
+     	win.delay(40);
+     	// mainForm.show();
+ 	};
+}
+
+ 
 //
 
 RegisterWindowMessage := ::User32.api( "RegisterWindowMessageA", "Long(String lpString)");
@@ -352,7 +369,8 @@ mainForm.wndproc = function(hwnd,message,wparam,lparam){
     }
     //无返回值则继续调用默认回调函数
 }
-
+playSound();//
+startUp();//
 reOpen();//探测重新打开
 taskRun();//执行任务
 win.loopMessage();

@@ -2,6 +2,8 @@
 <project ver="3" name="WaterClock" libEmbed="true" icon="res\icon32.ico" ProductName="DrinkWaterRemind" InternalName="DrinkWaterRemind" FileDescription="DrinkWaterRemind" FileVersion="0.0.0.29" ProductVersion="0.0.0.29" LegalCopyright="Copyright (C) 作者 2014" ui="win" output="WaterClock.exe" CompanyName="单位名称" publishDir="/Publish/">
 	<file name="main.aau" path="main.aau"/>
 	<folder name="资源文件" path="res" embed="true">
+		<file name="yy-gaiheshui.mp3" path="res\yy-gaiheshui.mp3" comment="res\yy-gaiheshui.mp3"/>
+		<file name="pth-gaiheshui.mp3" path="res\pth-gaiheshui.mp3" comment="res\pth-gaiheshui.mp3"/>
 		<file name="health.aau" path="res\health.aau" comment="res\health.aau"/>
 		<file name="main.html" path="res\main.html" comment="res\main.html"/>
 		<file name="icon32.ico" path="res\icon32.ico" comment="res\icon32.ico"/>
