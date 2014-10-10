@@ -1,0 +1,34 @@
+import win.ui;
+/*DSG{{*/
+var winform = ..win.form(text="AAuto Form";right=599;bottom=399)
+winform.add()
+/*}}*/
+
+import win.ui;
+import win.util.round;
+import win.ui.menu;
+import win.region.round;
+import web.layout;
+import web.layout.behavior.windowCommand;
+import web.layout.behavior.windowSizer;
+import web.layout.behavior.tabs; //µº»Îbehavior
+import sqlite;
+import console;
+import win.ui.atom;
+import win.util.tray;
+import win.reg;
+import fsys.lnk;
+import mouse;
+/*DSG{{*/
+var mainForm = ..win.form(text="";right=549;bottom=399;border="none";parent=...;topmost=1)
+mainForm.add()
+/*}}*/
+
+
+var wbLayout = web.layout( mainForm )
+
+var ahtml = string.load("/res/main2.html");
+wbLayout.html = ahtml;
+mainForm.show(true);
+
+win.loopMessage();

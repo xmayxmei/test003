@@ -44,7 +44,7 @@ var remdTimeTab = null;
 var remdAmtTab = null;
 var startDelaySecd = 0;//延迟多久启动定时任务
 var difSecd = 3;//消除时间误差
-
+var popmenu = win.ui.popmenu(mainForm);//弹出菜单
 win.util.round( mainForm);
 //创建网页浏览器
 var wbLayout = web.layout( mainForm )
@@ -53,34 +53,40 @@ var ahtml = string.load("/res/main.html");
 wbLayout.html = ahtml;
 
 var db = sqlite("\waterclock.db");
-if(!db.existsTable("config")){ //配置表
-	db.exec("create table config(parent,code,value,desc)");
-	db.exec("insert into config values('user','sex','男性','性别')");
-	db.exec("insert into config values('user','weight','55','体重')");
-	db.exec("insert into config values('user','lifestyle','上班不运动','生活方式')");
-	db.exec("insert into config values('user','mornin','8:30','上午上班')");
-	db.exec("insert into config values('user','mornout','12:00','上午下班')");
-	db.exec("insert into config values('user','afterin','14:00','下午上班')");
-	db.exec("insert into config values('user','afterout','18:00','下午下班')");
-	db.exec("insert into config values('sys','startup','true','开机启动')");
-	db.exec("insert into config values('sys','filelink','true','创建快捷')");
-	db.exec("insert into config values('sys','remsound','true','声音提醒')");
-	db.exec("insert into config values('sys','wavefile','clock.wav','声音文件')");
-	db.exec("insert into config values('sys','remwin','true','弹窗提醒')");
+configMap={};//全局
+//导入初始化数据
+var initConfigData = function(){
+	if(!db.existsTable("config")){ //配置表
+		db.exec("create table config(parent,code,value,desc)");
+		db.exec("insert into config values('user','sex','男性','性别')");
+		db.exec("insert into config values('user','weight','55','体重')");
+		db.exec("insert into config values('user','lifestyle','上班不运动','生活方式')");
+		db.exec("insert into config values('user','mornin','8:30','上午上班')");
+		db.exec("insert into config values('user','mornout','12:00','上午下班')");
+		db.exec("insert into config values('user','afterin','14:00','下午上班')");
+		db.exec("insert into config values('user','afterout','18:00','下午下班')");
+		db.exec("insert into config values('sys','startup','true','开机启动')");
+		db.exec("insert into config values('sys','filelink','true','创建快捷')");
+		db.exec("insert into config values('sys','remsound','true','声音提醒')");
+		db.exec("insert into config values('sys','wavefile','clock.wav','声音文件')");
+		db.exec("insert into config values('sys','remwin','true','弹窗提醒')");
+	}
+	if(!db.existsTable("knowledge")){ //水知识
+		db.exec("create table knowledge(id INTEGER PRIMARY KEY AUTOINCREMENT,kind,desc)");
+	}
+	if(!db.existsTable("records")){ //喝水记录
+		db.exec("create table records(id INTEGER PRIMARY KEY AUTOINCREMENT, volume int NOT NULL, create_time DATE)");
+	}
 }
-if(!db.existsTable("knowledge")){ //水知识
-	db.exec("create table knowledge(id INTEGER PRIMARY KEY AUTOINCREMENT,kind,desc)");
-}
-if(!db.existsTable("records")){ //喝水记录
-	db.exec("create table records(id INTEGER PRIMARY KEY AUTOINCREMENT, volume int NOT NULL, create_time DATE)");
+//加载配置数据
+var loadConfigData = function(){
+	var configTab = db.getTable("SELECT parent,code,value,desc FROM config where parent='user' or parent='sys'");
+	for(row,item in configTab){
+		//console.log(item['parent'],item['code'],item['value'],item['desc']);
+		configMap[item['code']] = item['value'];
+	}
 }
 
-var configTab = db.getTable("SELECT parent,code,value,desc FROM config where parent='user' or parent='sys'");
-configMap={};
-for(row,item in configTab){
-	//console.log(item['parent'],item['code'],item['value'],item['desc']);
-	configMap[item['code']] = item['value'];
-}
 //链接
 wbLayout.onHyperlinkClick = function (ltTarget,ltEle,reason,behaviorParams) {
     if(ltEle.id="settings"){//设置
@@ -319,21 +325,36 @@ var taskRun = function(){
     	}
 	)
 }
-
-mainForm.popmenu = win.ui.popmenu(mainForm);//创建弹出菜单
-
-mainForm.popmenu.add('打开',function(id){
-	//在下面输入菜单响应代码
-	mainForm.show(true);
-});
-mainForm.popmenu.add();//分隔线
-mainForm.popmenu.add('退出',function(id){ 
-	if(tray != null){
-    	tray.delete();
-    }
-	mainForm.close() ;
-});
-
+//创建弹出菜单
+var createPopMenu = function(){
+	//mainForm.popmenu
+	popmenu.add('打开(&O\)',function(id){
+		//在下面输入菜单响应代码
+		mainForm.show(true);
+	});
+	popmenu.add('设置(&S\)',function(id){
+		//在下面输入菜单响应代码
+		mainForm.loadForm("/res/config.aau");
+	});
+	popmenu.add();//分隔线
+	popmenu.add('分享给朋友(&F\)',function(id){
+		//在下面输入菜单响应代码
+		mainForm.loadForm("/res/config.aau");
+	});
+	popmenu.add('关于喝水闹钟(&A\)',function(id){
+		//在下面输入菜单响应代码
+		mainForm.loadForm("/res/config.aau");
+	});
+	popmenu.add();//分隔线
+	
+	popmenu.add('退出(&X)',function(id){ 
+		if(tray != null){
+    		tray.delete();
+    	}
+		mainForm.close() ;
+	});
+}
+createPopMenu();
 createWinTray(tray,"",mainForm,"");
 
 //事件监听器
@@ -364,7 +385,7 @@ mainForm.wndproc = function(hwnd,message,wparam,lparam){
 	    			x,y = mouse.getPos();
 	    			//弹出托盘菜单以前，一定要前置主窗口中，不然不点击菜单不会消失
 	    			win.setForeground(mainForm.hwnd)
-	    			mainForm.popmenu.popup( x,y,true );
+	    			popmenu.popup( x,y,true );
                 }
                 case (0x0202){//单击鼠标左键前置窗口
                     win.setForeground(mainForm.hwnd);
@@ -385,7 +406,8 @@ mainForm.wndproc = function(hwnd,message,wparam,lparam){
     }
     //无返回值则继续调用默认回调函数
 }
-
+initConfigData();//数据初始化
+loadConfigData();//加载初始化数据
 playSound();//
 startUp();//
 reOpen();//探测重新打开
