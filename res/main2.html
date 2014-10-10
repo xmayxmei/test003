@@ -14,19 +14,28 @@ body {
 	margin:0;
 }
 #mainwin {
+	behavior:windowCommand;
 	width:320px;
 	height:230px;
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #2eb4ff), color-stop(1, #2878be));
+	background: #2eb4ff;
 	border-radius:4px;
 }
+#banner{
+	width:320px;
+	height:40px;
+	float:left;
+}
+#logo{
+	width:40px;
+}
 #title {
-	height:18px;
-	padding:5px 5px 5px 20px;
+	width:120px;
+	padding:5px 5px 5px 0px;
 }
 
 #settings{
-	behavior:popup-menu; 
 	float:left;
+	width:120px;
 	height:14px;
 	font-family:"Marlett";/*该字体显示按钮符号*/  
 	font-size:14px;
@@ -62,14 +71,19 @@ body {
     background-color: #FF0000;
     color: #FFFFFF;
 }
+
 #closewin{
 	behavior:windowCommand;
-	float:left;//块节点左浮动( 从左向右排 )
+	float:left;
 	height:14px;
 	font-family:"Marlett";/*该字体显示按钮符号*/  
 	font-size:14px;
 	padding:4px;
 	color:#fff;
+	width:20px;
+}
+#closewin :hover{
+	background:#6ebccf;
 }
 menu{
   	width: max-intrinsic; /*内容的最大宽度,可以超出屏幕*/      
@@ -77,22 +91,61 @@ menu{
   	background-position: 0 0 0 24;
   	text-align:left;
 }
+#buttons{
+	
+}
+.button {
+  background-color: #fbfbfb #fbfbfb #e1e1e1 #e1e1e1;
+  display: inline-block;
+  vertical-align: middle;
+  border: 1px solid #d4d4d4;
+  height: 32px;
+  width:max-intrinsic;
+  line-height: 32px;
+  padding: 0px 25.6px;
+  font-weight: 300;
+  font-size: 14px;
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", "Helvetica, Arial", "Lucida Grande", "sans-serif";
+  color: #666666;
+  margin: 0;
+  text-decoration: none;
+  text-align: center;
+  behavior:button;
+}
+.button:hover {
+  background-color: #ffffff #ffffff #dcdcdc #dcdcdc;
+}
+.button:active {
+  background: #eeeeee;
+  color: #bbbbbb;
+}
+.button:focus {
+  outline: none;
+}
+.button-rounded {
+  border-radius: 6px;
+  margin:10px;
+}
+
 </style>
 <!--Fireworks 8 Dreamweaver 8 target.  Created Thu Sep 25 20:21:05 GMT+0800 2014-->
 </head>
 <body bgcolor="#eeeeee" cellpadding="0" cellspacing="0">
-<div id="mainwin">
+<div id="mainwin" command="window-caption">
 	<div id="banner">
 		<div id="logo"></div>
 		<div id="title">喝水闹钟</div>
 		<div id="settings">
 			<div .window-menu>u
 			   <menu .popup> <!-- .popup是内置的弹出菜单样式 -->
-    				<li>在线帮助</li> 
-    				<li>子菜单
+    				<li>设置</li>
+    				<li>分享到
       				<menu >
-        				<li>这是子菜单</li>
+        				<li>微博</li>
+						<li>QQ空间</li>
+						<li>人人网</li>
       				</menu>
+					<li>关于</li> 
     				</li>
     				<li #exit>退出</li>
   				</menu>
@@ -104,8 +157,8 @@ menu{
 		<div id="remindperc"></div>
 		<div id="remindtip"></div>
 		<div id="buttons">
-			<div id="okay">知道了</div>
-			<div id="delay">稍后提醒</div>
+			<a href="#" class="button button-rounded" id="okay">知道了</a>
+			<a href="#" class="button button-rounded" id="delay">稍后提醒</a>
 		</div>
 	</div>
 </div>
