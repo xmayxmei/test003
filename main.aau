@@ -14,7 +14,7 @@ import win.reg;
 import fsys.lnk;
 import mouse;
 /*DSG{{*/
-var mainForm = ..win.form(text="喝水闹钟";right=549;bottom=399;border="none";parent=...;topmost=1)
+var mainForm = ..win.form(text="喝水闹钟";right=338;bottom=229;border="none";parent=...;topmost=1)
 mainForm.add()
 /*}}*/
 
@@ -96,14 +96,7 @@ wbLayout.onHyperlinkClick = function (ltTarget,ltEle,reason,behaviorParams) {
     if(ltEle.id="minisize"){//最小化
     	mainForm.hitmin();
     }
-    if(ltEle.id="close"){//关闭
-    	for(i=25;1;-1){
-        	mainForm.transparent( i * 10);
-        	win.delay(50);
-    	};
-    	mainForm.close();
-    	win.quitMessage();
-    }
+
     if(ltEle.id="okay"){ //OK
     	var command = db.prepare("insert into records values(null,200,@create_time)");
     	command.bind.parameterByNamesAt( //绑定命名参数 
@@ -125,7 +118,14 @@ var playSound = function(){
 	win.mm.playMp3("/res/yy-gaiheshui.mp3");
 }
 
-
+//关闭窗口
+var fakeClose =function(){
+	for(i=25;1;-1){
+        mainForm.transparent( i * 10);
+        win.delay(50);
+    };
+    mainForm.close();
+}
 
 
 //按钮
@@ -160,7 +160,7 @@ var startUp = function(){
 	//win.util.popup(mainForm);
 	var w = ::GetSystemMetrics(0x10/*_SM_CXFULLSCREEN*/); 
 	var h = ::GetSystemMetrics(0x11/*_SM_CYFULLSCREEN*/) ;
-	mainForm.setPos(w-552,h-400,550,400);
+	mainForm.setPos(w-323,h-230,320,230);
 	mainForm.transparent(0);
 	mainForm.show();
 	
@@ -365,7 +365,7 @@ mainForm.wndproc = function(hwnd,message,wparam,lparam){
             //::PostMessage(mainForm.hwnd, 0x112,0xF020, 0);
     		//mainForm.show( false );
     		//return false;
-    		
+    		fakeClose();
         }
         case (0x400+9981/*_WM_TRAYMESSAGE*/) { //托盘图标消息
             select(lparam){

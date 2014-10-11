@@ -1,167 +1,66 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>aaa</title>
+<title>naub.png</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<style type="text/css">
-body {
-	color: #FFF;
-	font:14px;
-	font-family:Arial, Helvetica, sans-serif;
-	padding:0;
-	margin:0;
+<style type="text/css">td img {display: block;}body {
+	margin-left: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
 }
-#mainwin {
-	behavior:windowCommand;
-	width:320px;
-	height:230px;
-	background: #2eb4ff;
-	border-radius:4px;
+#title-bar{ 
+    behavior:windowCommand;
 }
-#banner{
-	width:320px;
-	height:40px;
-	float:left;
-}
-#logo{
-	width:40px;
-}
-#title {
-	width:120px;
-	padding:5px 5px 5px 0px;
-}
-
-#settings{
-	float:left;
-	width:120px;
-	height:14px;
-	font-family:"Marlett";/*该字体显示按钮符号*/  
-	font-size:14px;
-	padding:4px;
-	color:#fff;
-}
-#settings a[command]:hover{ 
-    background:#6ebccf;
-}
-
-#settings a[command]:active{ 
-    background:#FF0000;
-}
-
-#settings a[command="window-restore"]{ 
-    content:"2";/*改变文本,Marlett字体为还原符号*/ 
+html {   
+    background-color:transparent; /*网页背景透明*/
+    context-menu:selector(menu#menuId);
 } 
-
-#settings .window-menu{ 
-	behavior:popup-menu; 
-	float:left;
-	height:14px;
-	font-family:"Marlett";/*该字体显示按钮符号*/  
-	font-size:14px;
-	padding:4px;
-	color:#fff;
-}
-#settings .window-menu:hover{
-	background:#6ebccf;
-}
-#settings .window-menu:owns-popup /*菜单已弹出*/
-{ 
-    background-color: #FF0000;
-    color: #FFFFFF;
-}
-
-#closewin{
-	behavior:windowCommand;
-	float:left;
-	height:14px;
-	font-family:"Marlett";/*该字体显示按钮符号*/  
-	font-size:14px;
-	padding:4px;
-	color:#fff;
-	width:20px;
-}
-#closewin :hover{
-	background:#6ebccf;
-}
 menu{
   	width: max-intrinsic; /*内容的最大宽度,可以超出屏幕*/      
   	background: url(/res/menu-back-office.png) expand;
   	background-position: 0 0 0 24;
   	text-align:left;
 }
-#buttons{
-	
-}
-.button {
-  background-color: #fbfbfb #fbfbfb #e1e1e1 #e1e1e1;
-  display: inline-block;
-  vertical-align: middle;
-  border: 1px solid #d4d4d4;
-  height: 32px;
-  width:max-intrinsic;
-  line-height: 32px;
-  padding: 0px 25.6px;
-  font-weight: 300;
-  font-size: 14px;
-  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", "Helvetica, Arial", "Lucida Grande", "sans-serif";
-  color: #666666;
-  margin: 0;
-  text-decoration: none;
-  text-align: center;
-  behavior:button;
-}
-.button:hover {
-  background-color: #ffffff #ffffff #dcdcdc #dcdcdc;
-}
-.button:active {
-  background: #eeeeee;
-  color: #bbbbbb;
-}
-.button:focus {
-  outline: none;
-}
-.button-rounded {
-  border-radius: 6px;
-  margin:10px;
-}
-
 </style>
 <!--Fireworks 8 Dreamweaver 8 target.  Created Thu Sep 25 20:21:05 GMT+0800 2014-->
 </head>
-<body bgcolor="#eeeeee" cellpadding="0" cellspacing="0">
-<div id="mainwin" command="window-caption">
-	<div id="banner">
-		<div id="logo"></div>
-		<div id="title">喝水闹钟</div>
-		<div id="settings">
-			<div .window-menu>u
-			   <menu .popup> <!-- .popup是内置的弹出菜单样式 -->
-    				<li>设置</li>
-    				<li>分享到
-      				<menu >
-        				<li>微博</li>
-						<li>QQ空间</li>
-						<li>人人网</li>
-      				</menu>
-					<li>关于</li> 
-    				</li>
-    				<li #exit>退出</li>
-  				</menu>
-			</div>
-		</div>
-		<div id="closewin"><a command="window-close">r</a></div>
-	</div>
-	<div id="content">
-		<div id="remindperc"></div>
-		<div id="remindtip"></div>
-		<div id="buttons">
-			<a href="#" class="button button-rounded" id="okay">知道了</a>
-			<a href="#" class="button button-rounded" id="delay">稍后提醒</a>
-		</div>
-	</div>
-</div>
+<body bgcolor="#ffffff" cellpadding="0" cellspacing="0">
+<table border="0" cellpadding="0" cellspacing="0" width="550" id="title-bar" command="window-caption">
+<!-- fwtable fwsrc="naub.png" fwbase="naub.png" fwstyle="Dreamweaver" fwdocid = "57145475" fwnested="0" -->
+
+  <tr>
+   <td><img name="naub_r1_c1" src="/res/images/naub_r1_c1.png" width="61" height="61" border="0" id="naub_r1_c1" alt="" /></td>
+   <td><img name="naub_r1_c3" src="/res/images/naub_r1_c2.png"  border="0" id="naub_r1_c3" alt="" /></td>
+   <td background="/res/images/naub_r1_c3.png"><span id="remdTitle"></span></td>
+   <td><a href="" id="settings"><img name="naub_r1_c4" src="/res/images/naub_r1_c4.png" width="59" height="61" border="0" alt="" /></a></td>
+   <td><a href="" id="minisize"><img name="naub_r1_c5" src="/res/images/naub_r1_c5.png" width="47" height="61" border="0" id="naub_r1_c5" alt="" command="window-min"/></a></td>
+   <td><a href="" id="close"><img name="naub_r1_c6" src="/res/images/naub_r1_c6.png" width="57" height="61" border="0" id="naub_r1_c6" alt="" command="window-close"/></a></td>
+  </tr>
+
+  <tr>
+   <td colspan="6"><img name="naub_r2_c1" src="/res/images/naub_r2_c1.png" width="550" height="43" border="0" id="naub_r2_c1" alt="" /></td>
+  </tr>
+  <tr>
+   <td colspan="2"><img name="naub_r3_c1" src="/res/images/naub_r3_c1.png" width="171" height="174" border="0" id="naub_r3_c1" alt="" /></td>
+   <td background="/res/images/main45.png"></td>
+   <td colspan="3"><img name="naub_r3_c4" src="/res/images/naub_r3_c4.png" width="163" height="174" border="0" id="naub_r3_c4" alt="" /></td>
+  </tr>
+  <tr>
+   <td colspan="6"><img name="naub_r4_c1" src="/res/images/naub_r4_c1.png" width="550" height="35" border="0" id="naub_r4_c1" alt="" /></td>
+  </tr>
+  <tr>
+   <td colspan="2"><img name="naub_r5_c1" src="/res/images/naub_r5_c1.png" width="171" height="59" border="0" id="naub_r5_c1" alt="" /></td>
+   <td><a href="" id="okay"><img name="naub_r5_c3" src="/res/images/naub_r5_c3.png" width="216" height="59" border="0" id="naub_r5_c3" alt=""  command="window-close"/></a></td>
+   <td colspan="3"><img name="naub_r5_c4" src="/res/images/naub_r5_c4.png" width="163" height="59" border="0" id="naub_r5_c4" alt="" /></td>
+  </tr>
+  <tr>
+   <td colspan="6"><img name="naub_r6_c1" src="/res/images/naub_r6_c1.png" width="550" height="28" border="0" id="naub_r6_c1" alt="" /></td>
+  </tr>
+</table>
 <menu.context id="menuId">
   <li>桌面图标
      <menu>
