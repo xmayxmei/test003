@@ -14,7 +14,7 @@ import win.reg;
 import fsys.lnk;
 import mouse;
 /*DSG{{*/
-var mainForm = ..win.form(text="喝水闹钟";right=338;bottom=229;border="none";parent=...;topmost=1)
+var mainForm = ..win.form(text="水宝宝";right=338;bottom=229;border="none";exmode="none";mode="popup";parent=...;sysmenu=false;title=false;topmost=1)
 mainForm.add()
 /*}}*/
 
@@ -45,12 +45,27 @@ var remdAmtTab = null;
 var startDelaySecd = 0;//延迟多久启动定时任务
 var difSecd = 3;//消除时间误差
 var popmenu = win.ui.popmenu(mainForm);//弹出菜单
+
+//win.region.round(mainForm,,,4,4);
 win.util.round( mainForm);
 //创建网页浏览器
 var wbLayout = web.layout( mainForm )
 
 var ahtml = string.load("/res/main.html");
 wbLayout.html = ahtml;
+//重复打开激活
+var atom,hwnd = mainForm.atom("2A36B41E-A08C-442B-911A-8587ED58A498");
+var reOpen = function(){
+	//console.log(atom);
+	if(!atom){ 
+    	win.show(hwnd, true);
+    	win.setForeground(hwnd);
+    	win.quitMessage();
+    	return;
+	}
+}
+
+//reOpen();
 
 var db = sqlite("\waterclock.db");
 configMap={};//全局
@@ -87,7 +102,8 @@ var loadConfigData = function(){
 	}
 }
 
-//链接
+
+//链接响应
 wbLayout.onHyperlinkClick = function (ltTarget,ltEle,reason,behaviorParams) {
     if(ltEle.id="settings"){//设置
     	var configform,wb = mainForm.loadForm("/res/config.aau", );
@@ -106,10 +122,34 @@ wbLayout.onHyperlinkClick = function (ltTarget,ltEle,reason,behaviorParams) {
     	mainForm.close();
     }
     if(ltEle.id="delay"){//延迟
-    	nextTimer = nextTimer.addminute(remdDelayIntv);
+    	var nowTime=time.now();
+    	nextTimer = nowTime.addminute(remdDelayIntv);
     	nextTimeDist = remdDelayIntv;//距离下次多久
     	mainForm.hitmin();
     }
+}
+
+
+// 响应菜单点击事件
+wbLayout.onMenuItemClick =  {
+	
+	// 事件可以是一个函数或列表,如果是列表键名匹配节点的id或name属性 
+	exit = function (ltTarget,ltOwner,reason,behaviorParams) {
+		mainForm.close();
+	}
+	about = function(ltTarget,ltOwner,reason,behaviorParams){
+		mainForm.msgbox("about us!");
+	}
+	config = function(ltTarget,ltOwner,reason,behaviorParams){
+		var configform,wb =  mainForm.loadForm("/res/config.aau","");
+	}
+	
+	
+	// 在这里没有匹配不到id的节点会触发default函数*/
+	default = function (ltTarget,ltOwner,reason,behaviorParams) {
+		var ltPopupOwner = web.layout.element( behaviorParams.he );//这是弹出菜单的按钮节点
+		mainForm.msgbox( ltTarget.innerText )
+	}
 }
 
 //播放声音
@@ -120,37 +160,18 @@ var playSound = function(){
 
 //关闭窗口
 var fakeClose =function(){
+	wbLayout.getEle("mainwin").style["background-color"] = "red orange yellow yellow"
 	for(i=25;1;-1){
         mainForm.transparent( i * 10);
         win.delay(50);
     };
+    
+    if(tray != null){
+    	tray.delete();	
+    }
+    
     mainForm.close();
 }
-
-
-//按钮
-wbLayout.onButtonClick = function (ltTarget,ltEle,reason,behaviorParams) {
-	if(ltEle.id="settings"){
-		
-		//win.msgbox("设置");
-	}
-}
-
-// 响应菜单点击事件
-wbLayout.onMenuItemClick =  {
-
-	// 事件可以是一个函数或列表,如果是列表键名匹配节点的id或name属性 
-	exit = function (ltTarget,ltOwner,reason,behaviorParams) {
-		mainForm.close();
-	}
-	
-	// 在这里没有匹配不到id的节点会触发default函数*/
-	default = function (ltTarget,ltOwner,reason,behaviorParams) {
-		var ltPopupOwner = web.layout.element( behaviorParams.he );//这是弹出菜单的按钮节点
-		mainForm.msgbox( ltTarget.innerText )
-	}
-}
-
 
 
 var startUp = function(){
@@ -180,17 +201,9 @@ var startUp = function(){
 RegisterWindowMessage := ::User32.api( "RegisterWindowMessageA", "Long(String lpString)");
 var msgTaskbarRestart = RegisterWindowMessage("taskbarcreated");
 
-var atom,hwnd1 = mainForm.atom("13F0297F-F7AD-267E-142E-722AED89671D");
 
-//重复打开激活
-var reOpen = function(){
-	if(!atom){ 
-    	win.show(hwnd, true);
-    	win.setForeground(hwnd);
-    	win.quitMessage();
-    	return;
-	}
-}
+
+
 
 //创建快捷方式
 var createLnk = function(){
@@ -263,9 +276,7 @@ var formShowNow = function(showReason,showDelayIntv){
 	}elseif(showReason=='isdist'){//距离时间点（5分钟后消失）
 		//标题，托盘
 		mainForm.show( true);
-		
 	}
-	
 }
 
 //窗口提醒或提示(显示或消失)
@@ -354,8 +365,7 @@ var createPopMenu = function(){
 		mainForm.close() ;
 	});
 }
-createPopMenu();
-createWinTray(tray,"",mainForm,"");
+
 
 //事件监听器
 mainForm.wndproc = function(hwnd,message,wparam,lparam){	
@@ -367,6 +377,13 @@ mainForm.wndproc = function(hwnd,message,wparam,lparam){
     		//return false;
     		fakeClose();
         }
+        /**
+        case( 0x112/*_WM_SYSCOMMAND*/ ){ //系统命令消息
+            if( wparam == 0xF020/*_SC_MINIMIZE*/ ){ //用户点击了最小化按钮
+                mainForm.show(false); //隐藏窗口
+                return true;//阻击默认消息传递，取消最小化过程
+            }
+        }**/
         case (0x400+9981/*_WM_TRAYMESSAGE*/) { //托盘图标消息
             select(lparam){
                 case (0x203){//双击托盘图标打开窗口
@@ -406,11 +423,15 @@ mainForm.wndproc = function(hwnd,message,wparam,lparam){
     }
     //无返回值则继续调用默认回调函数
 }
+
+createPopMenu();
+createWinTray(tray,"","","");
+//reOpen();//探测重新打开
 initConfigData();//数据初始化
 loadConfigData();//加载初始化数据
 playSound();//
 startUp();//
-reOpen();//探测重新打开
-//taskRun();//执行任务
+
+taskRun();//执行任务
 win.loopMessage();
 

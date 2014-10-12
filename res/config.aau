@@ -15,6 +15,8 @@ var wbLayout = web.layout( winform )
 
 var ahtml = string.load("/res/config.html");
 wbLayout.html = ahtml;
+wbLayout.getEle("genalset").style["selected"] = "selected";
+ //setAttribute("selected","selected");
  
 var sex = wbLayout.getEle("sex");
 sex.setValueObject(configMap['sex']);
@@ -42,9 +44,12 @@ var wavefile = wbLayout.getEle("wavefile");
 wavefile.setAttribute("novalue",configMap['wavefile']);
 var remwin = wbLayout.getEle("remwin");
 remwin.setValueObject(configMap['remwin']=='true'?true:false);
-
-
-
+//分享到微博
+//http://service.weibo.com/share/share.php?title=你好啊&url=http://www.sina.com&source=bookmark&pic=http://img.t.sinajs.cn/t4/appstyle/widget/images/library/base/wb_logo.png?id=1395901125982
+//分享到QQ空间
+//http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://www.weibo.com&title=你好
+//分享到人人网
+//http://widget.renren.com/dialog/share?resourceUrl=&srcUrl=&title=&pic=&description=
 
 wbLayout.onHyperlinkClick = function (ltTarget,ltEle,reason,behaviorParams) {
     if(ltEle.id="minisize"){
@@ -69,7 +74,7 @@ wbLayout.onButtonClick = function (ltTarget,ltEle,reason,behaviorParams) {
 		var  afterin = wbLayout.getEle("afterin");
 		var  afterout = wbLayout.getEle("afterout");
 		//先保存，再执行相应函数
-		console.log(mornin.getValueObject());
+		//console.log(mornin.getValueObject());
 
 		var sql = string.concat("update config set value='",sex.value,"' where code = 'sex' and parent='user'");
 		db.exec(sql);
@@ -85,7 +90,8 @@ wbLayout.onButtonClick = function (ltTarget,ltEle,reason,behaviorParams) {
 		db.exec(sql);
 		var sql = string.concat("update config set value='",afterout.value,"' where code = 'afterout' and parent='user'");
 		db.exec(sql);
-		win.msgbox("保存成功！");
+		winform.close();
+		//win.msgbox("保存成功！");
 	}
 	if(ltEle.id="sysConfigSave"){
 		var  startup = wbLayout.getEle("startup");
@@ -103,7 +109,8 @@ wbLayout.onButtonClick = function (ltTarget,ltEle,reason,behaviorParams) {
 		db.exec(sql);
 		var sql = string.concat("update config set value='",(remwin.value==true?"true":"false"),"' where code = 'remwin' and parent='sys'");
 		db.exec(sql);
-		win.msgbox("保存成功！");
+		winform.close();
+		//win.msgbox("保存成功！");
 	}
 	if(ltEle.id="userConfigSave" || ltEle.id="userConfigSave"){
 		//重新加载

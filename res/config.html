@@ -109,19 +109,19 @@ body {
 	background-color:#0099FF;
 	behavior:windowCommand; 
 }
-#circle {     width: 100px;     height: 100px;     background: red;     -moz-border-radius: 50px;     -webkit-border-radius: 50px;  
-   border-radius: 50px; }
+#circle {     width: 100px;     height: 100px;         -moz-border-radius: 100px;      
+   border-radius: 100px; border:10px solid #ff0000;padding:10px 10px;}
 </style>
 <meta http-equiv="Content-Type" content="text/html; charset=gb2312"></head>
 <body>
-	<div class="title-bar" command = "window-caption">
-		<a href="" id="minisize">-</a>&nbsp;&nbsp;<a href="" id="close">X</a>&nbsp;&nbsp;
+	<div class="title-bar" command="window-caption">
+		<a href="" id="close">r</a>
 	</div>
    <div class="tabs">
       <div class="strip" > 
         <!-- 选项卡,可以随意放到哪一侧,必须使用DIV标签 -->
-         <div panel="panel1" selected>个人设置</div>
-         <div panel="panel2">常规设置</div>
+         <div panel="panel1" id="personset" >个人设置</div>
+         <div panel="panel2" id="genalset" selected>常规设置</div>
 		 <!--
          <div panel="panel3">选项三</div>
 		 -->
@@ -178,21 +178,33 @@ body {
 
 			<table width="350" border="0">
 			  <tr>
-				<td><input type="checkbox" name="startup"></td>
-				<td>开机时自动启动本程序</td>
-			  </tr>
-			  <tr>
-				<td><input type="checkbox" name="filelink"></td>
+				
 				<td>
-				  创建桌面快捷方式</td>
+					<button type="checkbox" name="startup">
+						<text>开机时自动启动本程序</text> 
+					</button>
+				</td>
 			  </tr>
 			  <tr>
-				<td><input type="checkbox" name="remsound"></td>
-				<td>闹钟时间到时使用声音提醒<input type="file" name="wavefile" size="2" filter="Wav files:*.wav,*.mp3" novalue="clock.wav"/></td>
+				<td>
+				  <button type="checkbox" name="filelink">
+					<text>创建桌面快捷方式</text> 
+				  </button>
+				</td>
 			  </tr>
 			  <tr>
-				<td><input type="checkbox" name="remwin"></td>
-				<td>闹钟时间到时使用桌面右下角弹窗提醒</td>
+				<td>
+					<button type="checkbox" name="remsound">
+					<text>闹钟时间到时使用声音提醒</text> 
+				  </button>
+				<input type="file" name="wavefile" size="2" filter="Wav files:*.wav,*.mp3" novalue="clock.wav"/></td>
+			  </tr>
+			  <tr>
+				<td>
+				  <button type="checkbox" name="remwin">
+					<text>闹钟时间到时使用桌面右下角弹窗提醒</text> 
+				  </button>
+				</td>
 			  </tr>
 			  
 			</table>

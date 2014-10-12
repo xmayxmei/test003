@@ -2,8 +2,8 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>aaa</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<meta http-equiv="Content-Type" content="text/html; charset=gbk" />
 <style type="text/css">
 body {
 	color: #FFF;
@@ -17,7 +17,7 @@ body {
 	width:320px;
 	height:230px;
 	border-radius:4px;
-	background-color: #2eb4ff #2eb4ff #2878be #2878be;
+	background-color: #2eb4ff #2eb4ff #2878be #CC99FF;
 }
 #banner{
 	width:320px;
@@ -26,10 +26,12 @@ body {
 #logo{
 	float:left;
 	width:40px;
+	margin:0px;2px;0px;0px;
 }
 #title {
 	float:left;
 	width:210px;
+	font-weight:bold;
 	padding:5px 5px 5px 0px;
 }
 
@@ -87,17 +89,30 @@ body {
 	color:#fff;
 	background:#6ebccf;
 }
-
-#remindperc{
-	float:center;
+#content{
 	
+}
+.remindperc{
+	margin:auto;
+	padding:0px; 
+	width:100px;
+	height:100px;
+	vertical-align:middle;
+	background: url(/res/circle.png) expand;
+	font-size:42px;
 	text-align:center;
-	font-size:48px;
+}
+#num{
+
+	
 }
 .per{
+	width:20px;
 	font-size:14px;
 }
 #remindtip{
+	width:320px;
+	margin-top:10px;
 	float:center;
 	text-align:center;
 	font-size:16px;
@@ -109,11 +124,13 @@ menu{
   	text-align:left;
 }
 #buttons{
-	margin-top:40px;
+	
+	margin-top:6px;
 	float:center;
 	text-align:center;
 }
 .button {
+  
   background-color: #fbfbfb #fbfbfb #e1e1e1 #e1e1e1;
   display: inline-block;
   vertical-align: middle;
@@ -129,7 +146,7 @@ menu{
   margin: 0;
   text-decoration: none;
   text-align: center;
-  behavior:button;
+  
 }
 .button:hover {
   background-color: #ffffff #ffffff #dcdcdc #dcdcdc;
@@ -149,22 +166,22 @@ menu{
 </style>
 <!--Fireworks 8 Dreamweaver 8 target.  Created Thu Sep 25 20:21:05 GMT+0800 2014-->
 </head>
-<body bgcolor="#eeeeee" cellpadding="0" cellspacing="0">
+<body cellpadding="0" cellspacing="0">
 <div id="mainwin" command="window-caption">
 	<div id="banner">
-		<div id="logo">@@</div>
-		<div id="title">喝水闹钟</div>
+		<div id="logo"><img src="/res/logo.png" border="0"/></div>
+		<div id="title">水宝宝</div>
 		<div id="settings">
 			<div .window-menu>u
 			   <menu .popup> <!-- .popup是内置的弹出菜单样式 -->
-    				<li>设置</li>
+    				<li #config>设置</li>
     				<li>分享到
       				<menu >
-        				<li>微博</li>
-						<li>QQ空间</li>
-						<li>人人网</li>
+        				<li #weibo>微博</li>
+						<li #qzone>QQ空间</li>
+						<li #renren>人人网</li>
       				</menu>
-					<li>关于</li> 
+					<li #about>关于</li> 
     				</li>
     				<li #exit>退出</li>
   				</menu>
@@ -173,11 +190,14 @@ menu{
 		<div id="closewin"  command="window-close">r</div>
 	</div>
 	<div id="content">
-		<div id="remindperc">60<div class="per">%</div></div>
+		<div class="remindperc">
+			60<div id="num"></div>
+			<p style="font-size:14px">%</p>
+		</div>
 		<div id="remindtip">亲，该喝水了！</div>
 		<div id="buttons">
-			<a href="#" class="button button-rounded" id="okay">知道了</a>
-			<a href="#" class="button button-rounded" id="delay">稍后提醒</a>
+			<a href="" class="button button-rounded" id="okay">知道了</a>
+			<a href="" class="button button-rounded" id="delay">稍后提醒</a>
 		</div>
 	</div>
 </div>

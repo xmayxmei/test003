@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="gb2312"?>
-<project ver="3" name="WaterClock" libEmbed="true" icon="res\icon32.ico" ProductName="DrinkWaterRemind" InternalName="DrinkWaterRemind" FileDescription="DrinkWaterRemind" FileVersion="0.0.0.29" ProductVersion="0.0.0.29" LegalCopyright="Copyright (C) 作者 2014" ui="win" output="WaterClock.exe" CompanyName="单位名称" publishDir="/Publish/">
+<project ver="3" name="WaterClock" libEmbed="true" icon="res\icon32.ico" ProductName="DrinkWaterRemind" InternalName="DrinkWaterRemind" FileDescription="DrinkWaterRemind" FileVersion="0.0.0.33" ProductVersion="0.0.0.33" LegalCopyright="Copyright (C) 作者 2014" ui="win" output="WaterClock.exe" CompanyName="单位名称" publishDir="/Publish/">
 	<file name="main.aau" path="main.aau"/>
 	<folder name="资源文件" path="res" embed="true">
+		<file name="menu-back-office.png" path="res\menu-back-office.png" comment="res\menu-back-office.png"/>
+		<file name="logo.png" path="res\logo.png" comment="res\logo.png"/>
+		<file name="icon.png" path="res\icon.png" comment="res\icon.png"/>
+		<file name="circle.png" path="res\circle.png" comment="res\circle.png"/>
 		<file name="test.aau" path="res\test.aau" comment="res\test.aau"/>
 		<file name="main2.html" path="res\main2.html" comment="res\main2.html"/>
 		<file name="yy-gaiheshui.mp3" path="res\yy-gaiheshui.mp3" comment="res\yy-gaiheshui.mp3"/>
@@ -11,24 +15,5 @@
 		<file name="icon32.ico" path="res\icon32.ico" comment="res\icon32.ico"/>
 		<file name="config.aau" path="res\config.aau" comment="res\config.aau"/>
 		<file name="config.html" path="res\config.html" comment="res\config.html"/>
-		<folder name="images" path="res\images" comment="res\images" embed="false">
-			<file name="main45.png" path="res\images\main45.png" comment="res\images\main45.png"/>
-			<file name="spacer.gif" path="res\images\spacer.gif" comment="res\images\spacer.gif"/>
-			<file name="naub_r6_c1.png" path="res\images\naub_r6_c1.png" comment="res\images\naub_r6_c1.png"/>
-			<file name="naub_r5_c4.png" path="res\images\naub_r5_c4.png" comment="res\images\naub_r5_c4.png"/>
-			<file name="naub_r5_c3.png" path="res\images\naub_r5_c3.png" comment="res\images\naub_r5_c3.png"/>
-			<file name="naub_r5_c1.png" path="res\images\naub_r5_c1.png" comment="res\images\naub_r5_c1.png"/>
-			<file name="naub_r4_c1.png" path="res\images\naub_r4_c1.png" comment="res\images\naub_r4_c1.png"/>
-			<file name="naub_r3_c4.png" path="res\images\naub_r3_c4.png" comment="res\images\naub_r3_c4.png"/>
-			<file name="naub_r3_c3.png" path="res\images\naub_r3_c3.png" comment="res\images\naub_r3_c3.png"/>
-			<file name="naub_r3_c1.png" path="res\images\naub_r3_c1.png" comment="res\images\naub_r3_c1.png"/>
-			<file name="naub_r2_c1.png" path="res\images\naub_r2_c1.png" comment="res\images\naub_r2_c1.png"/>
-			<file name="naub_r1_c6.png" path="res\images\naub_r1_c6.png" comment="res\images\naub_r1_c6.png"/>
-			<file name="naub_r1_c5.png" path="res\images\naub_r1_c5.png" comment="res\images\naub_r1_c5.png"/>
-			<file name="naub_r1_c4.png" path="res\images\naub_r1_c4.png" comment="res\images\naub_r1_c4.png"/>
-			<file name="naub_r1_c3.png" path="res\images\naub_r1_c3.png" comment="res\images\naub_r1_c3.png"/>
-			<file name="naub_r1_c2.png" path="res\images\naub_r1_c2.png" comment="res\images\naub_r1_c2.png"/>
-			<file name="naub_r1_c1.png" path="res\images\naub_r1_c1.png" comment="res\images\naub_r1_c1.png"/>
-		</folder>
 	</folder>
 </project>
