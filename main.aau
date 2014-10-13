@@ -161,7 +161,27 @@ var setFormPos = function(){
 	//mainForm.getPos();
 	mainForm.setPos(w-323,h-230,320,230);
 }
-
+//窗口显示（时间到）
+var fakeShow = function(){
+	import win.ui.shadow;
+	win.ui.shadow(mainForm); //添加阴影边框
+	win.region.round(mainForm);
+	
+	setFormPos();
+	
+	//import win.ui.glass;
+	//win.ui.glass( mainForm);//玻璃效果
+	//win.util.popup(mainForm);
+	mainForm.transparent(0);
+	mainForm.show();
+	for(i=1;51;1){
+     	mainForm.transparent(i*5);
+     	if(i>=41){
+     		wbLayout.getEle("num").innerHTML =i;
+     	}
+     	win.delay(40);
+ 	};
+}
 //播放声音
 var playSound = function(){
 	import win.mm
@@ -186,7 +206,8 @@ var fakeExit = function(){
     	tray.delete();	
     }
     //wbLayout.getEle("remindperc").style["background"] = "";
-    wbLayout.getEle("remindperc").innerHTML ='再见';
+    
+    wbLayout.getEle("remindperc").innerHTML = '<div id="remindpercbak">再见</div>';
     wbLayout.getEle("remindtip").innerHTML ='';
 	wbLayout.getEle("buttons").innerHTML = '';
     for(i=25;1;-1){
@@ -198,7 +219,8 @@ var fakeExit = function(){
 
 //时间到显示
 var isTimeShow = function(){
-	setFormPos();
+	showReason = "istime";
+	showDelay = showDelayIntv;
 	wbLayout.getEle("remindtip").innerHTML ='';
 	wbLayout.getEle("buttons").innerHTML = '<a href="" class="button button-rounded" id="okay">知道了</a><a href="" class="button button-rounded" id="delay">稍后提醒</a>';
 	fakeShow();
@@ -207,14 +229,18 @@ var isTimeShow = function(){
 
 //延迟提醒显示
 var reTimeShow = function(){
+	showReason = "retime";
+	showDelay = showDelayIntv;
 	wbLayout.getEle("buttons").innerHTML = '<a href="" class="button button-rounded" id="okay">知道了</a>';
 	fakeShow();
 	playSound();//
 }
 
 //手动显示
-var isManaulShow = function(showReason){
-	setFormPos();
+var manaulShow = function(){
+	showReason = "manaul";
+	showDelay = showDelayIntv;
+	
 	//时间到
 	wbLayout.getEle("remindtip").innerHTML = currRemdStr;
 	wbLayout.getEle("buttons").innerHTML = '<a href="" class="button button-rounded" id="okay">知道了</a><a href="" class="button button-rounded" id="delay">稍后提醒</a>';
@@ -224,7 +250,7 @@ var isManaulShow = function(showReason){
 	//显示时间距离
 	wbLayout.getEle("remindtip").innerHTML = nextRemdStr;
 	wbLayout.getEle("buttons").innerHTML = '';
-	mainForm.show();
+	fakeShow();
 }
 
 //显示或延迟
@@ -232,24 +258,7 @@ var showAndDelay = function(){
 	//istime,retime,manaul
 }
 
-//窗口显示（时间到）
-var fakeShow = function(){
-	import win.ui.shadow;
-	win.ui.shadow(mainForm); //添加阴影边框
-	win.region.round(mainForm);
-	mainForm.transparent(0);
-	setFormPos();
-	mainForm.show();
-	
-	//import win.ui.glass;
-	//win.ui.glass( mainForm);//玻璃效果
-	//win.util.popup(mainForm);
-	for(i=1;51;1){
-     	mainForm.transparent(i*5);
-     	win.delay(40);
- 	};
- 	
-}
+
 
  
 //
@@ -402,12 +411,18 @@ var taskRun = function(){
         	getCurRemindInfo();//获取提醒提示信息
         	//createWinTray(tray,nextRemdStr,frmName,nextRemdStr); //电脑托盘
 			//remindByAlertOrTip();//提醒
-			//是否时间到或延迟时间到显示中
+			//是否在显示中
 			if(showDelay>0){
 				
 			}else{//
 				if(showReason=='istime'){
-					fakeShow();
+					isTimeShow();
+				}
+				if(showReason=='retime'){
+					reTimeShow();
+				}
+				if(showReason=='manaul'){
+					manaulShow();
 				}
 				showReason = '';
 			}
@@ -420,7 +435,7 @@ var createPopMenu = function(){
 	//mainForm.popmenu
 	popmenu.add('打开(&O\)',function(id){
 		//在下面输入菜单响应代码
-		isManaulShow();
+		manaulShow();
 	});
 	popmenu.add('设置(&S\)',function(id){
 		//在下面输入菜单响应代码
@@ -457,13 +472,13 @@ mainForm.wndproc = function(hwnd,message,wparam,lparam){
                    stat = win.isVisible(mainForm.hwnd);
                    if(stat){
                        ::PostMessage(mainForm.hwnd,0x112,0xF020,0); 
-                       mainForm.show(true);
+                       
                    }else{
                        
                    }
                    ::PostMessage(mainForm.hwnd, 0x112, 0xF120, 0)；
                    win.setForeground(mainForm.hwnd);
-                   isManaulShow();//还原窗口
+                   manaulShow();//还原窗口
                 }
                 case (0x205/*_WM_RBUTTONUP*/){//单击鼠标右键弹出菜单
 	    			x,y = mouse.getPos();
