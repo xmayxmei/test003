@@ -15,7 +15,7 @@ var wbLayout = web.layout( winform )
 
 var ahtml = string.load("/res/config.html");
 wbLayout.html = ahtml;
-wbLayout.getEle("genalset").style["selected"] = "selected";
+//wbLayout.getEle("funcs").innerHTML = '<div panel="panel1" id="personset" >个人设置</div><div panel="panel2" id="genalset" selected>常规设置</div>';
  //setAttribute("selected","selected");
  
 var sex = wbLayout.getEle("sex");

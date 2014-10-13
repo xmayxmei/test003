@@ -26,13 +26,15 @@ var currRemdTempl = "{0},建议喝水{1}ML";//建议喝水模板
 var nextRemdTempl = "距离下次喝水还有{0}分钟";//下次喝水模板
 var remdTimeTabStr = "8:30,9:30,10:30,11:30,12:30,14:00,15:00,16:00,17:00,18:00";
 var remdAmtTabStr = "150,200,200,200,150,200,200,200,150,150";
+var showDelayIntv = 5;//界面显示延时（分钟）
+var remdDelayIntv = 5;//延迟提醒时间间隔（分钟）
 
 var isShowWindow = true;//是否显示窗口（可配置）
 var isPlaySound = true;//是否声音提醒（可配置）
 var showReason = "";//显示窗口原因（时间到显示5分钟，手工显示5分钟）istime,retime,manaul(isdist);
 //1随时间、2随动作显示窗口、3显示什么样的窗口，4显示多久、5显示后随时间的变化、6显示后随动作的变化
-var showDelayIntv = 5;//界面显示延时（分钟）
-var remdDelayIntv = 5;//延迟提醒时间间隔（分钟）
+var showDelay = 0 ;//显示倒计时
+var isDelayRemd = false;//是否延时提醒；
 var curId=0;//现在提醒哪一个时间？
 var nextTimer = null;//下次喝水时间点
 var nextTimeDist = 0;//距离下次喝水时间
@@ -45,18 +47,18 @@ var remdAmtTab = null;
 var startDelaySecd = 0;//延迟多久启动定时任务
 var difSecd = 3;//消除时间误差
 var popmenu = win.ui.popmenu(mainForm);//弹出菜单
-
+configMap={};//全局
 //win.region.round(mainForm,,,4,4);
-win.util.round( mainForm);
+//win.util.round( mainForm);
 //创建网页浏览器
 var wbLayout = web.layout( mainForm )
 
 var ahtml = string.load("/res/main.html");
 wbLayout.html = ahtml;
+
 //重复打开激活
 var atom,hwnd = mainForm.atom("2A36B41E-A08C-442B-911A-8587ED58A498");
 var reOpen = function(){
-	//console.log(atom);
 	if(!atom){ 
     	win.show(hwnd, true);
     	win.setForeground(hwnd);
@@ -68,7 +70,7 @@ var reOpen = function(){
 //reOpen();
 
 var db = sqlite("\waterclock.db");
-configMap={};//全局
+
 //导入初始化数据
 var initConfigData = function(){
 	if(!db.existsTable("config")){ //配置表
@@ -125,6 +127,7 @@ wbLayout.onHyperlinkClick = function (ltTarget,ltEle,reason,behaviorParams) {
     	var nowTime=time.now();
     	nextTimer = nowTime.addminute(remdDelayIntv);
     	nextTimeDist = remdDelayIntv;//距离下次多久
+    	isDelayRemd = true;
     	mainForm.hitmin();
     }
 }
@@ -135,7 +138,7 @@ wbLayout.onMenuItemClick =  {
 	
 	// 事件可以是一个函数或列表,如果是列表键名匹配节点的id或name属性 
 	exit = function (ltTarget,ltOwner,reason,behaviorParams) {
-		mainForm.close();
+		fakeExit();
 	}
 	about = function(ltTarget,ltOwner,reason,behaviorParams){
 		mainForm.msgbox("about us!");
@@ -151,6 +154,13 @@ wbLayout.onMenuItemClick =  {
 		mainForm.msgbox( ltTarget.innerText )
 	}
 }
+//锁定位置
+var setFormPos = function(){
+	var w = ::GetSystemMetrics(0x10/*_SM_CXFULLSCREEN*/); 
+	var h = ::GetSystemMetrics(0x11/*_SM_CYFULLSCREEN*/) ;
+	//mainForm.getPos();
+	mainForm.setPos(w-323,h-230,320,230);
+}
 
 //播放声音
 var playSound = function(){
@@ -160,39 +170,85 @@ var playSound = function(){
 
 //关闭窗口
 var fakeClose =function(){
-	wbLayout.getEle("mainwin").style["background-color"] = "red orange yellow yellow"
+	//wbLayout.getEle("mainwin").style["background-color"] = "red orange gold yellow"
 	for(i=25;1;-1){
         mainForm.transparent( i * 10);
         win.delay(50);
     };
-    
-    if(tray != null){
-    	tray.delete();	
-    }
-    
-    mainForm.close();
+    showDelay = 0;
+    showReason ='';
+    mainForm.show(false);
 }
 
+//完全退出
+var fakeExit = function(){
+	if(tray != null){
+    	tray.delete();	
+    }
+    //wbLayout.getEle("remindperc").style["background"] = "";
+    wbLayout.getEle("remindperc").innerHTML ='再见';
+    wbLayout.getEle("remindtip").innerHTML ='';
+	wbLayout.getEle("buttons").innerHTML = '';
+    for(i=25;1;-1){
+        mainForm.transparent( i * 10);
+        win.delay(50);
+    };
+    mainForm.show(close);
+}
 
-var startUp = function(){
+//时间到显示
+var isTimeShow = function(){
+	setFormPos();
+	wbLayout.getEle("remindtip").innerHTML ='';
+	wbLayout.getEle("buttons").innerHTML = '<a href="" class="button button-rounded" id="okay">知道了</a><a href="" class="button button-rounded" id="delay">稍后提醒</a>';
+	fakeShow();
+	playSound();//
+}
+
+//延迟提醒显示
+var reTimeShow = function(){
+	wbLayout.getEle("buttons").innerHTML = '<a href="" class="button button-rounded" id="okay">知道了</a>';
+	fakeShow();
+	playSound();//
+}
+
+//手动显示
+var isManaulShow = function(showReason){
+	setFormPos();
+	//时间到
+	wbLayout.getEle("remindtip").innerHTML = currRemdStr;
+	wbLayout.getEle("buttons").innerHTML = '<a href="" class="button button-rounded" id="okay">知道了</a><a href="" class="button button-rounded" id="delay">稍后提醒</a>';
+	//再次时间到
+	wbLayout.getEle("remindtip").innerHTML = currRemdStr;
+	wbLayout.getEle("buttons").innerHTML = '<a href="" class="button button-rounded" id="okay">知道了</a>';
+	//显示时间距离
+	wbLayout.getEle("remindtip").innerHTML = nextRemdStr;
+	wbLayout.getEle("buttons").innerHTML = '';
+	mainForm.show();
+}
+
+//显示或延迟
+var showAndDelay = function(){
+	//istime,retime,manaul
+}
+
+//窗口显示（时间到）
+var fakeShow = function(){
 	import win.ui.shadow;
 	win.ui.shadow(mainForm); //添加阴影边框
 	win.region.round(mainForm);
-	//win.util.popup(mainForm);
-	var w = ::GetSystemMetrics(0x10/*_SM_CXFULLSCREEN*/); 
-	var h = ::GetSystemMetrics(0x11/*_SM_CYFULLSCREEN*/) ;
-	mainForm.setPos(w-323,h-230,320,230);
 	mainForm.transparent(0);
+	setFormPos();
 	mainForm.show();
 	
 	//import win.ui.glass;
 	//win.ui.glass( mainForm);//玻璃效果
-	
+	//win.util.popup(mainForm);
 	for(i=1;51;1){
      	mainForm.transparent(i*5);
      	win.delay(40);
-     	// mainForm.show();
  	};
+ 	
 }
 
  
@@ -255,11 +311,39 @@ var getCurRemind = function(){
 	}
 	if(curId>0){ //大于最大的时间点
 		nextTimeDist = (tonumber(time(remdTimeTab[curId],"%H:%M")) -  tonumber(nowTime))/60;
-		isShow = true;
 	}
 	if(startDelaySecd==0){
 		startDelaySecd = (60+difSecd-(nowTime.second==0?60:nowTime.second))*1000;
 	}
+	//时间到
+	if(nowTime==nextTimer){
+		if(showDelay<=0){
+			if(isDelayRemd){
+				showReason = "retime";
+				showDelay = showDelayIntv;
+				isDelayRemd = false;
+			}else{
+				showReason = "istime";
+				showDelay = showDelayIntv;
+			}
+		}
+	}
+}
+//查询是否提醒以及提醒语
+var getCurRemindInfo = function(){
+	
+	var pCurrRemdStr = currRemdTempl;
+	var pNextRemdStr = nextRemdTempl;
+	if(curId>0){
+		pCurrRemdStr = string.replace(pCurrRemdStr,"\{0\}",remdTimeTab[curId]);//
+		pCurrRemdStr = string.replace(pCurrRemdStr,"\{1\}",remdAmtTab[curId]);//
+		pNextRemdStr = string.replace(pNextRemdStr,"\{0\}",tostring(nextTimeDist));//下次提醒内容
+	}else{
+		pCurrRemdStr = restRemStr;//
+		pNextRemdStr = restRemStr;//
+	}
+	currRemdStr = pCurrRemdStr;
+	nextRemdStr = pNextRemdStr;
 }
 //时间驱动，人工驱动
 
@@ -300,30 +384,16 @@ var remindByAlertOrTip = function(){
     }
 }
 
-//查询是否提醒以及提醒语
-var getCurRemindInfo = function(){
-	var pCurrRemdStr = currRemdTempl;
-	var pNextRemdStr = nextRemdTempl;
-	if(curId>0){
-		pCurrRemdStr = string.replace(pCurrRemdStr,"\{0\}",remdTimeTab[curId]);//
-		pCurrRemdStr = string.replace(pCurrRemdStr,"\{1\}",remdAmtTab[curId]);//
-		pNextRemdStr = string.replace(pNextRemdStr,"\{0\}",tostring(nextTimeDist));//下次提醒内容
-	}else{
-		pCurrRemdStr = restRemStr;//
-		pNextRemdStr = restRemStr;//
-	}
-	currRemdStr = pCurrRemdStr;
-	nextRemdStr = pNextRemdStr;
-}
+
 
 //定时器，每分钟探测一次是否到时间点了。
 var taskRun = function(){
 	getCurRemind(); //获取是否提醒，及提醒次数，数据
     getCurRemindInfo();//获取提醒提示信息
 	
-	remindByAlertOrTip();
-	if(showDelayIntv>0){//显示时长
-		showDelayIntv--;
+	//remindByAlertOrTip();
+	if(showDelay>0){//显示时长
+		showDelay--;
 	}
 	var tmId = mainForm.addtimer( 
     	startDelaySecd,
@@ -331,7 +401,16 @@ var taskRun = function(){
 			getCurRemind(); //获取是否提醒，及提醒次数，数据
         	getCurRemindInfo();//获取提醒提示信息
         	//createWinTray(tray,nextRemdStr,frmName,nextRemdStr); //电脑托盘
-			remindByAlertOrTip();//提醒
+			//remindByAlertOrTip();//提醒
+			//是否时间到或延迟时间到显示中
+			if(showDelay>0){
+				
+			}else{//
+				if(showReason=='istime'){
+					fakeShow();
+				}
+				showReason = '';
+			}
         	return rollIntv;
     	}
 	)
@@ -341,28 +420,16 @@ var createPopMenu = function(){
 	//mainForm.popmenu
 	popmenu.add('打开(&O\)',function(id){
 		//在下面输入菜单响应代码
-		mainForm.show(true);
+		isManaulShow();
 	});
 	popmenu.add('设置(&S\)',function(id){
 		//在下面输入菜单响应代码
 		mainForm.loadForm("/res/config.aau");
 	});
 	popmenu.add();//分隔线
-	popmenu.add('分享给朋友(&F\)',function(id){
-		//在下面输入菜单响应代码
-		mainForm.loadForm("/res/config.aau");
-	});
-	popmenu.add('关于喝水闹钟(&A\)',function(id){
-		//在下面输入菜单响应代码
-		mainForm.loadForm("/res/config.aau");
-	});
-	popmenu.add();//分隔线
 	
 	popmenu.add('退出(&X)',function(id){ 
-		if(tray != null){
-    		tray.delete();
-    	}
-		mainForm.close() ;
+		fakeExit();
 	});
 }
 
@@ -375,7 +442,7 @@ mainForm.wndproc = function(hwnd,message,wparam,lparam){
             //::PostMessage(mainForm.hwnd, 0x112,0xF020, 0);
     		//mainForm.show( false );
     		//return false;
-    		fakeClose();
+    		fakeExit();
         }
         /**
         case( 0x112/*_WM_SYSCOMMAND*/ ){ //系统命令消息
@@ -396,7 +463,7 @@ mainForm.wndproc = function(hwnd,message,wparam,lparam){
                    }
                    ::PostMessage(mainForm.hwnd, 0x112, 0xF120, 0)；
                    win.setForeground(mainForm.hwnd);
-                   mainForm.show(true);//还原窗口
+                   isManaulShow();//还原窗口
                 }
                 case (0x205/*_WM_RBUTTONUP*/){//单击鼠标右键弹出菜单
 	    			x,y = mouse.getPos();
@@ -426,11 +493,11 @@ mainForm.wndproc = function(hwnd,message,wparam,lparam){
 
 createPopMenu();
 createWinTray(tray,"","","");
-//reOpen();//探测重新打开
+reOpen();//探测重新打开
 initConfigData();//数据初始化
 loadConfigData();//加载初始化数据
 playSound();//
-startUp();//
+//startUp();//
 
 taskRun();//执行任务
 win.loopMessage();
