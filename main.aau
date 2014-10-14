@@ -105,6 +105,16 @@ var loadConfigData = function(){
 }
 
 
+var fakeUpNum = function(){
+	curId = 3;
+	var k = curId-1;
+	for(i=k*10;k*10+10;1){
+		wbLayout.getEle("num").innerHTML = i;
+        win.delay(100);
+    };
+    win.delay(2000);
+}
+
 //链接响应
 wbLayout.onHyperlinkClick = function (ltTarget,ltEle,reason,behaviorParams) {
     if(ltEle.id="settings"){//设置
@@ -121,7 +131,8 @@ wbLayout.onHyperlinkClick = function (ltTarget,ltEle,reason,behaviorParams) {
     		create_time = time.now();
     	)
 		command.step(); 
-    	mainForm.close();
+		fakeUpNum();
+    	mainForm.show(false);
     }
     if(ltEle.id="delay"){//延迟
     	var nowTime=time.now();
@@ -199,6 +210,8 @@ var fakeClose =function(){
     showReason ='';
     mainForm.show(false);
 }
+
+
 
 //完全退出
 var fakeExit = function(){
