@@ -2,7 +2,6 @@
 <project ver="3" name="WaterClock" libEmbed="true" icon="res\logo.ico" ProductName="DrinkWaterRemind" InternalName="DrinkWaterRemind" FileDescription="DrinkWaterRemind" FileVersion="0.0.0.33" ProductVersion="0.0.0.33" LegalCopyright="Copyright (C) 作者 2014" ui="win" output="WaterClock.exe" CompanyName="单位名称" publishDir="/Publish/">
 	<file name="main.aau" path="main.aau"/>
 	<folder name="资源文件" path="res" embed="true">
-		<file name="logo.ico" path="res\logo.ico" comment="res\logo.ico"/>
 		<file name="menu-back-office.png" path="res\menu-back-office.png" comment="res\menu-back-office.png"/>
 		<file name="logo.png" path="res\logo.png" comment="res\logo.png"/>
 		<file name="icon.png" path="res\icon.png" comment="res\icon.png"/>

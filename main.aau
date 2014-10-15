@@ -42,8 +42,8 @@ var rollIntv = 60*1000;//定时时长,毫秒
 var currRemdStr;//建议喝水
 var nextRemdStr;//下次喝水
 var tray = null; //创建托盘图标
-var remdTimeTab = null; 
-var remdAmtTab = null;
+var remdTimeTab = string.split(remdTimeTabStr,',');
+var remdAmtTab = string.split(remdAmtTabStr,','); 
 var startDelaySecd = 0;//延迟多久启动定时任务
 var difSecd = 3;//消除时间误差
 var popmenu = win.ui.popmenu(mainForm);//弹出菜单
@@ -106,7 +106,7 @@ var loadConfigData = function(){
 
 
 var fakeUpNum = function(){
-	curId = 3;
+	//curId = 3;
 	var k = curId-1;
 	for(i=k*10;k*10+10;1){
 		wbLayout.getEle("num").innerHTML = i;
@@ -317,9 +317,6 @@ var createWinTray = function(tray,nextRemdStr,frmName,nextRemdStr){
 
 //查询第几次提醒，距离下一次提醒时间距离
 var getCurRemind = function(){
-	if(nextTimer != null){
-		return ;
-	}
 	curId = 0,nextTimeDist=0;
 	var nowTime=time.now();
 	nowTime.format="%H:%M";
@@ -412,21 +409,29 @@ var remindByAlertOrTip = function(){
 var taskRun = function(){
 	getCurRemind(); //获取是否提醒，及提醒次数，数据
     getCurRemindInfo();//获取提醒提示信息
-	
 	//remindByAlertOrTip();
-	if(showDelay>0){//显示时长
-		showDelay--;
-	}
+	
 	var tmId = mainForm.addtimer( 
     	startDelaySecd,
     	function(hwnd,msg,id,tick){
+    		if(showDelay>0){//显示时长
+				showDelay--;
+				if(showDelay==0){
+					showReason = '';
+				}
+			}
 			getCurRemind(); //获取是否提醒，及提醒次数，数据
         	getCurRemindInfo();//获取提醒提示信息
         	//createWinTray(tray,nextRemdStr,frmName,nextRemdStr); //电脑托盘
 			//remindByAlertOrTip();//提醒
 			//是否在显示中
+			console.log(showDelay);
+			console.log(showReason);
 			if(showDelay>0){
-				
+				if(showReason=='manaul'){
+					console.log(nextRemdStr);
+					wbLayout.getEle("remindtip").innerHTML = nextRemdStr;
+				}
 			}else{//
 				if(showReason=='istime'){
 					isTimeShow();
@@ -437,7 +442,7 @@ var taskRun = function(){
 				if(showReason=='manaul'){
 					manaulShow();
 				}
-				showReason = '';
+				
 			}
         	return rollIntv;
     	}

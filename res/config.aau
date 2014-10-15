@@ -75,21 +75,34 @@ wbLayout.onButtonClick = function (ltTarget,ltEle,reason,behaviorParams) {
 		var  afterout = wbLayout.getEle("afterout");
 		//先保存，再执行相应函数
 		//console.log(mornin.getValueObject());
-
-		var sql = string.concat("update config set value='",sex.value,"' where code = 'sex' and parent='user'");
-		db.exec(sql);
-		var sql = string.concat("update config set value='",weight.value,"' where code = 'weight' and parent='user'");
-		db.exec(sql);
-		var sql = string.concat("update config set value='",lifestyle.value,"' where code = 'lifestyle' and parent='user'");
-		db.exec(sql);
-		var sql = string.concat("update config set value='",mornin.value,"' where code = 'mornin' and parent='user'");
-		db.exec(sql);
-		var sql = string.concat("update config set value='",mornout.value,"' where code = 'mornout' and parent='user'");
-		db.exec(sql);
-		var sql = string.concat("update config set value='",afterin.value,"' where code = 'afterin' and parent='user'");
-		db.exec(sql);
-		var sql = string.concat("update config set value='",afterout.value,"' where code = 'afterout' and parent='user'");
-		db.exec(sql);
+		if(configMap['sex']!=sex.value){
+			var sql = string.concat("update config set value='",sex.value,"' where code = 'sex' and parent='user'");
+			db.exec(sql);
+		}
+		if(configMap['weight']!=weight.value){
+			var sql = string.concat("update config set value='",weight.value,"' where code = 'weight' and parent='user'");
+			db.exec(sql);
+		}
+		if(configMap['lifestyle']!=lifestyle.value){
+			var sql = string.concat("update config set value='",lifestyle.value,"' where code = 'lifestyle' and parent='user'");
+			db.exec(sql);
+		}
+		if(configMap['mornin']!=mornin.value){
+			var sql = string.concat("update config set value='",mornin.value,"' where code = 'mornin' and parent='user'");
+			db.exec(sql);
+		}
+		if(configMap['mornout']!=mornout.value){
+			var sql = string.concat("update config set value='",mornout.value,"' where code = 'mornout' and parent='user'");
+			db.exec(sql);
+		}
+		if(configMap['afterin']!=afterin.value){
+			var sql = string.concat("update config set value='",afterin.value,"' where code = 'afterin' and parent='user'");
+			db.exec(sql);
+		}
+		if(configMap['afterout']!=afterout.value){
+			var sql = string.concat("update config set value='",afterout.value,"' where code = 'afterout' and parent='user'");
+			db.exec(sql);
+		}
 		winform.close();
 		//win.msgbox("保存成功！");
 	}
@@ -99,16 +112,26 @@ wbLayout.onButtonClick = function (ltTarget,ltEle,reason,behaviorParams) {
 		var  remsound = wbLayout.getEle("remsound");
 		var  wavefile = wbLayout.getEle("wavefile");
 		var  remwin = wbLayout.getEle("remwin");
-		var sql = string.concat("update config set value='",(startup.value==true?"true":"false"),"' where code = 'startup' and parent='sys'");
-		db.exec(sql);
-		var sql = string.concat("update config set value='",(filelink.value==true?"true":"false"),"' where code = 'filelink' and parent='sys'");
-		db.exec(sql);
-		var sql = string.concat("update config set value='",(remsound.value==true?"true":"false"),"' where code = 'remsound' and parent='sys'");
-		db.exec(sql);
-		var sql = string.concat("update config set value='",wavefile.value,"' where code = 'wavefile' and parent='sys'");
-		db.exec(sql);
-		var sql = string.concat("update config set value='",(remwin.value==true?"true":"false"),"' where code = 'remwin' and parent='sys'");
-		db.exec(sql);
+		if(configMap['startup']!=(startup.value==true?"t":"f")){
+			var sql = string.concat("update config set value='",(startup.value==true?"t":"f"),"' where code = 'startup' and parent='sys'");
+			db.exec(sql);
+		}
+		if(configMap['filelink']!=(filelink.value==true?"t":"f")){
+			var sql = string.concat("update config set value='",(filelink.value==true?"t":"f"),"' where code = 'filelink' and parent='sys'");
+			db.exec(sql);
+		}
+		if(configMap['remsound']!=(remsound.value==true?"t":"f")){
+			var sql = string.concat("update config set value='",(remsound.value==true?"t":"f"),"' where code = 'remsound' and parent='sys'");
+			db.exec(sql);
+		}
+		if(configMap['wavefile']!=wavefile.value&&wavefile.value!=null){
+			var sql = string.concat("update config set value='",wavefile.value,"' where code = 'wavefile' and parent='sys'");
+			db.exec(sql);
+		}
+		if(configMap['remwin']!=(remwin.value==true?"t":"f")){
+			var sql = string.concat("update config set value='",(remwin.value==true?"t":"f"),"' where code = 'remwin' and parent='sys'");
+			db.exec(sql);
+		}
 		winform.close();
 		//win.msgbox("保存成功！");
 	}
@@ -135,15 +158,15 @@ wbLayout.onButtonClick = function (ltTarget,ltEle,reason,behaviorParams) {
 		afterout.setValueObject(configMap['afterout']);
 		
 		var startup = wbLayout.getEle("startup");
-		startup.setValueObject(configMap['startup']=='true'?true:false);
+		startup.setValueObject(configMap['startup']=='t'?true:false);
 		var filelink = wbLayout.getEle("filelink");
-		filelink.setValueObject(configMap['filelink']=='true'?true:false);
+		filelink.setValueObject(configMap['filelink']=='t'?true:false);
 		var remsound = wbLayout.getEle("remsound");
-		remsound.setValueObject(configMap['remsound']=='true'?true:false);
+		remsound.setValueObject(configMap['remsound']=='t'?true:false);
 		var wavefile = wbLayout.getEle("wavefile");
 		wavefile.setValueObject(configMap['wavefile']);
 		var remwin = wbLayout.getEle("remwin");
-		remwin.setValueObject(configMap['remwin']=='true'?true:false);
+		remwin.setValueObject(configMap['remwin']=='t'?true:false);
 	}
 }
 
