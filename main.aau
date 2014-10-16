@@ -14,7 +14,7 @@ import win.reg;
 import fsys.lnk;
 import mouse;
 /*DSG{{*/
-var mainForm = ..win.form(text="Ë®±¦±¦";right=338;bottom=229;border="none";exmode="none";mode="popup";parent=...;sysmenu=false;title=false;topmost=1)
+var mainForm = ..win.form(text="Ë®±¦±¦";right=338;bottom=229;border="none";exmode="none";max=false;min=false;mode="popup";parent=...;sysmenu=false;title=false;topmost=1)
 mainForm.add()
 /*}}*/
 

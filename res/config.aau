@@ -1,7 +1,7 @@
 import win.ui;
 import win.region.round;
 /*DSG{{*/
-var winform = ..win.form(text="设置";right=599;bottom=399;border="none";exmode="none";mode="popup";parent=...)
+var winform = ..win.form(text="设置";right=580;bottom=350;border="none";exmode="none";max=false;min=false;mode="popup";parent=...;sysmenu=false;title=false)
 winform.add()
 /*}}*/
 
@@ -13,7 +13,7 @@ import sqlite;
 //创建网页浏览器
 var wbLayout = web.layout( winform )
 
-var ahtml = string.load("/res/config.html");
+var ahtml = string.load("/res/config2.html");
 wbLayout.html = ahtml;
 //wbLayout.getEle("funcs").innerHTML = '<div panel="panel1" id="personset" >个人设置</div><div panel="panel2" id="genalset" selected>常规设置</div>';
  //setAttribute("selected","selected");
