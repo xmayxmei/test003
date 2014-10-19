@@ -13,7 +13,7 @@ import sqlite;
 //创建网页浏览器
 var wbLayout = web.layout( winform )
 
-var ahtml = string.load("/res/config2.html");
+var ahtml = string.load("/res/config.html");
 wbLayout.html = ahtml;
 //wbLayout.getEle("funcs").innerHTML = '<div panel="panel1" id="personset" >个人设置</div><div panel="panel2" id="genalset" selected>常规设置</div>';
  //setAttribute("selected","selected");
@@ -34,16 +34,16 @@ var afterout = wbLayout.getEle("afterout");
 afterout.setValueObject(configMap['afterout']);
 
 var startup = wbLayout.getEle("startup");
-startup.setValueObject(configMap['startup']=='true'?true:false);
+startup.setValueObject(configMap['startup']=='t'?true:false);
 var filelink = wbLayout.getEle("filelink");
-filelink.setValueObject(configMap['filelink']=='true'?true:false);
+filelink.setValueObject(configMap['filelink']=='t'?true:false);
 var remsound = wbLayout.getEle("remsound");
-remsound.setValueObject(configMap['remsound']=='true'?true:false);
+remsound.setValueObject(configMap['remsound']=='t'?true:false);
 var wavefile = wbLayout.getEle("wavefile");
 
 wavefile.setAttribute("novalue",configMap['wavefile']);
 var remwin = wbLayout.getEle("remwin");
-remwin.setValueObject(configMap['remwin']=='true'?true:false);
+remwin.setValueObject(configMap['remwin']=='t'?true:false);
 //分享到微博
 //http://service.weibo.com/share/share.php?title=你好啊&url=http://www.sina.com&source=bookmark&pic=http://img.t.sinajs.cn/t4/appstyle/widget/images/library/base/wb_logo.png?id=1395901125982
 //分享到QQ空间
@@ -51,7 +51,7 @@ remwin.setValueObject(configMap['remwin']=='true'?true:false);
 //分享到人人网
 //http://widget.renren.com/dialog/share?resourceUrl=&srcUrl=&title=&pic=&description=
 
-wbLayout.onHyperlinkClick = function (ltTarget,ltEle,reason,behaviorParams) {
+wbLayout.onButtonClick = function (ltTarget,ltEle,reason,behaviorParams) {
     if(ltEle.id="minisize"){
     	winform.hitmin();
     }
@@ -61,9 +61,13 @@ wbLayout.onHyperlinkClick = function (ltTarget,ltEle,reason,behaviorParams) {
     if(ltEle.id="okay"){
     	winform.close();
     }
+    if(ltEle.id="weibo" || ltEle.id="qzone"||ltEle.id="tencent"){
+    	process.execute(ltEle.getAttribute("href"))
+		return true;//取消默认行为
+    }
 }
 
-wbLayout.onButtonClick = function (ltTarget,ltEle,reason,behaviorParams) {
+wbLayout.onHyperlinkClick = function (ltTarget,ltEle,reason,behaviorParams) {
 	var db = sqlite("\waterclock.db");
 	if(ltEle.id="userConfigSave"){
 		var  sex = wbLayout.getEle("sex");
@@ -88,6 +92,7 @@ wbLayout.onButtonClick = function (ltTarget,ltEle,reason,behaviorParams) {
 			db.exec(sql);
 		}
 		if(configMap['mornin']!=mornin.value){
+			
 			var sql = string.concat("update config set value='",mornin.value,"' where code = 'mornin' and parent='user'");
 			db.exec(sql);
 		}
@@ -103,6 +108,7 @@ wbLayout.onButtonClick = function (ltTarget,ltEle,reason,behaviorParams) {
 			var sql = string.concat("update config set value='",afterout.value,"' where code = 'afterout' and parent='user'");
 			db.exec(sql);
 		}
+		reloadConfig();
 		winform.close();
 		//win.msgbox("保存成功！");
 	}
@@ -132,12 +138,37 @@ wbLayout.onButtonClick = function (ltTarget,ltEle,reason,behaviorParams) {
 			var sql = string.concat("update config set value='",(remwin.value==true?"t":"f"),"' where code = 'remwin' and parent='sys'");
 			db.exec(sql);
 		}
+		reloadConfig();
 		winform.close();
 		//win.msgbox("保存成功！");
 	}
-	if(ltEle.id="userConfigSave" || ltEle.id="userConfigSave"){
-		//重新加载
-		var configTab = db.getTable("SELECT parent,code,value,desc FROM config where parent='user' or parent='sys'");
+	
+	if(ltEle.id="close"||ltEle.id="cancel"){
+    	winform.close();
+    }
+    if(ltEle.id="weibo" || ltEle.id="qzone"||ltEle.id="tencent"){
+    	process.execute(ltEle.getAttribute("href"))
+		return true;//取消默认行为
+    }
+}
+
+// 响应菜单点击事件
+wbLayout.onMenuItemClick =  {
+
+	// 事件可以是一个函数或列表,如果是列表键名匹配节点的id或name属性 
+	exit = function (ltTarget,ltOwner,reason,behaviorParams) {
+		winform.close();
+	}
+	
+	// 在这里没有匹配不到id的节点会触发default函数*/
+	default = function (ltTarget,ltOwner,reason,behaviorParams) {
+		var ltPopupOwner = web.layout.element( behaviorParams.he );//这是弹出菜单的按钮节点
+		winform.msgbox( ltTarget.innerText )
+	}
+}
+//重新加载配置文件
+var reloadConfig = function(){
+	var configTab = db.getTable("SELECT parent,code,value,desc FROM config where parent='user' or parent='sys'");
 		for(row,item in configTab){
 			//console.log(item['parent'],item['code'],item['value'],item['desc']);
 			configMap[item['code']] = item['value'];
@@ -167,22 +198,6 @@ wbLayout.onButtonClick = function (ltTarget,ltEle,reason,behaviorParams) {
 		wavefile.setValueObject(configMap['wavefile']);
 		var remwin = wbLayout.getEle("remwin");
 		remwin.setValueObject(configMap['remwin']=='t'?true:false);
-	}
-}
-
-// 响应菜单点击事件
-wbLayout.onMenuItemClick =  {
-
-	// 事件可以是一个函数或列表,如果是列表键名匹配节点的id或name属性 
-	exit = function (ltTarget,ltOwner,reason,behaviorParams) {
-		winform.close();
-	}
-	
-	// 在这里没有匹配不到id的节点会触发default函数*/
-	default = function (ltTarget,ltOwner,reason,behaviorParams) {
-		var ltPopupOwner = web.layout.element( behaviorParams.he );//这是弹出菜单的按钮节点
-		winform.msgbox( ltTarget.innerText )
-	}
 }
 
 import win.ui.shadow;

@@ -2,6 +2,17 @@
 <project ver="3" name="WaterClock" libEmbed="true" icon="res\logo.ico" ProductName="DrinkWaterRemind" InternalName="DrinkWaterRemind" FileDescription="DrinkWaterRemind" FileVersion="0.0.0.33" ProductVersion="0.0.0.33" LegalCopyright="Copyright (C) 作者 2014" ui="win" output="WaterClock.exe" CompanyName="单位名称" publishDir="/Publish/">
 	<file name="main.aau" path="main.aau"/>
 	<folder name="资源文件" path="res" embed="true">
+		<file name="config2.html" path="res\config2.html" comment="res\config2.html"/>
+		<file name="config_r4_c2.png" path="res\config_r4_c2.png" comment="res\config_r4_c2.png"/>
+		<file name="config_r3_c2.png" path="res\config_r3_c2.png" comment="res\config_r3_c2.png"/>
+		<file name="config_r2_c2.png" path="res\config_r2_c2.png" comment="res\config_r2_c2.png"/>
+		<file name="config_r2_c1.png" path="res\config_r2_c1.png" comment="res\config_r2_c1.png"/>
+		<file name="config_r1_c2.png" path="res\config_r1_c2.png" comment="res\config_r1_c2.png"/>
+		<file name="config_r1_c1.png" path="res\config_r1_c1.png" comment="res\config_r1_c1.png"/>
+		<file name="spacer.gif" path="res\spacer.gif" comment="res\spacer.gif"/>
+		<file name="config_r4_c3.png" path="res\config_r4_c3.png" comment="res\config_r4_c3.png"/>
+		<file name="config_r3_c3.png" path="res\config_r3_c3.png" comment="res\config_r3_c3.png"/>
+		<file name="config_r2_c3.png" path="res\config_r2_c3.png" comment="res\config_r2_c3.png"/>
 		<file name="logo.ico" path="res\logo.ico" comment="res\logo.ico"/>
 		<file name="menu-back-office.png" path="res\menu-back-office.png" comment="res\menu-back-office.png"/>
 		<file name="logo.png" path="res\logo.png" comment="res\logo.png"/>

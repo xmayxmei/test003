@@ -21,10 +21,10 @@ mainForm.add()
 var frmName = "喝水闹钟";//
 var frmTitle = "喝水闹钟，定时提醒您该喝水啦。";
 var titlRemdStr = "^_^亲，该喝水啦！";
-var restRemStr = "^_^亲，该休息啦！";
+var restRemStr = "亲，该休息啦！";
 var currRemdTempl = "{0},建议喝水{1}ML";//建议喝水模板
 var nextRemdTempl = "距离下次喝水还有{0}分钟";//下次喝水模板
-var remdTimeTabStr = "8:30,9:30,10:50,11:30,12:30,14:00,15:00,16:00,17:00,18:00";
+var remdTimeTabStr = "8:30,9:30,10:50,11:30,12:30,14:00,15:00,16:00,21:10,21:20";
 var remdAmtTabStr = "150,200,200,200,150,200,200,200,150,150";
 var showDelayIntv = 5;//界面显示延时（分钟）
 var remdDelayIntv = 5;//延迟提醒时间间隔（分钟）
@@ -86,11 +86,11 @@ var initConfigData = function(){
 		db.exec("insert into config values('user','mornout','12:00','上午下班')");
 		db.exec("insert into config values('user','afterin','14:00','下午上班')");
 		db.exec("insert into config values('user','afterout','18:00','下午下班')");
-		db.exec("insert into config values('sys','startup','true','开机启动')");
-		db.exec("insert into config values('sys','filelink','true','创建快捷')");
-		db.exec("insert into config values('sys','remsound','true','声音提醒')");
+		db.exec("insert into config values('sys','startup','t','开机启动')");
+		db.exec("insert into config values('sys','filelink','t','创建快捷')");
+		db.exec("insert into config values('sys','remsound','t','声音提醒')");
 		db.exec("insert into config values('sys','wavefile','clock.wav','声音文件')");
-		db.exec("insert into config values('sys','remwin','true','弹窗提醒')");
+		db.exec("insert into config values('sys','remwin','t','弹窗提醒')");
 	}
 	if(!db.existsTable("knowledge")){ //水知识
 		db.exec("create table knowledge(id INTEGER PRIMARY KEY AUTOINCREMENT,kind,desc)");
@@ -135,8 +135,14 @@ var fakeShow = function(){
 	setFormPos();
 	mainForm.transparent(0);
 	mainForm.show();
-	var k = (curId-1)*10;
-	wbLayout.getEle("num").innerHTML = k;
+	if(curId==0||curId==1){
+		wbLayout.getEle("num").innerHTML = "^_^";
+		wbLayout.getEle("per").innerHTML = "";
+	}else{
+		var k = (curId-1)*10;
+		wbLayout.getEle("num").innerHTML = k;
+		wbLayout.getEle("per").innerHTML = "%";
+	}
 	for(i=1;51;1){
      	mainForm.transparent(i*5);
      	win.delay(40);
@@ -144,8 +150,10 @@ var fakeShow = function(){
 }
 //播放声音
 var playSound = function(){
-	import win.mm
-	win.mm.playMp3("/res/yy-gaiheshui.mp3");
+	if(configMap['remwin']=='t'){
+		import win.mm
+		win.mm.playMp3("/res/yy-gaiheshui.mp3");
+	}
 }
 
 //关闭窗口
@@ -193,6 +201,8 @@ var isTimeShow = function(){
 var reTimeShow = function(){
 	showReason = "retime";
 	showDelay = showDelayIntv;
+	var nowTime=time.now();
+	nextTimer = nowTime.addminute(showDelay);
 	wbLayout.getEle("remindtip").innerHTML = currRemdStr;
 	wbLayout.getEle("buttons").innerHTML = '<a href="" class="button button-rounded" id="okay">知道了</a>';
 	fakeShow();
