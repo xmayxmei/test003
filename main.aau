@@ -10,6 +10,7 @@ import sqlite;
 import console;
 import win.ui.atom;
 import win.util.tray;
+import fsys;
 import win.reg;
 import fsys.lnk;
 import mouse;
@@ -24,7 +25,7 @@ var titlRemdStr = "^_^亲，该喝水啦！";
 var restRemStr = "亲，该休息啦！";
 var currRemdTempl = "{0},建议喝水{1}ML";//建议喝水模板
 var nextRemdTempl = "距离下次喝水还有{0}分钟";//下次喝水模板
-var remdTimeTabStr = "8:30,9:30,10:50,11:30,12:30,14:00,15:00,16:00,21:10,21:20";
+var remdTimeTabStr = "8:30,9:30,10:50,11:30,12:30,14:00,15:00,16:00,21:38,23:23";
 var remdAmtTabStr = "150,200,200,200,150,200,200,200,150,150";
 var showDelayIntv = 5;//界面显示延时（分钟）
 var remdDelayIntv = 5;//延迟提醒时间间隔（分钟）
@@ -48,6 +49,7 @@ var remdAmtTab = string.split(remdAmtTabStr,',');
 var startDelaySecd = 0;//延迟多久启动定时任务
 var difSecd = 3;//消除时间误差
 var popmenu = win.ui.popmenu(mainForm);//弹出菜单
+var filepath = null;
 configMap={};//全局
 //win.region.round(mainForm,,,4,4);
 //win.util.round( mainForm);
@@ -72,8 +74,11 @@ var reOpen = function(){
 }
 
 //reOpen();
-
-var db = sqlite("\waterclock.db");
+filepath = fsys.getSpecial(0x26 /*_CSIDL_PROGRAM_FILES*/)+"\waterclock";
+if(!fsys.isDir(filepath)){
+	fsys.createDir(filepath);
+}
+var db = sqlite(filepath+"\waterclock.db");
 
 //导入初始化数据
 var initConfigData = function(){
@@ -116,7 +121,7 @@ var fakeUpNum = function(showReason){
 		wbLayout.getEle("num").innerHTML = i;
         win.delay(100);
     };
-    win.delay(2000);
+    win.delay(1000);
 }
 
 
@@ -129,6 +134,9 @@ var setFormPos = function(){
 }
 //窗口显示（时间到）
 var fakeShow = function(){
+	if(win.isVisible(mainForm.hwnd)){
+		return;
+	}
 	import win.ui.shadow;
 	win.ui.shadow(mainForm); //添加阴影边框
 	win.region.round(mainForm);
@@ -184,7 +192,7 @@ var fakeExit = function(){
         mainForm.transparent( i * 10);
         win.delay(50);
     };
-    mainForm.show(close);
+    mainForm.close();
 }
 
 //时间到显示
@@ -211,19 +219,28 @@ var reTimeShow = function(){
 
 //手动显示
 var manaulShow = function(){
-	showReason = "manaul";
-	showDelay = menalDelayIntv;
-	
-	//时间到
-	wbLayout.getEle("remindtip").innerHTML = currRemdStr;
-	wbLayout.getEle("buttons").innerHTML = '<a href="" class="button button-rounded" id="okay">知道了</a><a href="" class="button button-rounded" id="delay">稍后提醒</a>';
-	//再次时间到
-	wbLayout.getEle("remindtip").innerHTML = currRemdStr;
-	wbLayout.getEle("buttons").innerHTML = '<a href="" class="button button-rounded" id="okay">知道了</a>';
-	//显示时间距离
-	wbLayout.getEle("remindtip").innerHTML = nextRemdStr;
-	wbLayout.getEle("buttons").innerHTML = '';
-	fakeShow();
+	if(nextTimeDist==0&&currId!=null){
+		
+		if(!isDelayRemd){
+			isTimeShow();
+		}else{
+			reTimeShow();
+		}
+	}else{
+		showReason = "manaul";
+		showDelay = menalDelayIntv;
+		
+		//时间到
+		wbLayout.getEle("remindtip").innerHTML = currRemdStr;
+		wbLayout.getEle("buttons").innerHTML = '<a href="" class="button button-rounded" id="okay">知道了</a><a href="" class="button button-rounded" id="delay">稍后提醒</a>';
+		//再次时间到
+		wbLayout.getEle("remindtip").innerHTML = currRemdStr;
+		wbLayout.getEle("buttons").innerHTML = '<a href="" class="button button-rounded" id="okay">知道了</a>';
+		//显示时间距离
+		wbLayout.getEle("remindtip").innerHTML = nextRemdStr;
+		wbLayout.getEle("buttons").innerHTML = '';
+		fakeShow();
+	}
 }
 
 //创建快捷方式
@@ -309,21 +326,6 @@ var getCurRemindInfo = function(){
 }
 //时间驱动，人工驱动
 
-//1随时间、2随动作显示窗口、3显示什么样的窗口，4显示多久、5显示后随时间的变化、6显示后随动作的变化
-var formShowNow = function(showReason,showDelayIntv){
-	if(showReason=='istime'){//时间到（3分钟后消失）
-		//标题，2个按钮，托盘
-		mainForm.show( true);
-		
-	}elseif(showReason=='retime'){//延迟时间到（3分钟后消失）
-		//标题，1个按钮，托盘
-		mainForm.show( true);
-		
-	}elseif(showReason=='isdist'){//距离时间点（5分钟后消失）
-		//标题，托盘
-		mainForm.show( true);
-	}
-}
 
 //链接响应
 wbLayout.onHyperlinkClick = function (ltTarget,ltEle,reason,behaviorParams) {
@@ -342,7 +344,7 @@ wbLayout.onHyperlinkClick = function (ltTarget,ltEle,reason,behaviorParams) {
     	)
 		command.step(); 
 		fakeUpNum();
-    	mainForm.show(false);
+    	fakeClose();
     }
     if(ltEle.id="delay"){//延迟
     	var nowTime=time.now();
@@ -403,7 +405,12 @@ var taskRun = function(){
 	var tmId = mainForm.addtimer( 
     	startDelaySecd,
     	function(hwnd,msg,id,tick){
-    		if(showDelay>0){//显示时长
+			getCurRemind(); //获取是否提醒，及提醒次数，数据
+        	getCurRemindInfo();//获取提醒提示信息
+        	//createWinTray(tray,nextRemdStr,frmName,nextRemdStr); //电脑托盘
+			//remindByAlertOrTip();//提醒
+			//是否在显示中
+			if(showDelay>0){
 				showDelay--;
 				if(nextTimeDist==0){//正在手动显示，时间到了怎么办？直接变化到按钮状态
 					if(showReason=='istime'){
@@ -412,21 +419,14 @@ var taskRun = function(){
 					else if(showReason=='retime'){
 						reTimeShow();
 					}
+					else if(showReason=='manaul'){
+						isTimeShow();
+					}
 				}
 				if(showDelay==0){
 					showReason = '';
 				}
-			}
-			getCurRemind(); //获取是否提醒，及提醒次数，数据
-        	getCurRemindInfo();//获取提醒提示信息
-        	//createWinTray(tray,nextRemdStr,frmName,nextRemdStr); //电脑托盘
-			//remindByAlertOrTip();//提醒
-			//是否在显示中
-			if(showDelay>0){
-				if(showReason=='manaul'){
-					wbLayout.getEle("remindtip").innerHTML = nextRemdStr;
-				}
-			}else{//
+			}else{//已隐藏
 				if(showReason=='istime'){
 					isTimeShow();
 				}
@@ -454,7 +454,7 @@ mainForm.wndproc = function(hwnd,message,wparam,lparam){
             //::PostMessage(mainForm.hwnd, 0x112,0xF020, 0);
     		//mainForm.show( false );
     		//return false;
-    		fakeExit();
+    		//fakeExit();
         }
         /**
         case( 0x112/*_WM_SYSCOMMAND*/ ){ //系统命令消息

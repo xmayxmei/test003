@@ -10,6 +10,8 @@ import web.layout.behavior.windowCommand;
 import web.layout.behavior.windowSizer;
 import web.layout.behavior.tabs; //导入behavior
 import sqlite;
+
+var filepath = fsys.getSpecial(0x26 /*_CSIDL_PROGRAM_FILES*/)+"\waterclock";
 //创建网页浏览器
 var wbLayout = web.layout( winform )
 
@@ -68,7 +70,7 @@ wbLayout.onButtonClick = function (ltTarget,ltEle,reason,behaviorParams) {
 }
 
 wbLayout.onHyperlinkClick = function (ltTarget,ltEle,reason,behaviorParams) {
-	var db = sqlite("\waterclock.db");
+	var db = sqlite(filepath+"\waterclock.db");
 	if(ltEle.id="userConfigSave"){
 		var  sex = wbLayout.getEle("sex");
 		var  weight = wbLayout.getEle("weight");

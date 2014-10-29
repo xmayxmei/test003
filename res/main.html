@@ -30,7 +30,7 @@ body {
 }
 #title {
 	float:left;
-	width:210px;
+	width:215px;
 	font-weight:bold;
 	padding:5px 5px 5px 0px;
 }
@@ -75,18 +75,21 @@ body {
 }
 
 #closewin{
-	behavior:windowCommand;
 	float:left;
-	height:14px;
-	font-family:"Marlett";/*该字体显示按钮符号*/  
-	font-size:20px;
+	position:relative;
+	font-size:14px;
 	padding:4px;
 	color:#fff;
+	font-family:"Marlett";/*该字体显示按钮符号*/
+	behavior:windowCommand;
+	text-align:center;
 	width:20px;
 }
 
 #closewin :hover{
+	position:relative;
 	background:#6ebccf;
+	padding:4px;
 }
 #closewin :active{
 	background:#f00;
@@ -204,7 +207,7 @@ menu{
   				</menu>
 			</div>
 		</div>
-		<div id="closewin"  command="window-close">r</div>
+		<div id="closewin" command="window-close">r</div>
 	</div>
 	<div id="content">
 		<div id="remindperc">
