@@ -76,22 +76,25 @@ body {
 
 #closewin{
 	float:left;
-	position:relative;
+	text-align:center;
+	padding:4px 0px;
+}
+#closeit{
+	text-decoration:none;
 	font-size:14px;
+	
 	padding:4px;
 	color:#fff;
 	font-family:"Marlett";/*该字体显示按钮符号*/
-	behavior:windowCommand;
 	text-align:center;
-	width:20px;
+	
 }
-
-#closewin :hover{
+#closeit:hover{
 	position:relative;
-	background:#6ebccf;
 	padding:4px;
+	background-color: #6ebccf;
 }
-#closewin :active{
+#closeit:active{
 	background:#f00;
 }
 #content{
@@ -207,7 +210,7 @@ menu{
   				</menu>
 			</div>
 		</div>
-		<div id="closewin" command="window-close">r</div>
+		<div id="closewin"><a href="#" id="closeit">r</a></div>
 	</div>
 	<div id="content">
 		<div id="remindperc">

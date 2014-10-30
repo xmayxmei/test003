@@ -53,6 +53,9 @@ var filepath = null;
 configMap={};//全局
 //win.region.round(mainForm,,,4,4);
 //win.util.round( mainForm);
+import win.ui.shadow;
+	win.ui.shadow(mainForm); //添加阴影边框
+	win.region.round(mainForm);
 //创建网页浏览器
 var wbLayout = web.layout( mainForm )
 
@@ -137,9 +140,12 @@ var fakeShow = function(){
 	if(win.isVisible(mainForm.hwnd)){
 		return;
 	}
+	/**
 	import win.ui.shadow;
 	win.ui.shadow(mainForm); //添加阴影边框
 	win.region.round(mainForm);
+	
+	**/
 	setFormPos();
 	mainForm.transparent(0);
 	mainForm.show();
@@ -333,11 +339,13 @@ wbLayout.onHyperlinkClick = function (ltTarget,ltEle,reason,behaviorParams) {
     	var configform,wb = mainForm.loadForm("/res/config.aau", );
     	//configform.show();
     }
-    if(ltEle.id="minisize"){//最小化
+    else if(ltEle.id="minisize"){//最小化
     	mainForm.hitmin();
     }
-
-    if(ltEle.id="okay"){ //OK
+	else if(ltEle.id="closeit"){//关闭隐藏
+    	fakeClose();
+    }
+    else if(ltEle.id="okay"){ //OK
     	var command = db.prepare("insert into records values(null,200,@create_time)");
     	command.bind.parameterByNamesAt( //绑定命名参数 
     		create_time = time.now();
@@ -346,7 +354,7 @@ wbLayout.onHyperlinkClick = function (ltTarget,ltEle,reason,behaviorParams) {
 		fakeUpNum();
     	fakeClose();
     }
-    if(ltEle.id="delay"){//延迟
+    else if(ltEle.id="delay"){//延迟
     	var nowTime=time.now();
     	nextTimer = nowTime.addminute(remdDelayIntv);
     	nextTimeDist = remdDelayIntv;//距离下次多久
@@ -466,15 +474,7 @@ mainForm.wndproc = function(hwnd,message,wparam,lparam){
         case (0x400+9981/*_WM_TRAYMESSAGE*/) { //托盘图标消息
             select(lparam){
                 case (0x203){//双击托盘图标打开窗口
-                   stat = win.isVisible(mainForm.hwnd);
-                   if(stat){
-                       ::PostMessage(mainForm.hwnd,0x112,0xF020,0); 
-                       
-                   }else{
-                       
-                   }
-                   ::PostMessage(mainForm.hwnd, 0x112, 0xF120, 0)；
-                   win.setForeground(mainForm.hwnd);
+                   
                    manaulShow();//还原窗口
                 }
                 case (0x205/*_WM_RBUTTONUP*/){//单击鼠标右键弹出菜单
