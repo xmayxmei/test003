@@ -43,7 +43,7 @@ var nextTimeDist = 0;//距离下次喝水时间
 var rollIntv = 60*1000;//定时时长,毫秒
 var currRemdStr;//建议喝水
 var nextRemdStr;//下次喝水
-var tray = null; //创建托盘图标
+//var tray; //创建托盘图标
 var remdTimeTab = string.split(remdTimeTabStr,',');
 var remdAmtTab = string.split(remdAmtTabStr,','); 
 var startDelaySecd = 0;//延迟多久启动定时任务
@@ -186,7 +186,7 @@ var fakeClose =function(){
 
 //完全退出
 var fakeExit = function(){
-	if(tray != null){
+	if(tray){
     	tray.delete();	
     }
     //wbLayout.getEle("remindperc").style["background"] = "";
@@ -272,13 +272,13 @@ var regAutoRun = function(){
 }
 
 //创建托盘程序
-var createWinTray = function(tray,nextRemdStr,frmName,nextRemdStr){
-	if(tray == null){
+var createWinTray = function(){
+	
 		tray = win.util.tray(mainForm.hwnd);
 		tray.message = 0x400+9981;/*_WM_TRAYMESSAGE*/
 		tray.tip = nextRemdStr; //设置鼠标提示 
 		//tray.pop(nextRemdStr,frmName,2,0xFFFFFFFF);
-	}
+	
 }
 
 //查询第几次提醒，距离下一次提醒时间距离
@@ -463,6 +463,7 @@ mainForm.wndproc = function(hwnd,message,wparam,lparam){
     		//mainForm.show( false );
     		//return false;
     		//fakeExit();
+    		//tray.delete();
         }
         /**
         case( 0x112/*_WM_SYSCOMMAND*/ ){ //系统命令消息
@@ -504,7 +505,7 @@ mainForm.wndproc = function(hwnd,message,wparam,lparam){
 }
 
 createPopMenu();
-createWinTray(tray,"","","");
+createWinTray();
 reOpen();//探测重新打开
 initConfigData();//数据初始化
 loadConfigData();//加载初始化数据
