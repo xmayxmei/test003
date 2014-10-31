@@ -20,25 +20,25 @@
   height:100%;
   background-color:#eee;
   text-align:center;
-  
   font-size:14px;
 }
 
 .tabs > .strip > [panel] /* 选项卡按钮默认样式 */
 {
-  background-color:#AAE3FF;
+  background-color:#00ccff;
+  color:#ffffff;
   vertical-align : middle;
-  height:40px;
+  height:30px;
   border-top:solid 1px #fff; 
 }
 .tabs > .strip > [panel]:hover /* 鼠标悬停选项卡样式*/
 {
-	cursor:pointer;
+  cursor:pointer;
   transition:blend;
 }
 .tabs > .strip > [panel]:current  /*当前选项卡样式*/
 {
-  background-color:#66CCFF;
+  background-color:#33aaff;
   position:relative;
 }
 .tabs > .strip > [panel]:current:hover /*点击当前选项卡的样式*/
@@ -102,7 +102,7 @@ body {
 }
 .title-bar{
 	width:100%;
-	height:40px;
+	height:30px;
 	text-align:right;
 
 	behavior:windowCommand; 
@@ -112,11 +112,11 @@ body {
 	height:10px;
 	background-image:url(/res/config_r3_c2.png);
 	position:absolute;
-	top:240px;
+	top:200px;
 }
 .bottons{
 	position:absolute;
-	top:250px;
+	top:210px;
 	margin-left: auto;
 	margin-right: auto;
 	width:80%;
@@ -158,9 +158,9 @@ body {
 }
 #close{
 	font-family:"Marlett"; 
-	font-size:20px;
+	font-size:16px;
 	text-decoration: none;
-	padding:8px;
+	padding:4px;
 	color:#ccc;
 }
 #close:hover{
@@ -168,20 +168,20 @@ body {
 	color:#f00;
 }
 .share{
-	margin:20px;
+	margin:20px 0px;
 }
 .share ul{
-	width:470px;
+	width:370px;
 }
 .share ul li{
-	float:left;width:150px;list-style:none; 
+	float:left;width:100px;list-style:none; 
 }
 </style>
 <meta http-equiv="Content-Type" content="text/html; charset=gb2312"></head>
 <body>
 	<div class="title-bar" command="window-caption">
-		<div style="float:left;width:110;height:40;background-image:url(/res/shezhi1.jpg)"></div>
-		<div style="float:left;width:470;height:40;"><a href="" id="close">r</a></div>
+		<div style="float:left;width:110;height:30;background-color:#eee"></div>
+		<div style="float:left;width:370;height:30;"><a href="" id="close">r</a></div>
 	</div>
    <div class="tabs">
       <div class="strip"> 
@@ -288,7 +288,7 @@ body {
 			</div>
       </div>
       <div name="panel3"> 
-          <div style="text-align:center">把喝水闹钟分享给亲朋好友，让他们一起享受健康吧！</div>
+          <div style="text-align:left;margin:20px;20px;">把喝水闹钟分享给亲朋好友，让他们一起享受健康吧！</div>
 		  <div class="share">
 			<ul>
 			<li><a href="http://service.weibo.com/share/share.php?title=喝水闹钟&url=http://www.sina.com&source=bookmark&pic=http://img.t.sinajs.cn/t4/appstyle/widget/images/library/base/wb_logo.png?id=1395901125982" id="weibo" target="_blank"><img src="/res/share_r2_c5.png" border="0"/></a></li>
@@ -299,11 +299,11 @@ body {
       </div> 
 	  <div name="panel4"> 
           
-			<div style="text-align:center;font-size:16px;">关于喝水闹钟
+			<div style="text-align:center;font-size:14px;">关于喝水闹钟
 				<br/><br/><a href=""><img src="/res/about_r2_c2.png" border="0" align="center"/></a>
 			</div>
-			<div style="width:430px;margin:10px;">
-				喝水闹钟是一款绿色小巧的提醒软件，在繁忙的工作生活中实时提醒你放下手中的事情，休息一下眼睛，喝一杯温水，暖暖你的胃。。。
+			<div style="width:330px;margin:10px;line-height:20px;">
+				&nbsp;&nbsp;&nbsp;&nbsp;喝水闹钟是一款绿色小巧的提醒软件，在繁忙的工作生活中实时提醒你放下手中的事情，休息一下眼睛，喝一杯温水，暖暖你的胃。。。
 			</div>
       </div> 
    </div> 
