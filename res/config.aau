@@ -57,15 +57,15 @@ wbLayout.onButtonClick = function (ltTarget,ltEle,reason,behaviorParams) {
     if(ltEle.id="minisize"){
     	winform.hitmin();
     }
-    if(ltEle.id="close"){
+    else if(ltEle.id="close"){
     	winform.close();
     }
-    if(ltEle.id="okay"){
+    else if(ltEle.id="okay"){
     	winform.close();
     }
-    if(ltEle.id="weibo" || ltEle.id="qzone"||ltEle.id="tencent"){
+    else{
     	process.execute(ltEle.getAttribute("href"))
-		return true;//取消默认行为
+		return true;//
     }
 }
 
@@ -150,7 +150,7 @@ wbLayout.onHyperlinkClick = function (ltTarget,ltEle,reason,behaviorParams) {
     }
     if(ltEle.id="weibo" || ltEle.id="qzone"||ltEle.id="tencent"){
     	process.execute(ltEle.getAttribute("href"))
-		return true;//取消默认行为
+		return true;//水宝宝
     }
 }
 

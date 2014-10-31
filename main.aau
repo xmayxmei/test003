@@ -19,8 +19,8 @@ var mainForm = ..win.form(text="水宝宝";right=319;bottom=229;border="none";exmod
 mainForm.add()
 /*}}*/
 
-var frmName = "喝水闹钟";//
-var frmTitle = "喝水闹钟，定时提醒您该喝水啦。";
+var frmName = "水宝宝";//
+var frmTitle = "水宝宝，定时提醒您该喝水啦。";
 var titlRemdStr = "^_^亲，该喝水啦！";
 var restRemStr = "亲，该休息啦！";
 var currRemdTempl = "{0},建议喝水{1}ML";//建议喝水模板
