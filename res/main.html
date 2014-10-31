@@ -8,7 +8,7 @@
 body {
 	color: #FFF;
 	font:14px;
-	font-family:Arial, Helvetica, sans-serif;
+	font-family:宋体,Arial, Helvetica, sans-serif;
 	padding:0;
 	margin:0;
 }
@@ -32,7 +32,7 @@ body {
 	float:left;
 	width:215px;
 	font-weight:bold;
-	padding:5px 5px 5px 0px;
+	padding:8px 5px 5px 0px;
 }
 
 #settings{
@@ -68,6 +68,7 @@ body {
 #settings .window-menu:hover{
 	background:#6ebccf;
 }
+
 #settings .window-menu:owns-popup /*菜单已弹出*/
 { 
     background-color: #FF0000;
@@ -90,6 +91,7 @@ body {
 	
 }
 #closeit:hover{
+	cursor:default;
 	position:relative;
 	padding:4px;
 	background-color: #6ebccf;
@@ -158,9 +160,9 @@ menu{
   display: inline-block;
   vertical-align: middle;
   border: 1px solid #ffffff;
-  height: 28px;
-  width: max-intrinsic;
-  line-height: 28px;
+  height: 25px;
+  width: 56px;
+  line-height: 25px;
   padding: 0px 25.6px;
   font-weight: 300;
   font-size: 14px;
@@ -182,7 +184,7 @@ menu{
   outline: none;
 }
 .button-rounded {
-  border-radius: 6px;
+  border-radius: 8px;
   margin:10px;
 }
 
@@ -192,7 +194,7 @@ menu{
 <body cellpadding="0" cellspacing="0">
 <div id="mainwin" command="window-caption">
 	<div id="banner">
-		<div id="logo"><img src="/res/logo.png" border="0"/></div>
+		<div id="logo"><img src="/res/logo.png" border="0" style="margin:2px 0px 2px 4px;"/></div>
 		<div id="title">水宝宝</div>
 		<div id="settings">
 			<div .window-menu>u

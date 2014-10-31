@@ -15,7 +15,7 @@ import win.reg;
 import fsys.lnk;
 import mouse;
 /*DSG{{*/
-var mainForm = ..win.form(text="水宝宝";right=338;bottom=229;border="none";exmode="none";max=false;min=false;mode="popup";parent=...;sysmenu=false;title=false;topmost=1)
+var mainForm = ..win.form(text="水宝宝";right=319;bottom=229;border="none";exmode="none";max=false;min=false;mode="popup";parent=...;sysmenu=false;title=false;topmost=1)
 mainForm.add()
 /*}}*/
 
@@ -119,6 +119,7 @@ var loadConfigData = function(){
 
 var fakeUpNum = function(showReason){
 	//curId = 3;
+	wbLayout.getEle("buttons").innerHTML = '';
 	var k = curId-1;
 	for(i=k*10;k*10+10;1){
 		wbLayout.getEle("num").innerHTML = i;
@@ -127,7 +128,17 @@ var fakeUpNum = function(showReason){
     win.delay(1000);
 }
 
-
+var fakeDelay = function(showReason){
+	//curId = 3;
+	wbLayout.getEle("remindtip").innerHTML = nextRemdStr;
+	wbLayout.getEle("buttons").innerHTML = '';
+	win.delay(2000);
+	for(i=25;1;-1){
+        mainForm.transparent( i * 10);
+        win.delay(50);
+    };
+    mainForm.show(false);
+}
 //锁定位置
 var setFormPos = function(){
 	var w = ::GetSystemMetrics(0x10/*_SM_CXFULLSCREEN*/); 
@@ -359,7 +370,7 @@ wbLayout.onHyperlinkClick = function (ltTarget,ltEle,reason,behaviorParams) {
     	nextTimer = nowTime.addminute(remdDelayIntv);
     	nextTimeDist = remdDelayIntv;//距离下次多久
     	isDelayRemd = true;
-    	mainForm.hitmin();
+    	fakeDelay();
     }
 }
 
