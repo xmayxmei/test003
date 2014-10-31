@@ -25,7 +25,7 @@ var titlRemdStr = "^_^亲，该喝水啦！";
 var restRemStr = "亲，该休息啦！";
 var currRemdTempl = "{0},建议喝水{1}ML";//建议喝水模板
 var nextRemdTempl = "距离下次喝水还有{0}分钟";//下次喝水模板
-var remdTimeTabStr = "8:30,9:30,10:50,11:30,12:30,14:00,15:00,16:00,21:38,23:23";
+var remdTimeTabStr = "8:30,9:30,10:50,11:30,12:30,14:00,15:00,16:00,20:38,23:23";
 var remdAmtTabStr = "150,200,200,200,150,200,200,200,150,150";
 var showDelayIntv = 5;//界面显示延时（分钟）
 var remdDelayIntv = 5;//延迟提醒时间间隔（分钟）
@@ -102,6 +102,85 @@ var initConfigData = function(){
 	}
 	if(!db.existsTable("knowledge")){ //水知识
 		db.exec("create table knowledge(id INTEGER PRIMARY KEY AUTOINCREMENT,kind,desc)");
+		db.exec("insert into knowledge(kind,desc) values('helth','很多人对喝水的理解仅仅限于解渴。其实喝水也是一门学问，正确地喝水对维护人的健康非常重要。 ')");
+		db.exec("insert into knowledge(kind,desc) values('helth','如果你等到有口渴的感觉时再喝水的话，你已经出现轻微的脱水状态了。起床后先喝一杯水，睡前也要喝一杯水。 ')");
+		db.exec("insert into knowledge(kind,desc) values('helth','一般人以为将自来水煮沸后即可享用干净的饮用水，事实上，煮沸仅能杀死水中的部分细菌及病毒，对人体有害的重金属、化学物质及杂质却无法排除。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','每天要有定时喝水的计划。放一个水杯或是水壶在身边当作是提醒，或是把喝水的时间放入每天的行程表内。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','避免因运动和流汗所造成的脱水现象，你必须在最短的时间内完成水分的补充。美国营养学协会（ADA）建议在开始运动的前两个小时喝两杯水，之后在开始肌耐力运动前15到20分钟再喝2杯水。在运动当中每15到20分钟需要补充一次水分。 ')");
+		db.exec("insert into knowledge(kind,desc) values('helth','如果运动时间超过一个小时以上或是在气候极端的环境下就需要考虑摄取运动性饮料来维持电解质的平衡以提高身体对液体的吸收和碳水化合物来支持能量的提供。 ')");
+		db.exec("insert into knowledge(kind,desc) values('helth','如果你出现不正常的口渴状态或是频尿，寻求医生的协助来找出问题。口渴感觉和尿液的增加（份量和频率）可能是疾病的征状，包括不同程度的糖尿病。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','对于人体而言，水在身体内不但是“运送”各种营养物质的载体，而且还直接参与人体的新陈代谢，因此，保证充足的摄水量对人体生理功能的正常运转至关重要。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','人每天喝水的量至少要与体内的水分消耗量相平衡。人体一天所排出的尿量约有1500毫升，再加上从粪便、呼吸过程中或是从皮肤所蒸发的水，总共消耗水分大约是2500毫升左右。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','正常人喝太多水对健康不会有太大影响，只是可能造成排尿量增多，引起生活上的不便。但是对于某些特殊人群，喝水量的多少必须特别注意，比如浮肿病人、心脏功能衰竭病人、肾功能衰竭病人都不宜喝水过多，因为喝水太多会加重心脏和肾脏负担，容易导致病情加剧。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','通常每个人需要喝多少水会根据活动量、环境，甚至天气而有所改变。人在感冒发烧时也应多喝水，因为体温上升会使水分流失，多喝水能促使身体散热，帮助病人恢复健康。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','而怀孕期的妇女和运动量比较大的人水分消耗得多，也应多喝水。 ')");
+		db.exec("insert into knowledge(kind,desc) values('helth','喝水应该是白天和晚上都平均为原则，不要在单一小时内连续喝太多水。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','睡前少喝、睡后多喝也是正确饮水的原则，因为睡前喝太多的水，会造成眼皮浮肿、及夜尿多，令睡眠质素受影响。而经过一个晚上的睡眠，人体流失的水分约有四百五十毫升，早上起来需要及时补充，因此早上起床后空腹喝杯水有益血液循环，及促进大脑清醒。 ')");
+		db.exec("insert into knowledge(kind,desc) values('helth','身体的每个系统都需要喝水 - 事实上，我们身体内大部份都是水。人的肌肉、血液和大脑中有超过70%是水分。这是维持一个人每天生理需求的重点之一，而大部份的人都没有摄取足够的水分。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','水有调节身体温度，输送氧和养分，带走废弃物，协助肝、肾功能，溶解维他命和矿物质的功能。每个人每天需要消耗10到12杯的水来维持身体的液体平衡。 ')");
+		db.exec("insert into knowledge(kind,desc) values('helth','白开水是最好的，不过牛奶、果汁和其它的饮料类也都有约90%的水分含量，所以可以帮助你达到对水分的需求。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','含咖啡因的饮料和酒精类是属于利尿剂的一种所以会增加液体的流失，所以他们不能算。事实上，在你每喝一杯含咖啡因和酒精赖的饮料时，再喝一杯白开水。 ')");
+		db.exec("insert into knowledge(kind,desc) values('helth','从健康的角度来看，白开水是最好的饮料，它不含卡路里，不用消化就能为人体直接吸收利用，一般建议喝30摄氏度以下的温开水最好，这样不会过于刺激肠胃道的蠕动，不易造成血管收缩。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','含糖饮料会减慢肠胃道吸收水分的速度，长期大量地喝含糖饮料，对人体的新陈代谢会产生一定不良影响。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','水是人体的六大营养素之一，水中含有多种对人体有益的矿物质和微量元素，而纯净水中的这些物质含量大大降低，如果平时人们饮食中的营养结构又不平衡，就很容易导致营养失调。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','水的硬度对人体健康基本没有影响，而且现在国内的自来水都符合生活饮用水的标准，饮用煮沸了的自来水是安全的。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','喝水太快太急会无形中把很多空气一起吞咽下去，容易引起打嗝或是腹胀，因此最好先将水含在口中，再缓缓喝下，尤其是肠胃虚弱的人，喝水更应该一口一口慢慢喝。 ')");
+		db.exec("insert into knowledge(kind,desc) values('helth','经过一个晚上的睡眠，人体流失的水分约有450毫升，早上起来需要及时补充，因此早上起床后空腹喝杯水有益血液循环，也能促进大脑清醒，使这一天的思维清晰敏捷。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','水在烧开后要打开壶盖再继续烧几分钟，让水中的氯充分分解，经这样处理过的自来水就完全可以放心饮用了；开水如果放置超过24小时就会变成死水，不适合饮用；家用净水器和饮水机如果消毒不及时也同样存在二次污染的问题。 ')");
+		db.exec("insert into knowledge(kind,desc) values('helth','饮水机看似让人喝上好品质的水，实则“二次污染”很严重。每当打开饮水机龙头时，听到“咕噜”的声音，桶里翻出一串气泡，这就是有空气进入，灰尘及微生物就会被带入。据国家环境卫生监测部门检测数据显示，桶装饮水机内的冷热水胆3个月不洗就会大量繁殖细菌，如大肠杆菌、葡萄球菌等。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','将自来水接出来后先放置一会再烧；水快开时把壶盖打开；最后，水开后等3分钟再熄火，就能让水里的氯含量降至安全饮用标准，是真正的“开水”。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','越不注意喝水，喝水的欲望就会越低，人就会变得越来越“干旱”。所以，不管渴不渴都要及时补水。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','喝水不是为了解渴，而是让其参与新陈代谢，被人体吸收，长时间缺水会增加血液的黏稠度，诱发心脑血管疾病。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','上班一族常常会因工作关系疏忽了喝水，长此下去，膀胱和肾都会受损害。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','如果一定要喝有味儿的水，也要根据自身体质，适当改善。比如便秘的人可以喝点蜂蜜水或者果蔬汁，能够促进肠道蠕动；而胃寒的人要少喝性寒的绿茶、凉茶、果汁，多喝暖胃的红茶、姜糖水。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','早上起来的第一杯水是真正意义上的救命水，中老年人更应该注意。人体经过一夜代谢之后，身体的所有垃圾都需要洗刷一下。饮用一杯水可降低血液黏度，增加循环血容量。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','早晨这杯水最好选以下三种：第一种是清澈的水，白开水、矿泉水皆可，能够降低人体血液黏稠度；第二种是柠檬水，柠檬酸能够提升早晨的食欲；第三种是淡盐水，它对便秘的人非常有益。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','吃太咸会导致高血压，也可导致唾液分泌减少、口腔黏膜水肿等。如果吃咸了，首先要做的就是多喝水，最好是纯水和柠檬水，尽量不要喝含糖饮料和酸奶，因为过量的糖分也会加重口渴的感觉。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','淡豆浆也是一种很好的选择，其中90%以上都是水分，而且还含有较多的钾，可以促进钠的排出，且口感比较清甜。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','睡前不宜喝太多水，但可以稍微抿上两口，尤其是老人。当人熟睡时，由于体内水分丢失，造成血液中的水分减少，血液黏稠度会变高。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','生命起源于水，水是人体含量最多的成分。根据生物学家的研究报告，成年人人体内水分约占人体重的70%。其中脑脊髓中水占99%、淋巴腺中水占94%、血液中水占70%、肌肉中水占62%、骨骼中水占5%。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','当胎儿在母体内孕育的时候，水占体重的90%；当婴儿出生后，水占体重的80%；成人体内的水的比例达到了70%；而到老了以后，水在人体内的比例就降到了50%-60%。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','人的一切生命活动都需要水的参与，水是人体最基本的营养物质，也是人体其它营养物质的载体。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','水的生理作用主要有：溶解营养物质，传送养分到各个组织；排泄人体新陈代谢产生的废物；保持细胞形态，提高代谢作用；调节体液组织的循环；调节人体体温，保持皮肤湿润与弹性；润滑关节等。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','每人每天体内有7升到8升的水需要更新，身体中的水一周左右要完全更新一次。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','人体流失水分的主要器官有哪些？肾：成人日均1-1.5升，婴儿500毫升。肺：成人日均由肺排出250-350水分。肠：成人大便中含75%水分，每天经大便排出水分约100-200毫升。皮肤：出汗会排出大量水分，成人每天经皮肤流失的水分约500毫升。消化分泌：包括唾液、胃液等，成人每天约消耗8升的水分。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','正常情况下，每人每天至少要饮用2500毫升~3000毫升的水，才能维持体内水的平衡。当患某些疾病时，饮水量还要增加。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','人体缺水5%，就会感到口渴；缺水10%，就会产生疾病；缺水20%，就会死亡。如果有口渴的感觉，说明你的身体已经发生了较严重的脱水现象，“口渴”是身体脱水的一种紧急信号，此时当然应该迅速补水。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','但我们不能总是等到“口渴了”才去喝水，平时就应该养成多喝水的习惯，否则长此以往，身体的新陈代谢就无法顺利进行，身体的功能也会逐渐衰退。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','在沐浴的过程中，人体的皮肤毛孔处于扩张状态。由于自来水中存在余氯，就很容易经扩张的毛孔和人的呼吸进入体内，对身体健康造成危害。而氯通过皮肤吸收和呼吸的摄入量是直接饮入量的50倍，所以沐浴时间不要太长，建议控制在15分钟之内。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','纯净水虽然干净，不含有任何细菌、病毒和杂质，但也不含有对人体有益的矿物质和微量元素，不但不能给人体补充营养，反而会带走体内储存的营养元素。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','纯净水是酸性水，长期饮用会逐渐导致人体的酸性化。科学研究表明小孩喝多了会影响身体发育，成人会造成骨质疏松，因此纯净水不适宜人长期饮用。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','开封后的桶装纯净水存放一般不宜超过72小时。因为随着空气的进入，如果开封后的桶装纯净水存放太久就会滋生细菌，水质变坏，对健康不利。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','离子水也叫“电解水”，主要是通过电解的方式对水进行电离，产生带氢氧根的“离子水”，这种水呈碱性，由于是离子状态，所以是小分子团水，具有很强的活性。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','离子水是小分子团水，具有活性，能快速被人体所吸收，及时补充人体水分。离子水是碱性水，能中和人体的酸性废物，清除自由基，饮用初期对亚健康人群和一些慢性疾病具有较明显的改善作用。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','水是构成人体的重要成分，如血液、淋巴液以及身体的分泌物等都与水有关，水约占成人体重的60-70%。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','血液中含水量约达90%以上，我们进食后，吞咽、消化、运送养份、以至排泄废物，各个环节都需要水的帮助才能顺利进行。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','水能润滑关节、水可防止眼球过干、唾液和胃液能帮助消化、水亦能调节体温，透过排汗带走体内过高的热量。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','多喝水可降低尿酸、预防痛风发生，还可以降低尿中的钙浓度，避免尿路结石。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','我们身体大约有40公升的水，而我们每天的失水量随个人活动量及环境而不同。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','通常，我们人体一天的排尿量约有1500CC，再加上汗水、皮肤上直接蒸发的水份及粪便等，合计起来每日流失的水份大约有2000~3000CC，因此水份的补充量最好是在此范围内。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','呼吸也会流失水份，随着工作量与温度的增加，呼吸量与排汗量也同时增加，水的流失也相对增加。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','生病所引致的发烧、呕吐及腹泻状况也会令水份大量流失，因此必须尽快的补充，以保持体内水份的平衡，才能维持身体健康。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','如失去10%的水份对身体有害，若是失去20%的水份则对生命有危险。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','几乎所有的食物都含有水份，而在消化时被身体所吸收。除了白开水以外，水果和蔬菜是水份的良好来源。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','水是最好的良药，每人每天应喝8杯的水(约2000~3000CC，若尿液的颜色较深，则表示所喝的水量不够)来预防及治疗多种疾病。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','水喝得太少或不够的人除了较易得病外，也比较容易疲倦、思考混乱，而且不容易排除身体新陈代谢的毒素。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','整天坐在冷气房里的上班族们，更容易有皮肤干涩、容易长小细纹的苦恼，对于上了年纪的人、小孩或运动选手来说，若长时间待在太阳下时，很有可能会有头晕目眩、心跳加快、呼吸急促、脸色苍白、血压下降等脱水的症状，所以，不可轻视喝水这个小动作。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','感冒及发烧：感冒的预防须有充足的睡眠及均衡的饮食，充足的水份及流质食物，以补充因发烧所失去的水份。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','胆结石及肾结石：每天要喝足够的水，以冲走肾结石或预防结石的发生。 ')");
+		db.exec("insert into knowledge(kind,desc) values('helth','膀胱炎：这种泌尿疾病大都是由泌尿口受到细菌感染而引起，但有时也会是因为肾脏受到感染，而由尿液传染给膀胱。膀胱炎多半发生在女性，患者要喝大量的水以冲走体内感染之细菌。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','痛风：痛风是因为尿酸过高，并在关节四周的组织堆积而造成发炎所致。因此每天要喝大量的水，以防止尿酸所造成的结晶沉积，并使尿酸能容易地自肾脏排出。 ')");
+		db.exec("insert into knowledge(kind,desc) values('helth','哮喘：哮喘的病征是胸部紧勒和呼吸困难，且带着喘息和嘘嘘的声音。患者要多喝水，以维持呼吸道之分泌物较稀而不黏稠，如有痰较易咳出，不会堵塞支气管而加重哮喘。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','便秘：多喝水及流质食物以免肠道失水，同时要吃富含纤维之食物，以利排泄，并要充份运动。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','喝水可以促进药物在体内的运输和发挥作用，也利于身体通过排泄器官将代谢废物排出。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','自由水增加时细胞新陈代谢等活动易于发挥，往往生命活动更旺盛，可以分泌更多的抗体，合成更多的抗逆性的蛋白质，以对机体进行防御和修复。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','喝水降低血液粘滞度，对很多生理活动都有促进作用。生病的时候体液多少都会损失，喝水可以补充体液。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','清晨饮水可预防习惯性便秘。由于胃肠得到及时的清理洗刷，粪便不会淤积干结。同时，饮水对胃肠也是一种轻微的刺激，能促使胃肠蠕动，有利于排便。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','许多家庭有晚餐吃得丰富的习惯，因此，晚餐摄入的动物蛋白及盐分进入体内较多。动物蛋白质在体内分解代谢会产生一定的毒性物质，早晨起床及时饮水，可通过促进排尿，尽快把它们排出体外。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','若在早晨起床后马上喝杯温开水，有利于把头天晚餐吃进体内的氯化钠很快排出体外。平时饮水多、爱喝茶的人高血压及动脉硬化发病率就低。')");
+		db.exec("insert into knowledge(kind,desc) values('helth','人体通过一夜的睡眠后，体内水分随尿液、汗液和呼吸丢失许多，血液会变得粘稠，血管腔也因血容量减少而变窄，这常使供给心脏血液的冠状动脉发生急性供血不足，甚至发生闭塞。')");
+
+
 	}
 	if(!db.existsTable("records")){ //喝水记录
 		db.exec("create table records(id INTEGER PRIMARY KEY AUTOINCREMENT, volume int NOT NULL, create_time DATE)");
@@ -306,7 +385,7 @@ var getCurRemind = function(){
 		}
 	}
 	if(curId>0){ //大于最大的时间点
-		nextTimeDist = (tonumber(time(remdTimeTab[curId],"%H:%M")) -  tonumber(nowTime))/60;
+		nextTimeDist = tonumber((tonumber(time(remdTimeTab[curId],"%H:%M")) -  tonumber(nowTime))/60);
 	}
 	if(startDelaySecd==0){
 		startDelaySecd = (60+difSecd-(nowTime.second==0?60:nowTime.second))*1000;

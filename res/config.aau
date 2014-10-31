@@ -46,6 +46,8 @@ var wavefile = wbLayout.getEle("wavefile");
 wavefile.setAttribute("novalue",configMap['wavefile']);
 var remwin = wbLayout.getEle("remwin");
 remwin.setValueObject(configMap['remwin']=='t'?true:false);
+
+var currKnowId= 1 ;
 //分享到微博
 //http://service.weibo.com/share/share.php?title=你好啊&url=http://www.sina.com&source=bookmark&pic=http://img.t.sinajs.cn/t4/appstyle/widget/images/library/base/wb_logo.png?id=1395901125982
 //分享到QQ空间
@@ -62,6 +64,13 @@ wbLayout.onButtonClick = function (ltTarget,ltEle,reason,behaviorParams) {
     }
     else if(ltEle.id="okay"){
     	winform.close();
+    }
+    else if(ltEle.id="nextKnow"){
+    	
+    }
+    else if(ltEle.id="weibo"){
+    	process.execute(ltEle.getAttribute("href"))
+		return true;//
     }
     else{
     	process.execute(ltEle.getAttribute("href"))
@@ -114,7 +123,7 @@ wbLayout.onHyperlinkClick = function (ltTarget,ltEle,reason,behaviorParams) {
 		winform.close();
 		//win.msgbox("保存成功！");
 	}
-	if(ltEle.id="sysConfigSave"){
+	else if(ltEle.id="sysConfigSave"){
 		var  startup = wbLayout.getEle("startup");
 		var  filelink = wbLayout.getEle("filelink");
 		var  remsound = wbLayout.getEle("remsound");
@@ -144,15 +153,29 @@ wbLayout.onHyperlinkClick = function (ltTarget,ltEle,reason,behaviorParams) {
 		winform.close();
 		//win.msgbox("保存成功！");
 	}
-	
-	if(ltEle.id="close"||ltEle.id="cancel"){
+	else if(ltEle.id="close"||ltEle.id="cancel"){
     	winform.close();
     }
-    if(ltEle.id="weibo" || ltEle.id="qzone"||ltEle.id="tencent"){
+    else if(ltEle.id="nextKnow"){
+    	var db = sqlite(filepath+"\waterclock.db");
+    	var knowTab = db.getTable("SELECT id,kind,desc  FROM knowledge where id="+currKnowId);
+    	for(row,item in knowTab){
+    		wbLayout.getEle("knowCont").innerHTML = item['desc'];
+		}
+		currKnowId++;
+		if(currKnowId>71){
+			currKnowId = 1;
+		}
+    }
+    else if(ltEle.id="weibo" || ltEle.id="qzone"||ltEle.id="tencent"){
+    	process.execute(ltEle.getAttribute("href"))
+		return true;//水宝宝
+    }else{
     	process.execute(ltEle.getAttribute("href"))
 		return true;//水宝宝
     }
 }
+
 
 // 响应菜单点击事件
 wbLayout.onMenuItemClick =  {
