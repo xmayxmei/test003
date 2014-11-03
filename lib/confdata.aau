@@ -36,6 +36,7 @@ namespace confdata{
 		db.exec("insert into config values('sys','remsound','t','t','声音提醒')");
 		db.exec("insert into config values('sys','wavefile','clock.wav','clock.wav','声音文件')");
 		db.exec("insert into config values('sys','remwin','t','t','弹窗提醒')");
+		db.exec("insert into config values('kno','id','1','1','当前知识库ID')");//第一次启动
 	}
 	if(!db.existsTable("knowledge")){ //水知识
 		db.exec("create table knowledge(id INTEGER PRIMARY KEY AUTOINCREMENT,kind,desc)");

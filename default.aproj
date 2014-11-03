@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="gb2312"?>
-<project ver="3" name="WaterClock" libEmbed="true" icon="res\logo.ico" ProductName="DrinkWaterRemind" InternalName="DrinkWaterRemind" FileDescription="DrinkWaterRemind" FileVersion="0.0.0.35" ProductVersion="0.0.0.35" LegalCopyright="Copyright (C) 作者 2014" ui="win" output="WaterClock.exe" CompanyName="单位名称" publishDir="/Publish/">
+<project ver="3" name="WaterClock" libEmbed="true" icon="res\logo.ico" ProductName="DrinkWaterRemind" InternalName="DrinkWaterRemind" FileDescription="DrinkWaterRemind" FileVersion="0.0.0.41" ProductVersion="0.0.0.41" LegalCopyright="Copyright (C) 作者 2014" ui="win" output="WaterClock.exe" CompanyName="单位名称" publishDir="/Publish/">
 	<file name="main.aau" path="main.aau"/>
 	<folder name="资源文件" path="res" embed="true">
 		<file name="未命名-4.png" path="res\未命名-4.png" comment="res\未命名-4.png"/>

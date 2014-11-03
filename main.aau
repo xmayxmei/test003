@@ -14,6 +14,8 @@ import fsys;
 import win.reg;
 import fsys.lnk;
 import mouse;
+import win.ui.shadow;
+import process.mutex;
 import confshare;
 import confdata;
 /*DSG{{*/
@@ -56,32 +58,46 @@ var difSecd = 3;//消除时间误差
 var popmenu = win.ui.popmenu(mainForm);//弹出菜单
 var filepath = null;
 var db ;
-configMap={};//全局
-//win.region.round(mainForm,,,4,4);
-//win.util.round( mainForm);
-import win.ui.shadow;
-	win.ui.shadow(mainForm); //添加阴影边框
-	win.region.round(mainForm);
-	
-//创建网页浏览器
-var wbLayout = web.layout( mainForm )
-
-var ahtml = string.load("/res/main.html");
-wbLayout.html = ahtml;
-mainForm.modifyStyleEx(0x40000/*_WS_EX_APPWINDOW*/,0x80/*_WS_EX_TOOLWINDOW*/);
-//重复打开激活
-var atom,hwnd = mainForm.atom("2A36B41E-A08C-442B-911A-8587ED58A498");
-
-RegisterWindowMessage := ::User32.api( "RegisterWindowMessageA", "Long(String lpString)");
 var msgTaskbarRestart = RegisterWindowMessage("taskbarcreated");
-var reOpen = function(){
-	if(!atom){ 
-    	win.show(hwnd, true);
-    	win.setForeground(hwnd);
+var wbLayout = web.layout( mainForm );//创建网页浏览器
+configMap={};//全局
+
+
+//重复打开激活
+/**
+var atom,hwnd = mainForm.atom("2A36B41E-A08C-442B-911A-8587ED58A498");
+if(!atom){ 
+    	//console.log("aaa");
+    	//mainForm.transparent(255);
+    	//win.show(hwnd, true);
+    	//win.setForeground(hwnd);
+    	//
+    	//mainForm.transparent(0);
+    	//mainForm.transparent(false);
     	win.quitMessage();
     	return;
-	}
 }
+**/
+ 
+//保证唯一实例运行
+mutex=process.mutex("2A36B41E-A08C-442B-911A-8587ED58A498");
+if(mutex.conflict){
+    //mutex.close();
+   // return;
+}
+
+//启动加载html窗体阴影
+var loadFormLayout = function(){
+	win.ui.shadow(mainForm); //添加阴影边框
+	win.region.round(mainForm);
+	var ahtml = string.load("/res/main.html");
+	wbLayout.html = ahtml;
+	mainForm.modifyStyleEx(0x40000/*_WS_EX_APPWINDOW*/,0x80/*_WS_EX_TOOLWINDOW*/);
+}
+
+
+//RegisterWindowMessage := ::User32.api( "RegisterWindowMessageA", "Long(String lpString)");
+
 
 //导入初始化数据
 var initConfigData = function(){
@@ -131,7 +147,7 @@ var setFormPos = function(){
 	mainForm.setPos(w-323,h-220,320,230);
 }
 //窗口显示（时间到）
-var fakeShow = function(){
+var fakeShow = function(delay){
 	if(win.isVisible(mainForm.hwnd)){
 		return;
 	}
@@ -140,9 +156,6 @@ var fakeShow = function(){
 	win.ui.shadow(mainForm); //添加阴影边框
 	win.region.round(mainForm);
 	**/
-	
-	mainForm.transparent(0);
-	mainForm.show();
 	if(passedId==0){
 		wbLayout.getEle("num").innerHTML = "^_^";
 		wbLayout.getEle("per").innerHTML = "";
@@ -151,10 +164,17 @@ var fakeShow = function(){
 		wbLayout.getEle("num").innerHTML = k;
 		wbLayout.getEle("per").innerHTML = "%";
 	}
-	for(i=1;51;1){
-     	mainForm.transparent(i*5);
-     	win.delay(40);
- 	};
+	
+	if(delay){
+		mainForm.transparent(0);
+		mainForm.show();
+		for(i=1;51;1){
+     		mainForm.transparent(i*5);
+     		win.delay(40);
+ 		};
+ 	}else{
+ 		mainForm.show();
+ 	}
 }
 
 //播放声音
@@ -171,8 +191,8 @@ var fakeMove = function(){
 	var h = ::GetSystemMetrics(0x11/*_SM_CYFULLSCREEN*/) ;
 	//480,255;657,194;
 	for(i=1;30;1){
-		x = xx+math.round(((w-323)-xx)/30)*i;
-		y = yy-math.round(((h-220)-yy)/30)*(-i);
+		x = xx+math.round((((w-323)-xx)/30)*i);
+		y = yy-math.round((((h-220)-yy)/30)*(-i));
 		//console.log(x,y);
     	mainForm.setPos(x,y,320,230);
 	};
@@ -216,7 +236,7 @@ var isTimeShow = function(){
 	showDelay = showDelayIntv;
 	wbLayout.getEle("remindtip").innerHTML = currRemdStr;
 	wbLayout.getEle("buttons").innerHTML = '<a href="" class="button button-rounded" id="okay">知道了</a><a href="" class="button button-rounded" id="delay">稍后提醒</a>';
-	fakeShow();
+	fakeShow(true);
 	playSound();//
 }
 
@@ -228,12 +248,12 @@ var reTimeShow = function(){
 	nextTimer = nowTime.addminute(showDelay);
 	wbLayout.getEle("remindtip").innerHTML = currRemdStr;
 	wbLayout.getEle("buttons").innerHTML = '<a href="" class="button button-rounded" id="okay">知道了</a>';
-	fakeShow();
+	fakeShow(true);
 	playSound();//
 }
 
 //手动显示
-var manaulShow = function(){
+var manaulShow = function(delay){
 	if(nextTimeDist==0&&curId!=null){
 		
 		if(!isDelayRemd){
@@ -255,11 +275,13 @@ var manaulShow = function(){
 		//显示时间距离
 		wbLayout.getEle("buttons").innerHTML = '';
 		wbLayout.getEle("remindtip").innerHTML = nextRemdStr;
-		fakeShow();
+		fakeShow(delay);
+		/**
 		win.delay(2*1000);
 		wbLayout.getEle("remindtip").innerHTML = perAmtStr;
 		win.delay(5*1000);
 		wbLayout.getEle("remindtip").innerHTML = nextRemdStr;
+		**/
 	}
 }
 
@@ -386,7 +408,7 @@ var createPopMenu = function(){
 	//mainForm.popmenu
 	popmenu.add('打开(&O\)',function(id){
 		//在下面输入菜单响应代码
-		manaulShow();
+		manaulShow(true);
 	});
 	popmenu.add('设置(&S\)',function(id){
 		//在下面输入菜单响应代码
@@ -446,7 +468,7 @@ var taskRun = function(){
 					reTimeShow();
 				}
 				else if(showReason=='manaul'){
-					manaulShow();
+					manaulShow(true);
 				}else{
 					fakeClose();//默认关闭
 				}
@@ -468,6 +490,7 @@ mainForm.wndproc = function(hwnd,message,wparam,lparam){
     		//return false;
     		//fakeExit();
     		//tray.delete();
+    		mutex.close();
         }
         /**
         case( 0x112/*_WM_SYSCOMMAND*/ ){ //系统命令消息
@@ -480,7 +503,7 @@ mainForm.wndproc = function(hwnd,message,wparam,lparam){
             select(lparam){
                 case (0x203){//双击托盘图标打开窗口
                    
-                   manaulShow();//还原窗口
+                   manaulShow(true);//还原窗口
                 }
                 case (0x205/*_WM_RBUTTONUP*/){//单击鼠标右键弹出菜单
 	    			x,y = mouse.getPos();
@@ -508,21 +531,23 @@ mainForm.wndproc = function(hwnd,message,wparam,lparam){
     //无返回值则继续调用默认回调函数
 }
 
-createPopMenu();
-createWinTray();
-reOpen();//探测重新打开
-initConfigData();//数据初始化
-loadConfigData();//加载初始化数据
-playSound();//
-//startUp();//
+
+//第一次运行
 confshare.createLnk(frmName);
 confshare.regAutoRun(true);
-//第一次启动，点设置或关闭
+initConfigData();//数据初始化
+
+//启动
+loadConfigData();//加载初始化数据
+loadFormLayout();//加载窗口
+createPopMenu();//菜单
+createWinTray();//托盘
 getCurRemind(); //获取是否提醒，及提醒次数，数据
 getCurRemindInfo();//获取提醒提示信息
-manaulShow();
-fakeMove();
-taskRun();//执行任务
+manaulShow(false);//显示界面
+fakeMove();//移动界面
 
+//运行
+taskRun();//执行任务
 win.loopMessage();
 
