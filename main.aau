@@ -19,7 +19,7 @@ import process.mutex;
 import confshare;
 import confdata;
 /*DSG{{*/
-var mainForm = ..win.form(text="水宝宝";right=319;bottom=229;border="none";exmode="none";max=false;min=false;mode="popup";parent=...;sysmenu=false;title=false;topmost=1)
+var mainForm = ..win.form(text="水宝宝";right=319;bottom=229;border="none";exmode="none";mode="popup";parent=...;sysmenu=false;title=false;topmost=1)
 mainForm.add()
 /*}}*/
 
@@ -173,6 +173,8 @@ var fakeShow = function(delay){
      		win.delay(40);
  		};
  	}else{
+ 		x,y = mouse.getPos();
+ 		mainForm.setPos(x,y);
  		mainForm.show();
  	}
 }
@@ -352,7 +354,9 @@ var getCurRemindInfo = function(){
 //链接响应
 wbLayout.onHyperlinkClick = function (ltTarget,ltEle,reason,behaviorParams) {
     if(ltEle.id="settings"){//设置
+    	
     	var configform,wb = mainForm.loadForm("/res/config.aau", );
+    	if(!configform.valid){}
     	//configform.show();
     }
     else if(ltEle.id="minisize"){//最小化
