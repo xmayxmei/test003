@@ -1,7 +1,7 @@
 import win.ui;
 import win.region.round;
 /*DSG{{*/
-var winform = ..win.form(text="设置";right=480;bottom=300;border="none";max=1;min=1;mode="popup";parent=...;sysmenu=false)
+var winform = ..win.form(text="设置";right=480;bottom=300;border="none";mode="popup";parent=...;sysmenu=false)
 winform.add()
 /*}}*/
 
@@ -13,15 +13,12 @@ import sqlite;
 import confshare;
 
 var atom,hwnd = winform.atom("95469560-DCE8-46EF-B712-4CDBC40EAB6C");
-var reOpen = function(){
-	if(!atom){ 
-    	win.show(winform.hwnd, true);
-    	win.setForeground(winform.hwnd);
-    	//win.quitMessage();
-    	return;
-	}
-} 
-reOpen(); 
+if(!atom){ 
+    //win.quitMessage();
+    return;
+}
+
+
 
 
 var filepath = fsys.getSpecial(0x26 /*_CSIDL_PROGRAM_FILES*/)+"\waterclock";
@@ -249,4 +246,4 @@ win.ui.shadow(winform); //添加阴影边框
 win.region.round(winform);
 winform.show();
 win.loopMessage();
-
+return winform,wbLayout;

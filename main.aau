@@ -15,7 +15,6 @@ import win.reg;
 import fsys.lnk;
 import mouse;
 import win.ui.shadow;
-import process.mutex;
 import confshare;
 import confdata;
 /*DSG{{*/
@@ -61,29 +60,13 @@ var db ;
 var msgTaskbarRestart = RegisterWindowMessage("taskbarcreated");
 var wbLayout = web.layout( mainForm );//创建网页浏览器
 configMap={};//全局
-
+var configform;
 
 //重复打开激活
-/**
 var atom,hwnd = mainForm.atom("2A36B41E-A08C-442B-911A-8587ED58A498");
-if(!atom){ 
-    	//console.log("aaa");
-    	//mainForm.transparent(255);
-    	//win.show(hwnd, true);
-    	//win.setForeground(hwnd);
-    	//
-    	//mainForm.transparent(0);
-    	//mainForm.transparent(false);
-    	win.quitMessage();
-    	return;
-}
-**/
- 
-//保证唯一实例运行
-mutex=process.mutex("2A36B41E-A08C-442B-911A-8587ED58A498");
-if(mutex.conflict){
-    //mutex.close();
-   // return;
+if(!atom){
+	win.show(hwnd,false);
+    return ;
 }
 
 //启动加载html窗体阴影
@@ -117,6 +100,7 @@ var loadConfigData = function(){
 
 
 var fakeUpNum = function(showReason){
+	wbLayout.getEle("remindperc").innerHTML ='<div id="num"></div><div id="per">%</div>';
 	wbLayout.getEle("buttons").innerHTML = '';
 	wbLayout.getEle("per").innerHTML = "%";
 	var k = passedId;
@@ -157,10 +141,14 @@ var fakeShow = function(delay){
 	win.region.round(mainForm);
 	**/
 	if(passedId==0){
+		wbLayout.getEle("remindperc").innerHTML = '<div id="remindpercbak">^_^</div>';
+		/**
 		wbLayout.getEle("num").innerHTML = "^_^";
 		wbLayout.getEle("per").innerHTML = "";
+		**/
 	}else{
 		var k = passedId*10;
+		wbLayout.getEle("remindperc").innerHTML ='<div id="num"></div><div id="per">%</div>';
 		wbLayout.getEle("num").innerHTML = k;
 		wbLayout.getEle("per").innerHTML = "%";
 	}
@@ -354,9 +342,9 @@ var getCurRemindInfo = function(){
 //链接响应
 wbLayout.onHyperlinkClick = function (ltTarget,ltEle,reason,behaviorParams) {
     if(ltEle.id="settings"){//设置
-    	
-    	var configform,wb = mainForm.loadForm("/res/config.aau", );
-    	if(!configform.valid){}
+    	if(configform==null){
+    		configform,wb = mainForm.loadForm("/res/config.aau", );
+    	}
     	//configform.show();
     }
     else if(ltEle.id="minisize"){//最小化
@@ -393,17 +381,31 @@ wbLayout.onMenuItemClick =  {
 		fakeExit();
 	}
 	about = function(ltTarget,ltOwner,reason,behaviorParams){
-		mainForm.msgbox("about us!");
+		if(configform!=null&&win.isVisible(configform.hwnd)){
+			
+		}else{
+			configform,wb =  mainForm.loadForm("/res/config.aau","mainForm");
+		}
+		var elePanel = wb.getEle("shuibaobao");
+		elePanel.traverseMouse("onMouseDown");
 	}
-	config = function(ltTarget,ltOwner,reason,behaviorParams){
-		var configform,wb =  mainForm.loadForm("/res/config.aau","");
+	weibo = function(ltTarget,ltOwner,reason,behaviorParams){
+		process.execute(ltTarget.getAttribute("hf"));
+		return true;//
 	}
 	
+	config = function(ltTarget,ltOwner,reason,behaviorParams){
+		if(configform!=null&&win.isVisible(configform.hwnd)){
+			
+		}else{
+			configform,wb =  mainForm.loadForm("/res/config.aau","mainForm");
+		}
+	}	
 	
 	// 在这里没有匹配不到id的节点会触发default函数*/
 	default = function (ltTarget,ltOwner,reason,behaviorParams) {
 		var ltPopupOwner = web.layout.element( behaviorParams.he );//这是弹出菜单的按钮节点
-		mainForm.msgbox( ltTarget.innerText )
+		mainForm.msgbox( ltTarget.innerText );
 	}
 }
 
@@ -416,7 +418,11 @@ var createPopMenu = function(){
 	});
 	popmenu.add('设置(&S\)',function(id){
 		//在下面输入菜单响应代码
-		mainForm.loadForm("/res/config.aau");
+		if(configform!=null&&win.isVisible(configform.hwnd)){
+			
+		}else{
+			configform,wb =  mainForm.loadForm("/res/config.aau","mainForm");
+		}
 	});
 	popmenu.add();//分隔线
 	
@@ -494,7 +500,6 @@ mainForm.wndproc = function(hwnd,message,wparam,lparam){
     		//return false;
     		//fakeExit();
     		//tray.delete();
-    		mutex.close();
         }
         /**
         case( 0x112/*_WM_SYSCOMMAND*/ ){ //系统命令消息
