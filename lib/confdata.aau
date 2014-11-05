@@ -34,7 +34,7 @@ namespace confdata{
 		db.exec("insert into config values('sys','startup','t','t','开机启动')");
 		db.exec("insert into config values('sys','filelink','t','t','创建快捷')");
 		db.exec("insert into config values('sys','remsound','t','t','声音提醒')");
-		db.exec("insert into config values('sys','wavefile','clock.wav','clock.wav','声音文件')");
+		db.exec("insert into config values('sys','wavefile','clock.wav','/res/pth-gaiheshui.mp3','声音文件')");
 		db.exec("insert into config values('sys','remwin','t','t','弹窗提醒')");
 		db.exec("insert into config values('kno','id','1','1','当前知识库ID')");//第一次启动
 	}

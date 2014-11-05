@@ -389,6 +389,15 @@ wbLayout.onMenuItemClick =  {
 		var elePanel = wb.getEle("shuibaobao");
 		elePanel.traverseMouse("onMouseDown");
 	}
+	help = function(ltTarget,ltOwner,reason,behaviorParams){
+		if(configform!=null&&win.isVisible(configform.hwnd)){
+			
+		}else{
+			configform,wb =  mainForm.loadForm("/res/config.aau","mainForm");
+		}
+		var elePanel = wb.getEle("help");
+		elePanel.traverseMouse("onMouseDown");
+	}
 	weibo = function(ltTarget,ltOwner,reason,behaviorParams){
 		process.execute(ltTarget.getAttribute("hf"));
 		return true;//

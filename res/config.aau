@@ -1,7 +1,7 @@
 import win.ui;
 import win.region.round;
 /*DSG{{*/
-var winform = ..win.form(text="…Ë÷√";right=480;bottom=300;border="none";mode="popup";parent=...;sysmenu=false)
+var winform = ..win.form(text="…Ë÷√";right=480;bottom=300;border="none";max=false;mode="popup";parent=...)
 winform.add()
 /*}}*/
 

@@ -235,7 +235,19 @@ body {
 			  </tr>
 			  <tr>
 				<td>
-				&nbsp;&nbsp;&nbsp;&nbsp;选择文件声音：<input type="file" name="wavefile" style="width:120px;" filter="Wav files:*.wav,*.mp3" novalue="clock.wav"/></td>
+				&nbsp;&nbsp;&nbsp;&nbsp;选择声音：
+				<select name="wavefile" style="width:133px;">
+					<option value="/res/pth-gaiheshui.mp3">普通话</option>
+					<option value="/res/yy-gaiheshui.mp3">广东话</option>
+					<option value="/res/shichuan.wav">四川话</option>
+					<option value="/res/henan.wav">河南话</option>
+					<option value="/res/shanxi.wav">陕西话</option>
+				</select>
+				<!--
+				&nbsp;&nbsp;&nbsp;&nbsp;
+				选择文件声音：<input type="file" name="wavefile" style="width:120px;" filter="Wav files:*.wav,*.mp3" novalue="clock.wav"/>
+				-->
+				</td>
 			  </tr>
 			  <tr>
 				<td>
@@ -257,7 +269,7 @@ body {
 			  <tr>
 				<td width="80">性别：</td>
 				<td><label>
-				  <select name="sex" id="b">
+				  <select name="sex" id="b" style="width:158px;">
 					<option selected>男性</option>
 					<option>女性</option>
 					<option>怀孕女性</option>
@@ -265,19 +277,20 @@ body {
 				  </select>
 				</label></td>
 			  </tr>
-			  <tr>
-				<td>体重：</td>
-				<td><input type="text" name="weight" style=";width:50px;" size="10">
-				  千克</td>
-			  </tr>
+			 
 			  <tr>
 				<td>生活方式：</td>
 				<td>
-					<select name="lifestyle">
+					<select name="lifestyle" style="width:158px;">
 					  <option selected>办公室不运动</option>
 					  <option>运动</option>
 					</select>
 				</td>
+			  </tr>
+			   <tr>
+				<td>体重：</td>
+				<td><input type="text" name="weight" style="width:30px;" size="8">
+				  千克</td>
 			  </tr>
 			  <tr>
 				<td>上午上班：</td>
@@ -335,7 +348,7 @@ body {
 			<div style="width:330px;margin:10px;line-height:20px;">
 				<TABLE border="0" width="100%">
 				<TR>
-					<TD colspan="2">&nbsp;&nbsp;&nbsp;&nbsp;<b>一个成人每天需要喝水2000毫升</b><br/></TD>
+					<TD colspan="2">&nbsp;&nbsp;&nbsp;&nbsp;<b>你每天要喝多少水，每次要喝多少水？一个成人每天需要喝水2000-2500毫升，每次喝150-200毫升。</b><br/></TD>
 				</TR>
 				<TR>
 					<TD><img src="/res/310.jpg" border="0"/></TD>
