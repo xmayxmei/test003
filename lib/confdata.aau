@@ -122,5 +122,13 @@ namespace confdata{
 		db.exec("create table records(id INTEGER PRIMARY KEY AUTOINCREMENT,isOkay, volume int NOT NULL, create_time DATE)");
 	}
   }
-
+  
+  //容积计算
+  //每1公斤增加10ml，每一性别差增加200ml
+  //男55-2000，女1800，怀孕2200，哺乳2400（30<体重<120）
+  //女40-1500，哺乳65-2500
+  //时间计算
+  //(6:00-12:00)(13:00-22:00)早上最早6:00，晚上最晚22:00，中午最长沉默时间2小时，中午超过2小时则。一般一个小时提醒一次。
+  //工作总时间4-14小时。（）
+  
 }

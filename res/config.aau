@@ -242,6 +242,7 @@ wbLayout.onMenuItemClick =  {
 
 
 import win.ui.shadow;
+//win.ui.shadow(winform,ff,10,4,0,0xff000000,0.15,15);
 win.ui.shadow(winform); //ÃÌº”“ı”∞±ﬂøÚ
 win.region.round(winform);
 winform.show();

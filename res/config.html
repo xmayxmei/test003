@@ -124,26 +124,24 @@ body {
 #circle {     width: 100px;     height: 100px;         -moz-border-radius: 100px;      
    border-radius: 100px; border:10px solid #ff0000;padding:10px 10px;}
 .button {
-  
-  background-color: #fbfbfb #fbfbfb #e1e1e1 #e1e1e1;
+  background-color: #2b9fe0;
   display: inline-block;
   vertical-align: middle;
-  border: 1px solid #ffffff;
   height: 28px;
   width: max-intrinsic;
   line-height: 28px;
-  padding: 0px 25.6px;
+  padding: 0px 25px;
   font-weight: 300;
   font-size: 14px;
   font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", "Helvetica, Arial", "Lucida Grande", "sans-serif";
-  color: #666666;
+  color:#fff;
   margin: 0;
   text-decoration: none;
   text-align: center;
   
 }
 .button:hover {
-  background-color: #ffffff #ffffff #dcdcdc #dcdcdc;
+  background-color: #00ccff;
 }
 .button:active {
   background: #eeeeee;
@@ -153,7 +151,7 @@ body {
   outline: none;
 }
 .button-rounded {
-  border-radius: 6px;
+  border-radius: 30px;
   margin:10px;
 }
 #min{
@@ -187,6 +185,15 @@ body {
 .share ul li{
 	float:left;width:100px;list-style:none; 
 }
+.shortselect{
+	background:#fafdfe;
+	height:20px;
+	line-height:20px;
+	border:1px solid #9bc0dd;
+	-moz-border-radius:2px;
+	-webkit-border-radius:2px;
+	border-radius:2px;
+}
 </style>
 <meta http-equiv="Content-Type" content="text/html; charset=gb2312"></head>
 <body>
@@ -200,8 +207,8 @@ body {
          <div panel="panel1" id="genalset" selected>常规设置</div>
          <div panel="panel2" id="personset" >个人设置</div>
 		 <div panel="panel3" id="knowlege" >水健康</div>
-		 <div panel="panel4" id="shuibaobao" >水宝宝</div>
-		 <div panel="panel5" id="help" >帮助</div>
+		 <div panel="panel4" id="help" >帮助</div>
+		 <div panel="panel5" id="shuibaobao" >关于</div>
 		 <div panel="panel6" id="share" >分享</div>
 		 <div panel="panel7" id="about" >我们</div>
 		 <!--
@@ -214,27 +221,27 @@ body {
 			<table width="350" border="0">
 			  <tr>
 				
-				<td>
+				<td height="25px;">
 					<button type="checkbox" name="startup">
 						<text>开机时自动启动本程序</text> 
 					</button>
 				</td>
 			  </tr>
 			  <tr>
-				<td>
+				<td height="25px;">
 				  <button type="checkbox" name="filelink">
 					<text>创建桌面快捷方式</text> 
 				  </button>
 				</td>
 			  </tr>
 			  <tr>
-				<td>
+				<td height="20px;">
 					<button type="checkbox" name="remsound">
 					<text>闹钟时间到时使用声音提醒</text> 
 				  </button></td>
 			  </tr>
 			  <tr>
-				<td>
+				<td height="25px;">
 				&nbsp;&nbsp;&nbsp;&nbsp;选择声音：
 				<select name="wavefile" style="width:133px;">
 					<option value="/res/pth-gaiheshui.mp3">普通话</option>
@@ -250,7 +257,7 @@ body {
 				</td>
 			  </tr>
 			  <tr>
-				<td>
+				<td height="25px;">
 				  <button type="checkbox" name="remwin">
 					<text>闹钟时间到时使用桌面右下角弹窗提醒</text> 
 				  </button>
@@ -267,45 +274,45 @@ body {
       <div name="panel2"> 
 			<table width="350" border="0">
 			  <tr>
-				<td width="80">性别：</td>
-				<td><label>
-				  <select name="sex" id="b" style="width:158px;">
+				<td width="80" height="25px;">性别：</td>
+				<td>
+				  <select name="sex" id="b" style="width:158px">
 					<option selected>男性</option>
 					<option>女性</option>
 					<option>怀孕女性</option>
 					<option>哺乳女性</option>
 				  </select>
-				</label></td>
+				</td>
 			  </tr>
 			 
 			  <tr>
-				<td>生活方式：</td>
+				<td height="25px;">生活方式：</td>
 				<td>
-					<select name="lifestyle" style="width:158px;">
+					<select name="lifestyle" style="width:158px">
 					  <option selected>办公室不运动</option>
 					  <option>运动</option>
 					</select>
 				</td>
 			  </tr>
 			   <tr>
-				<td>体重：</td>
-				<td><input type="text" name="weight" style="width:30px;" size="8">
+				<td height="25px;">体重：</td>
+				<td><input type="text" name="weight" style="width:48px;" size="8">
 				  千克</td>
 			  </tr>
 			  <tr>
-				<td>上午上班：</td>
+				<td height="25px;">上午开始：</td>
 				<td>
 				  
-				  <input type="time" name="mornin" no-seconds/> 
-				  下班：
-				  <input type="time" name="mornout" no-seconds/></td>
+				  <input type="time" name="mornin" style="width:28px" no-seconds/> 
+				  结束：
+				  <input type="time" name="mornout"  style="width:28px" no-seconds/></td>
 			  </tr>
 			  <tr>
-				<td>下午上班：</td>
+				<td height="25px;">下午开始：</td>
 				<td>
-					<input type="time" name="afterin" no-seconds/>
-				  下班：
-				  <input type="time" name="afterout" no-seconds/>
+					<input type="time" name="afterin"  style="width:28px" no-seconds/>
+				  结束：
+				  <input type="time" name="afterout"  style="width:28px" no-seconds/>
 				  </td>
 			  </tr>
 			</table>
@@ -333,17 +340,9 @@ body {
       </div> 
      
 	 
-	  <div name="panel4"> 
-          
-			<div style="width:330px;text-align:center;font-weight:bold;">关于水宝宝
-				<br/><br/><img src="/res/about_r2_c2.png" border="0" align="center"/>
-			</div>
-			<div style="width:330px;margin:10px;line-height:20px;">
-				&nbsp;&nbsp;&nbsp;&nbsp;水宝宝是一款能够定时提醒您喝水的闹钟，她绿色小巧，时刻关心着你的身体健康，实时提醒你在繁忙的工作生活中放下手中的事情，休息一下眼睛，喝一杯温水，暖暖你的胃，没有什么比你身体健康更重要。。。
-			</div>
-      </div>
+	 
 
-	  <div name="panel5"> 
+	  <div name="panel4"> 
           
 			<div style="width:330px;margin:10px;line-height:20px;">
 				<TABLE border="0" width="100%">
@@ -363,6 +362,16 @@ body {
 					<TD>一瓶8元的可乐，2000毫升，如果喝水，你每天需要喝一大瓶水。</TD>
 				</TR>
 				</TABLE>
+			</div>
+      </div>
+
+	   <div name="panel5"> 
+          
+			<div style="width:330px;text-align:center;font-weight:bold;">关于水宝宝
+				<br/><br/><img src="/res/about_r2_c2.png" border="0" align="center"/>
+			</div>
+			<div style="width:330px;margin:10px;line-height:20px;">
+				&nbsp;&nbsp;&nbsp;&nbsp;水宝宝是一款能够定时提醒您喝水的闹钟，她绿色小巧，时刻关心着你的身体健康，实时提醒你在繁忙的工作生活中放下手中的事情，休息一下眼睛，喝一杯温水，暖暖你的胃，没有什么比你身体健康更重要。。。
 			</div>
       </div>
 

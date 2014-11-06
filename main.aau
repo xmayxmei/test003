@@ -409,6 +409,8 @@ wbLayout.onMenuItemClick =  {
 		}else{
 			configform,wb =  mainForm.loadForm("/res/config.aau","mainForm");
 		}
+		var elePanel = wb.getEle("personset");
+		elePanel.traverseMouse("onMouseDown");
 	}	
 	
 	// 在这里没有匹配不到id的节点会触发default函数*/
