@@ -31,12 +31,15 @@ namespace confdata{
 		db.exec("insert into config values('user','mornout','12:00','12:00','上午下班')");
 		db.exec("insert into config values('user','afterin','14:00','14:00','下午上班')");
 		db.exec("insert into config values('user','afterout','18:00','18:00','下午下班')");
-		db.exec("insert into config values('sys','startup','t','t','开机启动')");
+		db.exec("insert into config values('sys','startup','t','f','开机启动')");
 		db.exec("insert into config values('sys','filelink','t','t','创建快捷')");
 		db.exec("insert into config values('sys','remsound','t','t','声音提醒')");
 		db.exec("insert into config values('sys','wavefile','clock.wav','/res/pth-gaiheshui.mp3','声音文件')");
 		db.exec("insert into config values('sys','remwin','t','t','弹窗提醒')");
-		db.exec("insert into config values('kno','id','1','1','当前知识库ID')");//第一次启动
+		db.exec("insert into config values('user','knowid','1','1','当前知识库ID')");//第一次启动
+		db.exec("insert into config values('user','vol','2000','2000','喝水量')");
+		db.exec("insert into config values('user','timepoint','8:30,9:30,10:30,11:30,12:25,14:00,15:00,16:00,17:00,17:55','8:30,9:30,10:30,11:30,12:25,14:00,15:00,16:00,17:00,17:55','喝水时间')");
+		db.exec("insert into config values('user','volpoint','150,200,200,200,150,200,200,200,150,150','150,200,200,200,150,200,200,200,150,150','喝水时间')");
 	}
 	if(!db.existsTable("knowledge")){ //水知识
 		db.exec("create table knowledge(id INTEGER PRIMARY KEY AUTOINCREMENT,kind,desc)");
@@ -156,7 +159,29 @@ namespace confdata{
   //总共10次，最长1小时，最短30分钟。早上第一次，上午下班一次，下午上班第一次，下午下班最后一次，中午若超过90分钟，靠前提醒一次；
   //先计算总时长，再计算，上午中午下午时长，总时长要>=5，<16。（第一次，上班延后5分钟，最后一次，提前5分钟）
   //中午小于4小时。
+  //时间设置要求，中午不超过150分钟，总计最短8小时，最长16小时。
+  //(总计8-16小时)（中午0.5-2.0），有效6-14，总共8，10，12次（分3档，45、60、75每次）
+  //总计10次，中午超过90分钟一次，
   cntTimes = function(mornin,mornout,afterin,afterout){
+  	//如果中午（90-120，一次），否则正常执行
+  	//8小时，8次，45分钟，如果上午最后一次，超过设定的时间>30分钟
+  	var holehour = afterout-mornin;
+  	var noonhour = afterin-mornout;
+  	//1小时一次，如果上午最后一次超过设定的上午下班时间，中午不再提醒。
+  	//否则提醒一次，中午90分以内，45时提醒，90以外60提醒。
+  	//第一次提醒延后5分钟，最后一次提醒提前5分钟。
+  	var tms = {}
+  	for(i=mornin;mornout;60){
+  		if(i==1){
+  			
+  		}
+  		tms[i] = mornin+i*60;
+  		
+  	}
+  	for(i=afterin;afterout;60){
+  		tms[i] = afterin+i*60;
+  		
+  	}
   	
   }
   

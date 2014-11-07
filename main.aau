@@ -31,8 +31,8 @@ var nextRemdTempl = "距离下次喝水还有{0}分钟";//下次喝水模板
 var perAmtTempl = "建议您每日喝水{0}毫升";
 var remdTimeTabStr = "8:30,9:30,10:50,11:46,12:25,14:00,15:00,16:00,20:38,23:05";
 var remdAmtTabStr = "150,200,200,200,150,200,200,200,150,150";
-var showDelayIntv = 5;//界面显示延时（分钟）
-var remdDelayIntv = 5;//延迟提醒时间间隔（分钟）
+var showDelayIntv = 3;//界面显示延时（分钟）
+var remdDelayIntv = 10;//延迟提醒时间间隔（分钟）
 var menalDelayIntv = 2;//界面显示延时（分钟）
 
 var isShowWindow = true;//是否显示窗口（可配置）
