@@ -53,9 +53,20 @@ var filelink = wbLayout.getEle("filelink");
 filelink.setValueObject(configMap['filelink']=='t'?true:false);
 var remsound = wbLayout.getEle("remsound");
 remsound.setValueObject(configMap['remsound']=='t'?true:false);
-var wavefile = wbLayout.getEle("wavefile");
 
-wavefile.setAttribute("novalue",configMap['wavefile']);
+if(configMap['wavefile']='/res/pth-gaiheshui.mp3'){
+	idx = 1;
+}else if(configMap['wavefile']='/res/yy-gaiheshui.mp3'){
+	idx = 2;
+}else if(configMap['wavefile']='/res/shichuan.wav'){
+	idx = 3;
+}else if(configMap['wavefile']='/res/henan.wav'){
+	idx = 4;
+}else if(configMap['wavefile']='/res/shanxi.wav'){
+	idx = 4;
+}
+//var wavefile = wbLayout.getEle("wavefile");
+wbLayout.querySelectorAll("#wavefile option")[idx].state.checked = true;
 var remwin = wbLayout.getEle("remwin");
 remwin.setValueObject(configMap['remwin']=='t'?true:false);
 
@@ -76,7 +87,6 @@ var reloadConfig = function(){
 		weight.setValueObject(configMap['weight']);
 		var lifestyle = wbLayout.getEle("lifestyle");
 		lifestyle.setValueObject(configMap['lifestyle']);
-		var mornin = wbLayout.getEle("mornin");
 		mornin.setValueObject(configMap['mornin']);
 		var mornout = wbLayout.getEle("mornout");
 		mornout.setValueObject(configMap['mornout']);
@@ -126,6 +136,10 @@ wbLayout.onHyperlinkClick = function (ltTarget,ltEle,reason,behaviorParams) {
 		var  mornout = wbLayout.getEle("mornout");
 		var  afterin = wbLayout.getEle("afterin");
 		var  afterout = wbLayout.getEle("afterout");
+		var morninval = tostring(mornin.getValueObject());
+		var mornoutval = tostring(mornout.getValueObject());
+		var afterinval = tostring(afterin.getValueObject());
+		var afteroutval = tostring(afterout.getValueObject());
 		//先保存，再执行相应函数
 		//喝水容量计算
 		if(configMap['sex']!=sex.value){
@@ -141,21 +155,20 @@ wbLayout.onHyperlinkClick = function (ltTarget,ltEle,reason,behaviorParams) {
 			db.exec(sql);
 		}
 		//喝水时间计算
-		if(configMap['mornin']!=mornin.value){
-			
-			var sql = string.concat("update config set value='",mornin.value,"' where code = 'mornin' and parent='user'");
+		if(configMap['mornin']!=morninval){
+			var sql = string.concat("update config set value='",morninval,"' where code = 'mornin' and parent='user'");
 			db.exec(sql);
 		}
-		if(configMap['mornout']!=mornout.value){
-			var sql = string.concat("update config set value='",mornout.value,"' where code = 'mornout' and parent='user'");
+		if(configMap['mornout']!=mornoutval){
+			var sql = string.concat("update config set value='",mornoutval,"' where code = 'mornout' and parent='user'");
 			db.exec(sql);
 		}
-		if(configMap['afterin']!=afterin.value){
-			var sql = string.concat("update config set value='",afterin.value,"' where code = 'afterin' and parent='user'");
+		if(configMap['afterin']!=afterinval){
+			var sql = string.concat("update config set value='",afterinval,"' where code = 'afterin' and parent='user'");
 			db.exec(sql);
 		}
-		if(configMap['afterout']!=afterout.value){
-			var sql = string.concat("update config set value='",afterout.value,"' where code = 'afterout' and parent='user'");
+		if(configMap['afterout']!=afteroutval){
+			var sql = string.concat("update config set value='",afteroutval,"' where code = 'afterout' and parent='user'");
 			db.exec(sql);
 		}
 		reloadConfig();

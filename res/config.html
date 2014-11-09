@@ -245,7 +245,7 @@ body {
 			  <tr>
 				<td height="25px;">
 				&nbsp;&nbsp;&nbsp;&nbsp;选择声音：
-				<select name="wavefile" style="width:133px;">
+				<select name="wavefile" style="width:133px;height:24px;" id="wavefile">
 					<option value="/res/pth-gaiheshui.mp3">普通话</option>
 					<option value="/res/yy-gaiheshui.mp3">广东话</option>
 					<option value="/res/shichuan.wav">四川话</option>
@@ -260,7 +260,7 @@ body {
 			  </tr>
 			  <tr>
 				<td height="25px;">
-				  <button type="checkbox" name="remwin">
+				  <button type="checkbox" name="remwin" style="display:none">
 					<text>闹钟时间到时使用桌面右下角弹窗提醒</text> 
 				  </button>
 				</td>
@@ -278,7 +278,7 @@ body {
 			  <tr>
 				<td width="80" height="25px;">性别：</td>
 				<td>
-				  <select name="sex" id="b" style="width:158px">
+				  <select name="sex" id="b" style="width:158px;height:24px;">
 					<option selected>男性</option>
 					<option>女性</option>
 					<option>怀孕女性</option>
@@ -290,7 +290,7 @@ body {
 			  <tr>
 				<td height="25px;">生活方式：</td>
 				<td>
-					<select name="lifestyle" style="width:158px">
+					<select name="lifestyle" style="width:158px;height:24px;">
 					  <option selected>办公室不运动</option>
 					  <option>运动</option>
 					</select>
@@ -298,23 +298,22 @@ body {
 			  </tr>
 			   <tr>
 				<td height="25px;">体重：</td>
-				<td><input type="text" name="weight" style="width:48px;" filter="0~9" size="8">
+				<td><input type="text" name="weight" style="width:48px;height:16px;" filter="0~9" size="8">
 				  千克</td>
 			  </tr>
 			  <tr>
 				<td height="25px;">上午开始：</td>
 				<td>
-				  
-				  <input type="time" name="mornin" style="width:28px" no-seconds/> 
+				  <input type="time" name="mornin" value="" style="width:28px;height:24px;" no-seconds/> 
 				  结束：
-				  <input type="time" name="mornout"  style="width:28px" no-seconds/></td>
+				  <input type="time" name="mornout"  style="width:28px;height:24px;" no-seconds/></td>
 			  </tr>
 			  <tr>
 				<td height="25px;">下午开始：</td>
 				<td>
-					<input type="time" name="afterin"  style="width:28px" no-seconds/>
+					<input type="time" name="afterin"  style="width:28px;height:24px;" no-seconds/>
 				  结束：
-				  <input type="time" name="afterout"  style="width:28px" no-seconds/>
+				  <input type="time" name="afterout"  style="width:28px;height:24px;" no-seconds/>
 				  </td>
 			  </tr>
 			</table>

@@ -27,7 +27,7 @@ namespace confdata{
 		db.exec("insert into config values('user','sex','男性','男性','性别')");
 		db.exec("insert into config values('user','weight','55','55','体重')");
 		db.exec("insert into config values('user','lifestyle','上班不运动','上班不运动','生活方式')");
-		db.exec("insert into config values('user','mornin','8:30','8:30','上午上班')");
+		db.exec("insert into config values('user','mornin','08:30','08:30','上午上班')");
 		db.exec("insert into config values('user','mornout','12:00','12:00','上午下班')");
 		db.exec("insert into config values('user','afterin','14:00','14:00','下午上班')");
 		db.exec("insert into config values('user','afterout','18:00','18:00','下午下班')");
@@ -167,21 +167,18 @@ namespace confdata{
   	//8小时，8次，45分钟，如果上午最后一次，超过设定的时间>30分钟
   	var holehour = afterout-mornin;
   	var noonhour = afterin-mornout;
-  	//1小时一次，如果上午最后一次超过设定的上午下班时间，中午不再提醒。
-  	//否则提醒一次，中午90分以内，45时提醒，90以外60提醒。
-  	//第一次提醒延后5分钟，最后一次提醒提前5分钟。
-  	var tms = {}
-  	for(i=mornin;mornout;60){
-  		if(i==1){
-  			
+  	//1小时一次，中午不提醒，如果上午最后一次小于半小时，则中午第15分钟提醒一次否则上午最后时间点提醒。
+  	//早上第一次提醒延后5分钟，中午第一次延后2分钟，最后一次提醒提前5分钟。
+  	var tms = {};
+  	/**
+  	for(var i=0;15;1){
+  		itm = time(mornin,"%H:%M").addhour(i);
+  		if(i==0){
+  			tms[i] = itm.addminute(5);
   		}
-  		tms[i] = mornin+i*60;
   		
   	}
-  	for(i=afterin;afterout;60){
-  		tms[i] = afterin+i*60;
-  		
-  	}
+  	**/
   	
   }
   

@@ -18,7 +18,7 @@ import win.ui.shadow;
 import confshare;
 import confdata;
 /*DSG{{*/
-var mainForm = ..win.form(text="水宝宝";right=319;bottom=229;border="none";exmode="none";mode="popup";parent=...;sysmenu=false;title=false;topmost=1)
+var mainForm = ..win.form(text="水宝宝";right=319;bottom=229;border="none";exmode="none";max=false;min=false;mode="popup";parent=...;sysmenu=false;title=false;topmost=1)
 mainForm.add()
 /*}}*/
 
@@ -71,8 +71,16 @@ if(!atom){
 
 //启动加载html窗体阴影
 var loadFormLayout = function(){
+	//
+	
+	win.region.round(mainForm,,6,6);
+	//窗体对象,透明度,阴影大小,外圆角,内圆角,阻影颜色,插值位置,聚焦系数
+	//除参数@1以外,其他所有参数可选\n透明度默认为80,255为不透明\n阴影大小默认为3像素\n外圆角默认为阴影大小\n内圆角默认为空
+	//\n阴影颜色默认为0xFF000000,FF为透明度\n插值位置默认为0.15\n聚焦系数默认为15
+	//win.ui.shadow(mainForm,80,3,6,0,0xff000000,0.15,15);
+	
+	//win.ui.shadow(mainForm,,6,6,,,,);
 	win.ui.shadow(mainForm); //添加阴影边框
-	win.region.round(mainForm);
 	var ahtml = string.load("/res/main.html");
 	wbLayout.html = ahtml;
 	mainForm.modifyStyleEx(0x40000/*_WS_EX_APPWINDOW*/,0x80/*_WS_EX_TOOLWINDOW*/);
@@ -171,7 +179,7 @@ var fakeShow = function(delay){
 var playSound = function(){
 	if(configMap['remwin']=='t'){
 		import win.mm
-		win.mm.playMp3("/res/yy-gaiheshui.mp3");
+		win.mm.playMp3(configMap['wavefile']);
 	}
 }
 
@@ -554,7 +562,7 @@ mainForm.wndproc = function(hwnd,message,wparam,lparam){
 
 //第一次运行
 confshare.createLnk(frmName);
-confshare.regAutoRun(true);
+//confshare.regAutoRun(true);
 initConfigData();//数据初始化
 
 //启动
