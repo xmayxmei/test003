@@ -9,6 +9,7 @@ namespace confdata{
 //安装数据库
  createDb = function(){
 	var filepath = fsys.getSpecial(0x26 /*_CSIDL_PROGRAM_FILES*/)+"\waterclock";
+	var isfirst = true;
 	if(!fsys.isDir(filepath)){
 		fsys.createDir(filepath);
 	}
@@ -17,8 +18,10 @@ namespace confdata{
 	if(!io.exist(dbfile)){
 		dbresfile = string.load("/res/waterclock.db");
 		string.save(dbfile,dbresfile);
+	}else{
+		isfirst = false;
 	}
-	return dbfile;
+	return dbfile,isfirst;
  }
 //初始化数据
  createData = function(db){

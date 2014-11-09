@@ -44,7 +44,7 @@ var isDelayRemd = false;//是否延时提醒；
 var curId=0;//现在提醒哪一个时间？
 var passedId = 0;//已提醒次数
 var nextTimer = null;//下次喝水时间点
-var nextTimeDist = 0;//距离下次喝水时间
+var nextTimeDist = -1;//距离下次喝水时间
 var rollIntv = 60*1000;//定时时长,毫秒
 var currRemdStr;//建议喝水
 var nextRemdStr;//下次喝水
@@ -94,9 +94,10 @@ var loadFormLayout = function(){
 
 //导入初始化数据
 var initConfigData = function(){
-	var dbfile = confdata.createDb();//安装数据库
+	var dbfile,isfirst = confdata.createDb();//安装数据库
 	db = sqlite(dbfile);
 	confdata.createData(db);//初始化数据库
+	return isfirst;
 }
 //加载配置数据
 var loadConfigData = function(){
@@ -257,7 +258,8 @@ var reTimeShow = function(){
 
 //手动显示
 var manaulShow = function(delay){
-	if(nextTimeDist==0&&curId!=null){	
+	//console.log(curId);
+	if(nextTimeDist==0&&curId!=null&&curId!=0){	
 		if(!isDelayRemd){
 			isTimeShow();
 		}else{
@@ -332,13 +334,16 @@ var getCurRemind = function(){
 }
 //查询是否提醒以及提醒语
 var getCurRemindInfo = function(){
-	
 	var pCurrRemdStr = currRemdTempl;
 	var pNextRemdStr = nextRemdTempl;
 	if(curId>0){
 		pCurrRemdStr = string.replace(pCurrRemdStr,"\{0\}",remdTimeTab[curId]);//
 		pCurrRemdStr = string.replace(pCurrRemdStr,"\{1\}","150-200");//
 		pNextRemdStr = string.replace(pNextRemdStr,"\{0\}",tostring(nextTimeDist));//下次提醒内容
+		if(nextTimeDist>120){//距离下次提醒时间超过120分钟，提醒休息。
+			pCurrRemdStr = restRemStr;//
+			pNextRemdStr = restRemStr;//
+		}
 	}else{
 		pCurrRemdStr = restRemStr;//
 		pNextRemdStr = restRemStr;//
@@ -563,10 +568,12 @@ mainForm.wndproc = function(hwnd,message,wparam,lparam){
 
 
 //第一次运行
-confshare.createLnk(frmName);
-//confshare.regAutoRun(true);
-initConfigData();//数据初始化
 
+//confshare.regAutoRun(true);
+var isfirst  = initConfigData();//数据初始化
+if(isfirst){//第一次运行
+	confshare.createLnk(frmName);
+}
 //启动
 loadConfigData();//加载初始化数据
 loadFormLayout();//加载窗口
