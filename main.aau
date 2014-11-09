@@ -29,7 +29,7 @@ var restRemStr = "亲，该休息啦！";
 var currRemdTempl = "{0}，建议喝水{1}毫升";//建议喝水模板
 var nextRemdTempl = "距离下次喝水还有{0}分钟";//下次喝水模板
 var perAmtTempl = "建议您每日喝水{0}毫升";
-var remdTimeTabStr = "8:30,9:30,10:50,11:46,12:25,14:00,15:00,16:00,20:38,23:05";
+var remdTimeTabStr = "8:30,9:30,10:50,11:46,12:25,14:00,15:00,16:00,20:38,22:45,22:50,22:55,23:00,23:10,23:23";
 var remdAmtTabStr = "150,200,200,200,150,200,200,200,150,150";
 var showDelayIntv = 3;//界面显示延时（分钟）
 var remdDelayIntv = 10;//延迟提醒时间间隔（分钟）
@@ -52,6 +52,7 @@ var perAmtStr;//建议每日喝水
 //var tray; //创建托盘图标
 var remdTimeTab = string.split(remdTimeTabStr,',');
 var remdAmtTab = string.split(remdAmtTabStr,','); 
+var remTabCnt= table.count(remdTimeTab);
 var startDelaySecd = 0;//延迟多久启动定时任务
 var difSecd = 3;//消除时间误差
 var popmenu = win.ui.popmenu(mainForm);//弹出菜单
@@ -59,6 +60,7 @@ var filepath = null;
 var db ;
 var msgTaskbarRestart = RegisterWindowMessage("taskbarcreated");
 var wbLayout = web.layout( mainForm );//创建网页浏览器
+
 configMap={};//全局
 var configform;
 
@@ -104,6 +106,8 @@ var loadConfigData = function(){
 		configMap[item['code']] = item['value'];
 	}
 	perAmtStr = string.replace(perAmtTempl,"\{0\}",2000);//
+	var passedCount = db.stepQuery("select count(*) cnt from records where strftime('%Y-%m-%d',create_time) = strftime('%Y-%m-%d',datetime('now'))");
+	passedId = passedCount['cnt'];
 }
 
 
@@ -112,7 +116,13 @@ var fakeUpNum = function(showReason){
 	wbLayout.getEle("buttons").innerHTML = '';
 	wbLayout.getEle("per").innerHTML = "%";
 	var k = passedId;
-	for(i=k*10;k*10+10;1){
+	
+
+	//	8 / 12
+	for(i=math.round(k/remTabCnt*100);math.round((k+1)/remTabCnt*100);1){
+		if(i>100){
+			i=100;
+		}
 		wbLayout.getEle("num").innerHTML = i;
         win.delay(100);
     };
@@ -143,24 +153,20 @@ var fakeShow = function(delay){
 	if(win.isVisible(mainForm.hwnd)){
 		return;
 	}
+	wbLayout.getEle("remindperc").innerHTML = '<div id="remindpercbak">^_^</div>';
 	/**
-	import win.ui.shadow;
-	win.ui.shadow(mainForm); //添加阴影边框
-	win.region.round(mainForm);
-	**/
 	if(passedId==0){
 		wbLayout.getEle("remindperc").innerHTML = '<div id="remindpercbak">^_^</div>';
-		/**
-		wbLayout.getEle("num").innerHTML = "^_^";
-		wbLayout.getEle("per").innerHTML = "";
-		**/
 	}else{
-		var k = passedId*10;
+		var i = math.round(passedId*100/remTabCnt);
+		if(i>100){
+			i=100;
+		}
 		wbLayout.getEle("remindperc").innerHTML ='<div id="num"></div><div id="per">%</div>';
-		wbLayout.getEle("num").innerHTML = k;
+		wbLayout.getEle("num").innerHTML = i;
 		wbLayout.getEle("per").innerHTML = "%";
 	}
-	
+	**/
 	if(delay){
 		mainForm.transparent(0);
 		mainForm.show();
@@ -217,7 +223,6 @@ var fakeExit = function(){
     	tray.delete();	
     }
     //wbLayout.getEle("remindperc").style["background"] = "";
-    
     wbLayout.getEle("remindperc").innerHTML = '<div id="remindpercbak">再见</div>';
     wbLayout.getEle("remindtip").innerHTML ='';
 	wbLayout.getEle("buttons").innerHTML = '';
@@ -252,8 +257,7 @@ var reTimeShow = function(){
 
 //手动显示
 var manaulShow = function(delay){
-	if(nextTimeDist==0&&curId!=null){
-		
+	if(nextTimeDist==0&&curId!=null){	
 		if(!isDelayRemd){
 			isTimeShow();
 		}else{
@@ -287,12 +291,10 @@ var manaulShow = function(delay){
 
 //创建托盘程序
 var createWinTray = function(){
-	
-		tray = win.util.tray(mainForm.hwnd);
-		tray.message = 0x400+9981;/*_WM_TRAYMESSAGE*/
-		tray.tip = nextRemdStr; //设置鼠标提示 
-		//tray.pop(nextRemdStr,frmName,2,0xFFFFFFFF);
-	
+	tray = win.util.tray(mainForm.hwnd);
+	tray.message = 0x400+9981;/*_WM_TRAYMESSAGE*/
+	tray.tip = nextRemdStr; //设置鼠标提示 
+	//tray.pop(nextRemdStr,frmName,2,0xFFFFFFFF);
 }
 
 //查询第几次提醒，距离下一次提醒时间距离
@@ -335,7 +337,7 @@ var getCurRemindInfo = function(){
 	var pNextRemdStr = nextRemdTempl;
 	if(curId>0){
 		pCurrRemdStr = string.replace(pCurrRemdStr,"\{0\}",remdTimeTab[curId]);//
-		pCurrRemdStr = string.replace(pCurrRemdStr,"\{1\}",remdAmtTab[curId]);//
+		pCurrRemdStr = string.replace(pCurrRemdStr,"\{1\}","150-200");//
 		pNextRemdStr = string.replace(pNextRemdStr,"\{0\}",tostring(nextTimeDist));//下次提醒内容
 	}else{
 		pCurrRemdStr = restRemStr;//
