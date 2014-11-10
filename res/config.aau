@@ -154,7 +154,7 @@ wbLayout.onHyperlinkClick = function (ltTarget,ltEle,reason,behaviorParams) {
 			var sql = string.concat("update config set value='",lifestyle.value,"' where code = 'lifestyle' and parent='user'");
 			db.exec(sql);
 		}
-		//喝水时间计算
+		
 		if(configMap['mornin']!=morninval){
 			var sql = string.concat("update config set value='",morninval,"' where code = 'mornin' and parent='user'");
 			db.exec(sql);
@@ -169,6 +169,18 @@ wbLayout.onHyperlinkClick = function (ltTarget,ltEle,reason,behaviorParams) {
 		}
 		if(configMap['afterout']!=afteroutval){
 			var sql = string.concat("update config set value='",afteroutval,"' where code = 'afterout' and parent='user'");
+			db.exec(sql);
+		}
+		//喝水量计算
+		if(configMap['sex']!=sex.value||configMap['weight']!=weight.value||configMap['lifestyle']!=lifestyle.value){
+			var  totalVol = confshare.cntVol(sex.value,weight.value,lifestyle.value);
+			var sql = string.concat("update config set value='",totalVol,"' where code = 'vol' and parent='user'");
+			db.exec(sql);
+		}
+		//喝水时间计算
+		if(configMap['mornin']!=morninval||configMap['mornout']!=mornoutval||configMap['afterin']!=afterinval||configMap['afterout']!=afteroutval){
+			var a= "";
+			var sql = string.concat("update config set value='",a,"' where code = 'timepoint' and parent='user'");
 			db.exec(sql);
 		}
 		reloadConfig();

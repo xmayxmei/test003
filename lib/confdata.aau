@@ -172,17 +172,66 @@ namespace confdata{
   	var noonhour = afterin-mornout;
   	//1小时一次，中午不提醒，如果上午最后一次小于半小时，则中午第15分钟提醒一次否则上午最后时间点提醒。
   	//早上第一次提醒延后5分钟，中午第一次延后2分钟，最后一次提醒提前5分钟。
+  	var tm_mornin = time(mornin,"%H:%M");
+  	var tm_mornout = time(mornout,"%H:%M");
+  	var tm_afterin = time(afterin,"%H:%M");
+  	var tm_afterout = time(afterout,"%H:%M");
   	var tms = {};
-  	/**
-  	for(var i=0;15;1){
-  		itm = time(mornin,"%H:%M").addhour(i);
+  	var j=0;
+  	/*
+  	//上午
+  	for(var i=0;10;1){
+  		var itm = tm_mornin.addhour(i);
+  		if(itm>time(tm_mornout,"%H:%M"){
+  			break ;
+  		}
+  		tms[i] = itm;
   		if(i==0){
   			tms[i] = itm.addminute(5);
   		}
-  		
+  		if(tm_mornout<itm.addminute(30)){
+  			if(tm_mornout>itm.addminute(15)){
+  				tms[i] = itm.addminute(15);
+  			}else{
+  				tms[i] = tm_mornout;
+  			}
+  		}elseif(itm.addminute(30)<tm_mornout<itm.addminute(60)){
+  			j = i+1;
+  		}
   	}
-  	**/
-  	
+  	//中午
+  	if(j>0){
+  		tms[j] = tm_mornout;
+  	}
+  	var k = 0;
+  	//下午
+  	for(var j;20;1){
+  		var itm = tm_afterin.addhour(i);
+  		if(itm>time(tm_afterout,"%H:%M"){
+  			break ;
+  		}
+  		tms[i] = itm;
+  		if(i==0){
+  			tms[i] = itm.addminute(5);
+  		}
+  		if(tm_afterout<itm.addminute(30)){
+  			if(tm_afterout>itm.addminute(15)){
+  				tms[i] = itm.addminute(15);
+  			}else{
+  				tms[i] = tm_afterout;
+  			}
+  		}elseif(itm.addminute(30)<tm_mornout<itm.addminute(60)){
+  			j = i+1;
+  		}
+  	}
+  	if(k>0){
+  		tms[k] = tm_mornout;
+  		k = 0;
+  	}
+  	for(var l=0;#tms;1){
+  		var tm = tms[l];
+  	}
+  	*/
   }
   
   
