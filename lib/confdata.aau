@@ -5,7 +5,9 @@ namespace confdata{
  import string;
  import fsys.file;
  import console;
+ import time.ole;
  import io;
+ import string.list;
 //安装数据库
  createDb = function(){
 	var filepath = fsys.getSpecial(0x26 /*_CSIDL_PROGRAM_FILES*/)+"\waterclock";
@@ -165,74 +167,71 @@ namespace confdata{
   //时间设置要求，中午不超过150分钟，总计最短8小时，最长16小时。
   //(总计8-16小时)（中午0.5-2.0），有效6-14，总共8，10，12次（分3档，45、60、75每次）
   //总计10次，中午超过90分钟一次，
-  cntTimes = function(mornin,mornout,afterin,afterout){
+  
   	//如果中午（90-120，一次），否则正常执行
   	//8小时，8次，45分钟，如果上午最后一次，超过设定的时间>30分钟
-  	var holehour = afterout-mornin;
-  	var noonhour = afterin-mornout;
   	//1小时一次，中午不提醒，如果上午最后一次小于半小时，则中午第15分钟提醒一次否则上午最后时间点提醒。
   	//早上第一次提醒延后5分钟，中午第一次延后2分钟，最后一次提醒提前5分钟。
+  cntTimes = function(mornin,mornout,afterin,afterout){
+   
   	var tm_mornin = time(mornin,"%H:%M");
   	var tm_mornout = time(mornout,"%H:%M");
   	var tm_afterin = time(afterin,"%H:%M");
   	var tm_afterout = time(afterout,"%H:%M");
-  	var tms = {};
+  	var tms = string.list();
   	var j=0;
-  	/*
+  	
   	//上午
-  	for(var i=0;10;1){
-  		var itm = tm_mornin.addhour(i);
-  		if(itm>time(tm_mornout,"%H:%M"){
+  	var tm_mi = tm_mornin;
+  	tms[1+''] = tm_mi.addminute(5);
+  	console.log(tostring(tms['1']));
+  	for(i=2;10;1){
+  		var tm_mi = tm_mornin;
+  		itm = tm_mi.addhour(1);
+  		if(itm>time(tm_mornout,"%H:%M")){
   			break ;
   		}
-  		tms[i] = itm;
-  		if(i==0){
-  			tms[i] = itm.addminute(5);
-  		}
-  		if(tm_mornout<itm.addminute(30)){
-  			if(tm_mornout>itm.addminute(15)){
-  				tms[i] = itm.addminute(15);
-  			}else{
-  				tms[i] = tm_mornout;
-  			}
-  		}elseif(itm.addminute(30)<tm_mornout<itm.addminute(60)){
-  			j = i+1;
-  		}
+  		tms[i+''] = itm;
+  		console.log(tms[i+'']);
   	}
   	//中午
   	if(j>0){
   		tms[j] = tm_mornout;
   	}
-  	var k = 0;
+  	var n = 0;
   	//下午
-  	for(var j;20;1){
-  		var itm = tm_afterin.addhour(i);
-  		if(itm>time(tm_afterout,"%H:%M"){
+  	for(k = j;20;1){
+  		console.log(k);
+  		var itm = tm_afterin.addhour(k);
+  		if(itm>time(tm_afterout,"%H:%M")){
   			break ;
   		}
-  		tms[i] = itm;
-  		if(i==0){
-  			tms[i] = itm.addminute(5);
+  		tms[k] = itm;
+  		if(k==0){
+  			tms[k] = itm.addminute(5);
   		}
   		if(tm_afterout<itm.addminute(30)){
   			if(tm_afterout>itm.addminute(15)){
-  				tms[i] = itm.addminute(15);
+  				tms[k] = itm.addminute(15);
   			}else{
-  				tms[i] = tm_afterout;
+  				tms[k] = tm_afterout;
   			}
-  		}elseif(itm.addminute(30)<tm_mornout<itm.addminute(60)){
-  			j = i+1;
+  		}elseif(itm.addminute(30)<tm_mornout&&tm_mornout<itm.addminute(60)){
+  			n = k+1;
   		}
   	}
-  	if(k>0){
-  		tms[k] = tm_mornout;
-  		k = 0;
+  	if(n>0){
+  		tms[n] = tm_mornout;
+  		n = 0;
   	}
-  	for(var l=0;#tms;1){
-  		var tm = tms[l];
+  	for( m=0;#tms;1){
+  		var tm = tms[m];
+  		//tm.format= "%H:%M";
+  		console.log(tm);
+  		
   	}
-  	*/
+  	
   }
-  
+  cntTimes("08:30","12:00","14:00","19:00");
   
 }

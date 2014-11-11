@@ -29,7 +29,7 @@ var restRemStr = "亲，该休息啦！";
 var currRemdTempl = "{0}，建议喝水{1}毫升";//建议喝水模板
 var nextRemdTempl = "距离下次喝水还有{0}分钟";//下次喝水模板
 var perAmtTempl = "建议您每日喝水{0}毫升";
-var remdTimeTabStr = "8:30,9:30,10:50,11:46,12:25,14:00,15:16,17:03,18:30,22:45,22:50,22:55,23:00,23:10,23:23";
+var remdTimeTabStr = "8:30,9:30,10:50,11:46,12:25,14:00,15:16,17:03,18:30,19:48,20:50,22:55,23:00,23:10,23:23";
 var remdAmtTabStr = "150,200,200,200,150,200,200,200,150,150";
 var showDelayIntv = 3;//界面显示延时（分钟）
 var remdDelayIntv = 5;//延迟提醒时间间隔（分钟）
@@ -210,7 +210,6 @@ var fakeClose =function(){
     };
     showDelay = 0;
     showReason ='';
-    isCurIdDealed = false;//默认该次展示已处理
     mainForm.show(false);
 }
 
@@ -500,8 +499,10 @@ var taskRun = function(){
 				}
 				if(showDelay==0){
 					showReason = '';
+					isCurIdDealed = false;//复原
 				}
 			}else{//已隐藏
+				isCurIdDealed = false;//复原
 				if(nextTimeDist==0&&curId>0){
 					if(isDelayRemd){
 						reTimeShow();

@@ -179,9 +179,9 @@ wbLayout.onHyperlinkClick = function (ltTarget,ltEle,reason,behaviorParams) {
 		}
 		//喝水时间计算
 		if(configMap['mornin']!=morninval||configMap['mornout']!=mornoutval||configMap['afterin']!=afterinval||configMap['afterout']!=afteroutval){
-			var a= "";
-			var sql = string.concat("update config set value='",a,"' where code = 'timepoint' and parent='user'");
-			db.exec(sql);
+			var totalTimes= confdata.cntTimes(morninval,mornoutval,afterinval,afteroutval);
+			//var sql = string.concat("update config set value='",totalTimes,"' where code = 'timepoint' and parent='user'");
+			//db.exec(sql);
 		}
 		reloadConfig();
 		winform.close();
