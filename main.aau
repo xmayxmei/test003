@@ -29,17 +29,18 @@ var restRemStr = "亲，该休息啦！";
 var currRemdTempl = "{0}，建议喝水{1}毫升";//建议喝水模板
 var nextRemdTempl = "距离下次喝水还有{0}分钟";//下次喝水模板
 var perAmtTempl = "建议您每日喝水{0}毫升";
-var remdTimeTabStr = "8:30,9:30,10:50,11:46,12:25,14:00,15:00,16:00,20:38,22:45,22:50,22:55,23:00,23:10,23:23";
+var remdTimeTabStr = "8:30,9:30,10:50,11:46,12:25,14:00,15:16,17:03,18:30,22:45,22:50,22:55,23:00,23:10,23:23";
 var remdAmtTabStr = "150,200,200,200,150,200,200,200,150,150";
 var showDelayIntv = 3;//界面显示延时（分钟）
-var remdDelayIntv = 10;//延迟提醒时间间隔（分钟）
+var remdDelayIntv = 5;//延迟提醒时间间隔（分钟）
 var menalDelayIntv = 2;//界面显示延时（分钟）
-
+var showDelayId = 0;
 var isShowWindow = true;//是否显示窗口（可配置）
 var isPlaySound = true;//是否声音提醒（可配置）
 var showReason = "";//显示窗口原因（时间到显示5分钟，手工显示5分钟）istime,retime,manaul(isdist);
 //1随时间、2随动作显示窗口、3显示什么样的窗口，4显示多久、5显示后随时间的变化、6显示后随动作的变化
 var showDelay = 0 ;//显示倒计时
+var isCurIdDealed = false;
 var isDelayRemd = false;//是否延时提醒；
 var curId=0;//现在提醒哪一个时间？
 var passedId = 0;//已提醒次数
@@ -115,8 +116,7 @@ var fakeUpNum = function(showReason){
 	wbLayout.getEle("buttons").innerHTML = '';
 	wbLayout.getEle("per").innerHTML = "%";
 	var k = passedId;
-	
-
+	passedId++;
 	//	8 / 12
 	for(i=math.round(k/remTabCnt*100);math.round((k+1)/remTabCnt*100);1){
 		if(i>100){
@@ -126,9 +126,8 @@ var fakeUpNum = function(showReason){
         win.delay(100);
     };
     win.delay(1000);
-    passedId++;
 }
-
+//消失
 var fakeDelay = function(showReason){
 	//curId = 3;
 	wbLayout.getEle("remindtip").innerHTML = nextRemdStr;
@@ -211,6 +210,7 @@ var fakeClose =function(){
     };
     showDelay = 0;
     showReason ='';
+    isCurIdDealed = false;//默认该次展示已处理
     mainForm.show(false);
 }
 
@@ -237,7 +237,12 @@ var isTimeShow = function(){
 	showReason = "istime";
 	showDelay = showDelayIntv;
 	wbLayout.getEle("remindtip").innerHTML = currRemdStr;
-	wbLayout.getEle("buttons").innerHTML = '<a href="" class="button button-rounded" id="okay">知道了</a><a href="" class="button button-rounded" id="delay">稍后提醒</a>';
+	if(isCurIdDealed){
+		wbLayout.getEle("buttons").innerHTML = '';
+	}else{
+		wbLayout.getEle("buttons").innerHTML = '<a href="" class="button button-rounded" id="okay">知道了</a><a href="" class="button button-rounded" id="delay">稍后提醒</a>';
+	}
+	showDelayId = curId;
 	fakeShow(true);
 	playSound();//
 }
@@ -371,15 +376,22 @@ wbLayout.onHyperlinkClick = function (ltTarget,ltEle,reason,behaviorParams) {
     	command.bind.parameterByNamesAt( //绑定命名参数 
     		create_time = time.now();
     	)
-		command.step(); 
+		command.step();
+		isDelayRemd = false; 
+		isCurIdDealed = true;
 		fakeUpNum();
     	fakeClose();
     }
     else if(ltEle.id="delay"){//延迟
     	var nowTime=time.now();
     	nextTimer = nowTime.addminute(remdDelayIntv);
+    	nextTimer.format="%H:%M";
     	nextTimeDist = remdDelayIntv;//距离下次多久
+    	curId = showDelayId;
+    	remdTimeTab[curId] = tostring(nextTimer);
     	isDelayRemd = true;
+    	isCurIdDealed = true;
+    	showReason = "retime";
     	getCurRemindInfo();//获取提醒提示信息
     	fakeDelay();
     }
@@ -479,7 +491,11 @@ var taskRun = function(){
 						reTimeShow();
 					}
 					else if(showReason=='manaul'){
-						isTimeShow();
+						if(isDelayRemd){
+							reTimeShow();
+						}else{
+							isTimeShow();
+						}
 					}
 				}
 				if(showDelay==0){
@@ -502,7 +518,11 @@ var taskRun = function(){
 					reTimeShow();
 				}
 				else if(showReason=='manaul'){
-					manaulShow(true);
+					if(isDelayRemd){
+						reTimeShow();
+					}else{
+						manaulShow(true);
+					}
 				}else{
 					fakeClose();//默认关闭
 				}
