@@ -19,7 +19,8 @@ namespace confdata{
 	
 	//console.log(dbfile);
 	if(!io.exist(dbfile)){
-		
+		dbresfile = string.load("/res/waterclock.db");
+		string.save(dbfile,dbresfile);
 	}else{
 		isfirst = false;
 	}
@@ -154,7 +155,6 @@ namespace confdata{
   	}
   	wvol = (weight-55)*20;
   	vol = vol+svol+lvol+wvol;
-  	//console.log(vol);
   	return vol;
   }
   
@@ -231,8 +231,9 @@ namespace confdata{
   				stm = string.concat(tostring(tm));
   			}
   			//console.log(tostring(tms[p]));
+  			
   		}
-  		//console.log(stm);
+  		//console.log(stm);	
   	}catch(e){
   		stm = "8:30,9:30,10:30,11:30,14:00,15:00,16:00,17:00,17:55";
   	}
