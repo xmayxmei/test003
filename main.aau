@@ -49,7 +49,8 @@ var nextTimeDist = -1;//距离下次喝水时间
 var rollIntv = 60*1000;//定时时长,毫秒
 var currRemdStr;//建议喝水
 var nextRemdStr;//下次喝水
-var perAmtStr;//建议每日喝水
+var perAmtStr;//建议每日喝水提示
+var pervol =2000;//喝水量
 //var tray; //创建托盘图标
 var remdTimeTab = string.split(remdTimeTabStr,',');
 var remdAmtTab = string.split(remdAmtTabStr,','); 
@@ -89,7 +90,20 @@ var loadFormLayout = function(){
 
 
 //RegisterWindowMessage := ::User32.api( "RegisterWindowMessageA", "Long(String lpString)");
-
+//更新关键配置数据
+reloadKeyData = function(totalVol,totalTimes,para_cnt){
+	if(totalVol!=null){
+		pervol = totalVol;
+		perAmtStr = string.replace(perAmtTempl,"\{0\}",totalVol);//
+	}
+	if(totalTimes!=null){
+		remdTimeTabStr = totalTimes;
+		remdTimeTab = string.split(remdTimeTabStr,',');
+	}
+	if(para_cnt!=null){
+		passedId = para_cnt;
+	}
+}
 
 //导入初始化数据
 var initConfigData = function(){
@@ -105,9 +119,14 @@ var loadConfigData = function(){
 		//console.log(item['parent'],item['code'],item['value'],item['desc']);
 		configMap[item['code']] = item['value'];
 	}
-	perAmtStr = string.replace(perAmtTempl,"\{0\}",2000);//
 	var passedCount = db.stepQuery("select count(*) cnt from records where strftime('%Y-%m-%d',create_time) = strftime('%Y-%m-%d',datetime('now'))");
+	/**
+	pervol = configMap['pervol'];
+	remdTimeTabStr = configMap['timepoint'];
+	perAmtStr = string.replace(perAmtTempl,"\{0\}",pervol);//
 	passedId = passedCount['cnt'];
+	**/
+	reloadKeyData(configMap['pervol'],configMap['timepoint'],passedCount['cnt']);
 }
 
 

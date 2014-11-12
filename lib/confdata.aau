@@ -7,7 +7,7 @@ namespace confdata{
  import console;
  import time.ole;
  import io;
- import string.list;
+ import table;
 //安装数据库
  createDb = function(){
 	var filepath = fsys.getSpecial(0x26 /*_CSIDL_PROGRAM_FILES*/)+"\waterclock";
@@ -16,10 +16,10 @@ namespace confdata{
 		fsys.createDir(filepath);
 	}
 	var dbfile = filepath+"\waterclock.db";
+	
 	//console.log(dbfile);
 	if(!io.exist(dbfile)){
-		dbresfile = string.load("/res/waterclock.db");
-		string.save(dbfile,dbresfile);
+		
 	}else{
 		isfirst = false;
 	}
@@ -39,11 +39,11 @@ namespace confdata{
 		db.exec("insert into config values('sys','startup','t','f','开机启动')");
 		db.exec("insert into config values('sys','filelink','t','t','创建快捷')");
 		db.exec("insert into config values('sys','remsound','t','t','声音提醒')");
-		db.exec("insert into config values('sys','wavefile','clock.wav','/res/pth-gaiheshui.mp3','声音文件')");
+		db.exec("insert into config values('sys','wavefile','/res/pth-gaiheshui.mp3','/res/pth-gaiheshui.mp3','声音文件')");
 		db.exec("insert into config values('sys','remwin','t','t','弹窗提醒')");
 		db.exec("insert into config values('user','knowid','1','1','当前知识库ID')");//第一次启动
-		db.exec("insert into config values('user','vol','2000','2000','喝水量')");
-		db.exec("insert into config values('user','timepoint','8:30,9:30,10:30,11:30,12:25,14:00,15:00,16:00,17:00,17:55','8:30,9:30,10:30,11:30,12:25,14:00,15:00,16:00,17:00,17:55','喝水时间')");
+		db.exec("insert into config values('user','pervol','2000','2000','喝水量')");
+		db.exec("insert into config values('user','timepoint','8:30,9:30,10:30,11:30,14:00,15:00,16:00,17:00,17:55','8:30,9:30,10:30,11:30,14:00,15:00,16:00,17:00,17:55','喝水时间')");
 		db.exec("insert into config values('user','volpoint','150,200,200,200,150,200,200,200,150,150','150,200,200,200,150,200,200,200,150,150','喝水时间')");
 	}
 	if(!db.existsTable("knowledge")){ //水知识
@@ -154,6 +154,7 @@ namespace confdata{
   	}
   	wvol = (weight-55)*20;
   	vol = vol+svol+lvol+wvol;
+  	//console.log(vol);
   	return vol;
   }
   
@@ -173,65 +174,69 @@ namespace confdata{
   	//1小时一次，中午不提醒，如果上午最后一次小于半小时，则中午第15分钟提醒一次否则上午最后时间点提醒。
   	//早上第一次提醒延后5分钟，中午第一次延后2分钟，最后一次提醒提前5分钟。
   cntTimes = function(mornin,mornout,afterin,afterout){
-   
   	var tm_mornin = time(mornin,"%H:%M");
   	var tm_mornout = time(mornout,"%H:%M");
   	var tm_afterin = time(afterin,"%H:%M");
   	var tm_afterout = time(afterout,"%H:%M");
-  	var tms = string.list();
+  	var tms = {};//string.list();
+  	var stm=null;
   	var j=0;
-  	
-  	//上午
-  	var tm_mi = tm_mornin;
-  	tms[1+''] = tm_mi.addminute(5);
-  	console.log(tostring(tms['1']));
-  	for(i=2;10;1){
-  		var tm_mi = tm_mornin;
-  		itm = tm_mi.addhour(1);
-  		if(itm>time(tm_mornout,"%H:%M")){
-  			break ;
-  		}
-  		tms[i+''] = itm;
-  		console.log(tms[i+'']);
-  	}
-  	//中午
-  	if(j>0){
-  		tms[j] = tm_mornout;
-  	}
   	var n = 0;
-  	//下午
-  	for(k = j;20;1){
-  		console.log(k);
-  		var itm = tm_afterin.addhour(k);
-  		if(itm>time(tm_afterout,"%H:%M")){
-  			break ;
-  		}
-  		tms[k] = itm;
-  		if(k==0){
-  			tms[k] = itm.addminute(5);
-  		}
-  		if(tm_afterout<itm.addminute(30)){
-  			if(tm_afterout>itm.addminute(15)){
-  				tms[k] = itm.addminute(15);
-  			}else{
-  				tms[k] = tm_afterout;
+  	try{
+  		//上午
+  		for(i=1;10;1){
+  			itm = time(tm_mornin).addhour(i-1);
+  			if(itm>tm_mornout){
+  				break ;
   			}
-  		}elseif(itm.addminute(30)<tm_mornout&&tm_mornout<itm.addminute(60)){
-  			n = k+1;
+  			if(i==1){
+  				itm.addminute(5);
+  			}
+  			tms[i] = itm;
   		}
+  		//中午
+  		i = table.count(tms);
+  		if(time(tms[i]).addminute(15)>=tm_mornout||tms[i]==tm_mornout){
+  			tms[i] = tm_mornout;
+  		}elseif(time(tms[i]).addminute(15)<tm_mornout&&time(tms[i]).addminute(30)>=tm_mornout){
+  			tms[i] = time(tms[i]).addminute(15);
+  		}elseif(time(tms[i]).addminute(30)<tm_mornout){
+  			tms[n+1] = tm_mornout;
+  		}
+	
+  		//下午
+  		var m = table.count(tms);
+  		for(k= m+1;20;1){
+  			itm = time(tm_afterin).addhour(k-m-1);
+  			if(itm>time(tm_afterout,"%H:%M")){
+  				break ;
+  			}
+  			tms[k] = itm;
+  		}
+  		//下班
+  		var n = table.count(tms);
+  		if(time(tms[n]).addminute(15)>=tm_afterout||tms[n]==tm_afterout){
+  			tms[n] = time(tm_afterout).addminute(-5);
+  		}elseif(time(tms[n]).addminute(15)<tm_afterout&&time(tms[n]).addminute(30)>=tm_afterout){
+  			tms[n] = tms[n].addminute(15);
+  		}elseif(time(tms[n]).addminute(30)<tm_afterout){
+  			tms[n+1] = tm_afterout;
+  		}
+  		//连接并返回
+  		for(p=1;#tms;1){
+  			var tm = tms[p];
+  			if(stm!=null){
+  				stm = string.concat(stm+","+tostring(tm));
+  			}else{
+  				stm = string.concat(tostring(tm));
+  			}
+  			//console.log(tostring(tms[p]));
+  		}
+  		//console.log(stm);
+  	}catch(e){
+  		stm = "8:30,9:30,10:30,11:30,14:00,15:00,16:00,17:00,17:55";
   	}
-  	if(n>0){
-  		tms[n] = tm_mornout;
-  		n = 0;
-  	}
-  	for( m=0;#tms;1){
-  		var tm = tms[m];
-  		//tm.format= "%H:%M";
-  		console.log(tm);
-  		
-  	}
-  	
+  	return stm;
   }
-  cntTimes("08:30","12:00","14:00","19:00");
-  
+  //cntTimes("7:30","12:00","14:00","19:00");
 }

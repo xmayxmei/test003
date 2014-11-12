@@ -141,6 +141,8 @@ wbLayout.onHyperlinkClick = function (ltTarget,ltEle,reason,behaviorParams) {
 		var afterinval = tostring(afterin.getValueObject());
 		var afteroutval = tostring(afterout.getValueObject());
 		//先保存，再执行相应函数
+		var  totalVol = null;
+		var totalTimes = null;
 		//喝水容量计算
 		if(configMap['sex']!=sex.value){
 			var sql = string.concat("update config set value='",sex.value,"' where code = 'sex' and parent='user'");
@@ -173,17 +175,18 @@ wbLayout.onHyperlinkClick = function (ltTarget,ltEle,reason,behaviorParams) {
 		}
 		//喝水量计算
 		if(configMap['sex']!=sex.value||configMap['weight']!=weight.value||configMap['lifestyle']!=lifestyle.value){
-			var  totalVol = confshare.cntVol(sex.value,weight.value,lifestyle.value);
-			var sql = string.concat("update config set value='",totalVol,"' where code = 'vol' and parent='user'");
+			totalVol = confdata.cntVol(sex.value,weight.value,lifestyle.value);
+			var sql = string.concat("update config set value='",totalVol,"' where code = 'pervol' and parent='user'");
 			db.exec(sql);
 		}
 		//喝水时间计算
 		if(configMap['mornin']!=morninval||configMap['mornout']!=mornoutval||configMap['afterin']!=afterinval||configMap['afterout']!=afteroutval){
-			var totalTimes= confdata.cntTimes(morninval,mornoutval,afterinval,afteroutval);
-			//var sql = string.concat("update config set value='",totalTimes,"' where code = 'timepoint' and parent='user'");
-			//db.exec(sql);
+			totalTimes = confdata.cntTimes(morninval,mornoutval,afterinval,afteroutval);
+			var sql = string.concat("update config set value='",totalTimes,"' where code = 'timepoint' and parent='user'");
+			db.exec(sql);
 		}
 		reloadConfig();
+		..reloadKeyData(totalVol,totalTimes,null);
 		winform.close();
 		//win.msgbox("保存成功！");
 	}
