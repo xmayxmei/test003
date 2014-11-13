@@ -26,6 +26,7 @@ var frmName = "水宝宝";//
 var frmTitle = "水宝宝，定时提醒您该喝水啦。";
 var titlRemdStr = "^_^亲，该喝水啦！";
 var restRemStr = "亲，该休息啦！";
+var taskSuccess = "恭喜！任务完成！";
 var restOverRemStr = "亲，没有勇气结束这一天吗？";//夜晚提醒
 var restOkayStr = "拥有只是短暂，人生除了身体，一切一切都是身外之物。";
 var currRemdTempl = "{0}，建议喝水{1}毫升";//建议喝水模板
@@ -35,7 +36,7 @@ var remdTimeTabStr = "8:30,9:30,10:50,11:46,12:25,14:00,15:16,17:03,18:30,19:48,
 var remdAmtTabStr = "150,200,200,200,150,200,200,200,150,150";
 var showDelayIntv = 3;//界面显示延时（分钟）
 var remdDelayIntv = 5;//延迟提醒时间间隔（分钟）
-var menalDelayIntv = 2;//界面显示延时（分钟）
+var menalDelayIntv = 3;//界面显示延时（分钟）
 var showDelayId = 0;
 var isShowWindow = true;//是否显示窗口（可配置）
 var isPlaySound = true;//是否声音提醒（可配置）
@@ -77,14 +78,14 @@ if(!atom){
 
 //启动加载html窗体阴影
 var loadFormLayout = function(){
-	win.region.round(mainForm);
+	
 	//窗体对象,透明度,阴影大小,外圆角,内圆角,阻影颜色,插值位置,聚焦系数
 	//除参数@1以外,其他所有参数可选\n透明度默认为80,255为不透明\n阴影大小默认为3像素\n外圆角默认为阴影大小\n内圆角默认为空
 	//\n阴影颜色默认为0xFF000000,FF为透明度\n插值位置默认为0.15\n聚焦系数默认为15
 	//win.ui.shadow(mainForm,80,3,6,0,0xff000000,0.15,15);
-	
 	//win.ui.shadow(mainForm,,6,6,,,,);
 	win.ui.shadow(mainForm); //添加阴影边框
+	win.region.round(mainForm);
 	var ahtml = string.load("/res/main.html");
 	wbLayout.html = ahtml;
 	mainForm.modifyStyleEx(0x40000/*_WS_EX_APPWINDOW*/,0x80/*_WS_EX_TOOLWINDOW*/);
@@ -138,15 +139,22 @@ var fakeUpNum = function(showReason){
 	wbLayout.getEle("per").innerHTML = "%";
 	var k = passedId;
 	passedId++;
+	var num = 0;
 	//	8 / 12
 	for(i=math.round(k/remTabCnt*100);math.round((k+1)/remTabCnt*100);1){
 		if(i>100){
 			i=100;
 		}
+		num = i;
 		wbLayout.getEle("num").innerHTML = i;
         win.delay(100);
     };
-    win.delay(1000);
+    if(num==100){
+		wbLayout.getEle("remindtip").innerHTML = taskSuccess;
+		win.delay(5000);
+	}else{
+    	win.delay(1000);
+    }
 }
 //消失
 var fakeDelay = function(showReason){
@@ -352,6 +360,7 @@ var getCurRemind = function(){
 		var lastRemdTime = remdTimeTab[table.count(remdTimeTab)];
 		if(nowTime>time(lastRemdTime,"%H:%M")){
 			curId = 0 ;
+			nextTimeDist = -1;
 		}
 		if(nowTime>time(lastRemdTime,"%H:%M")&&nowTime==time("23:30","%H:%M")){
 			showReason = "rest";
@@ -388,9 +397,10 @@ var getCurRemindInfo = function(){
 			pCurrRemdStr = restRemStr;//
 			pNextRemdStr = restRemStr;//
 		}
-	}elseif(curId==0) {
-		pCurrRemdStr = restRemStr;//
-		pNextRemdStr = restRemStr;//
+	}elseif(curId==0) {//当日最后一次提醒
+		pCurrRemdStr = string.replace(pCurrRemdStr,"\{0\}",remdTimeTab[table.count(remdTimeTab)]);//
+		pCurrRemdStr = string.replace(pCurrRemdStr,"\{1\}","150-200");//
+		pNextRemdStr = restRemStr;
 	}else{
 		pCurrRemdStr = restRemStr;//
 		pNextRemdStr = restRemStr;//
