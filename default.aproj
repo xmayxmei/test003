@@ -1,88 +1,30 @@
 <?xml version="1.0" encoding="gb2312"?>
-<project ver="3" name="WaterClock" libEmbed="true" icon="res\logo.ico" ProductName="DrinkWaterRemind" InternalName="DrinkWaterRemind" FileDescription="DrinkWaterRemind" FileVersion="0.0.0.44" ProductVersion="0.0.0.44" LegalCopyright="Copyright (C) 作者 2014" ui="win" output="WaterClock.exe" CompanyName="单位名称" publishDir="/Publish/">
+<project ver="3" name="WaterClock" libEmbed="true" icon="res\logo.ico" ProductName="水宝宝" InternalName="喝水闹钟" FileDescription="DrinkWaterRemind" FileVersion="1.0.0.01" ProductVersion="1.0.0.01" LegalCopyright="Copyright (C) 作者 2014" ui="win" output="WaterClock.exe" CompanyName="水宝宝之喝水闹钟" publishDir="/Publish/">
 	<file name="main.aau" path="main.aau"/>
 	<folder name="资源文件" path="res" embed="true">
-		<file name="未命名-4.png" path="res\未命名-4.png" comment="res\未命名-4.png"/>
-		<file name="复件 config2.html" path="res\复件 config2.html" comment="res\复件 config2.html"/>
-		<file name="复件 config.html" path="res\复件 config.html" comment="res\复件 config.html"/>
-		<file name="_bigIcon453532a41f1a4f0e897cebb331f77d61.png" path="res\_bigIcon453532a41f1a4f0e897cebb331f77d61.png" comment="res\_bigIcon453532a41f1a4f0e897cebb331f77d61.png"/>
 		<file name="yy-gaiheshui.mp3" path="res\yy-gaiheshui.mp3" comment="res\yy-gaiheshui.mp3"/>
-		<file name="www.ico.la_d161e14864b348ed39026244a3a8e13c_32X32.ico" path="res\www.ico.la_d161e14864b348ed39026244a3a8e13c_32X32.ico" comment="res\www.ico.la_d161e14864b348ed39026244a3a8e13c_32X32.ico"/>
-		<file name="www.ico.la_b072d630cae7c7924186dad9d59b8a6e_64X64.ico" path="res\www.ico.la_b072d630cae7c7924186dad9d59b8a6e_64X64.ico" comment="res\www.ico.la_b072d630cae7c7924186dad9d59b8a6e_64X64.ico"/>
-		<file name="www.ico.la_473465a2bb0e01d415616dc3023187d9_48X48.ico" path="res\www.ico.la_473465a2bb0e01d415616dc3023187d9_48X48.ico" comment="res\www.ico.la_473465a2bb0e01d415616dc3023187d9_48X48.ico"/>
-		<file name="www.ico.la_0f1a38a47700636c4a819fe39ea7590a_128X128.ico" path="res\www.ico.la_0f1a38a47700636c4a819fe39ea7590a_128X128.ico" comment="res\www.ico.la_0f1a38a47700636c4a819fe39ea7590a_128X128.ico"/>
-		<file name="wr1.png" path="res\wr1.png" comment="res\wr1.png"/>
 		<file name="waterclock.db" path="res\waterclock.db" comment="res\waterclock.db"/>
-		<file name="test.aau" path="res\test.aau" comment="res\test.aau"/>
 		<file name="spacer.gif" path="res\spacer.gif" comment="res\spacer.gif"/>
-		<file name="shezhi1.jpg" path="res\shezhi1.jpg" comment="res\shezhi1.jpg"/>
+		<file name="shui.png" path="res\shui.png" comment="res\shui.png"/>
+		<file name="shichuan.wav" path="res\shichuan.wav" comment="res\shichuan.wav"/>
 		<file name="share_r2_c7.png" path="res\share_r2_c7.png" comment="res\share_r2_c7.png"/>
 		<file name="share_r2_c5.png" path="res\share_r2_c5.png" comment="res\share_r2_c5.png"/>
 		<file name="share_r2_c3.png" path="res\share_r2_c3.png" comment="res\share_r2_c3.png"/>
+		<file name="shanxi.wav" path="res\shanxi.wav" comment="res\shanxi.wav"/>
 		<file name="pth-gaiheshui.mp3" path="res\pth-gaiheshui.mp3" comment="res\pth-gaiheshui.mp3"/>
-		<file name="naub.png" path="res\naub.png" comment="res\naub.png"/>
-		<file name="naub.htm" path="res\naub.htm" comment="res\naub.htm"/>
-		<file name="menu.html" path="res\menu.html" comment="res\menu.html"/>
-		<file name="menu.aau" path="res\menu.aau" comment="res\menu.aau"/>
 		<file name="menu-back-office.png" path="res\menu-back-office.png" comment="res\menu-back-office.png"/>
-		<file name="main2.html" path="res\main2.html" comment="res\main2.html"/>
 		<file name="main.html" path="res\main.html" comment="res\main.html"/>
 		<file name="logo.png" path="res\logo.png" comment="res\logo.png"/>
 		<file name="logo.ico" path="res\logo.ico" comment="res\logo.ico"/>
-		<file name="icon_water.gif" path="res\icon_water.gif" comment="res\icon_water.gif"/>
-		<file name="icon64.ico" path="res\icon64.ico" comment="res\icon64.ico"/>
-		<file name="icon32.ico" path="res\icon32.ico" comment="res\icon32.ico"/>
-		<file name="icon128.ico" path="res\icon128.ico" comment="res\icon128.ico"/>
-		<file name="icon.png" path="res\icon.png" comment="res\icon.png"/>
-		<file name="health.aau" path="res\health.aau" comment="res\health.aau"/>
-		<file name="drink2.jpg" path="res\drink2.jpg" comment="res\drink2.jpg"/>
-		<file name="drink1.jpg" path="res\drink1.jpg" comment="res\drink1.jpg"/>
-		<file name="dew-icon.png" path="res\dew-icon.png" comment="res\dew-icon.png"/>
-		<file name="config_r4_c3.png" path="res\config_r4_c3.png" comment="res\config_r4_c3.png"/>
-		<file name="config_r4_c2.png" path="res\config_r4_c2.png" comment="res\config_r4_c2.png"/>
-		<file name="config_r3_c3.png" path="res\config_r3_c3.png" comment="res\config_r3_c3.png"/>
+		<file name="henan.wav" path="res\henan.wav" comment="res\henan.wav"/>
 		<file name="config_r3_c2.png" path="res\config_r3_c2.png" comment="res\config_r3_c2.png"/>
-		<file name="config_r2_c3.png" path="res\config_r2_c3.png" comment="res\config_r2_c3.png"/>
-		<file name="config_r2_c2.png" path="res\config_r2_c2.png" comment="res\config_r2_c2.png"/>
-		<file name="config_r2_c1.png" path="res\config_r2_c1.png" comment="res\config_r2_c1.png"/>
 		<file name="config_r1_c2.png" path="res\config_r1_c2.png" comment="res\config_r1_c2.png"/>
-		<file name="config_r1_c1.png" path="res\config_r1_c1.png" comment="res\config_r1_c1.png"/>
-		<file name="config3.html" path="res\config3.html" comment="res\config3.html"/>
-		<file name="config2.html" path="res\config2.html" comment="res\config2.html"/>
 		<file name="config.html" path="res\config.html" comment="res\config.html"/>
 		<file name="config.aau" path="res\config.aau" comment="res\config.aau"/>
 		<file name="circle.png" path="res\circle.png" comment="res\circle.png"/>
-		<file name="button.aau" path="res\button.aau" comment="res\button.aau"/>
-		<file name="bak_menu-back-office.png" path="res\bak_menu-back-office.png" comment="res\bak_menu-back-office.png"/>
 		<file name="about_r2_c2.png" path="res\about_r2_c2.png" comment="res\about_r2_c2.png"/>
-		<file name="8117-11030916062696.jpg" path="res\8117-11030916062696.jpg" comment="res\8117-11030916062696.jpg"/>
 		<file name="550.jpg" path="res\550.jpg" comment="res\550.jpg"/>
 		<file name="310.jpg" path="res\310.jpg" comment="res\310.jpg"/>
-		<file name="2419558_225128749000_2.jpg" path="res\2419558_225128749000_2.jpg" comment="res\2419558_225128749000_2.jpg"/>
 		<file name="2000.jpg" path="res\2000.jpg" comment="res\2000.jpg"/>
-		<file name="2000.jpeg" path="res\2000.jpeg" comment="res\2000.jpeg"/>
-		<folder name="html" path="res\html" comment="res\html"/>
-		<folder name="images" path="res\images" comment="res\images">
-			<file name="spacer.gif" path="res\images\spacer.gif" comment="res\images\spacer.gif"/>
-			<file name="naub_r6_c1.png" path="res\images\naub_r6_c1.png" comment="res\images\naub_r6_c1.png"/>
-			<file name="naub_r5_c4.png" path="res\images\naub_r5_c4.png" comment="res\images\naub_r5_c4.png"/>
-			<file name="naub_r5_c3.png" path="res\images\naub_r5_c3.png" comment="res\images\naub_r5_c3.png"/>
-			<file name="naub_r5_c1.png" path="res\images\naub_r5_c1.png" comment="res\images\naub_r5_c1.png"/>
-			<file name="naub_r4_c1.png" path="res\images\naub_r4_c1.png" comment="res\images\naub_r4_c1.png"/>
-			<file name="naub_r3_c4.png" path="res\images\naub_r3_c4.png" comment="res\images\naub_r3_c4.png"/>
-			<file name="naub_r3_c3.png" path="res\images\naub_r3_c3.png" comment="res\images\naub_r3_c3.png"/>
-			<file name="naub_r3_c1.png" path="res\images\naub_r3_c1.png" comment="res\images\naub_r3_c1.png"/>
-			<file name="naub_r2_c1.png" path="res\images\naub_r2_c1.png" comment="res\images\naub_r2_c1.png"/>
-			<file name="naub_r1_c6.png" path="res\images\naub_r1_c6.png" comment="res\images\naub_r1_c6.png"/>
-			<file name="naub_r1_c5.png" path="res\images\naub_r1_c5.png" comment="res\images\naub_r1_c5.png"/>
-			<file name="naub_r1_c4.png" path="res\images\naub_r1_c4.png" comment="res\images\naub_r1_c4.png"/>
-			<file name="naub_r1_c3.png" path="res\images\naub_r1_c3.png" comment="res\images\naub_r1_c3.png"/>
-			<file name="naub_r1_c2.png" path="res\images\naub_r1_c2.png" comment="res\images\naub_r1_c2.png"/>
-			<file name="naub_r1_c1.png" path="res\images\naub_r1_c1.png" comment="res\images\naub_r1_c1.png"/>
-			<file name="main45.png" path="res\images\main45.png" comment="res\images\main45.png"/>
-		</folder>
-		<folder name="style" path="res\style" comment="res\style">
-			<file name="main.css" path="res\style\main.css" comment="res\style\main.css"/>
-		</folder>
 	</folder>
 </project>

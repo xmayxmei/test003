@@ -14,6 +14,7 @@ import fsys;
 import win.reg;
 import fsys.lnk;
 import mouse;
+import math;
 import win.ui.shadow;
 import confshare;
 import confdata;
@@ -34,7 +35,7 @@ var nextRemdTempl = "距离下次喝水还有{0}分钟";//下次喝水模板
 var perAmtTempl = "建议您每日喝水{0}毫升";
 var remdTimeTabStr = "8:30,9:30,10:50,11:46,12:25,14:00,15:16,17:03,18:30,19:48,20:50,22:55,23:00,23:10,23:23";
 var remdAmtTabStr = "150,200,200,200,150,200,200,200,150,150";
-var showDelayIntv = 3;//界面显示延时（分钟）
+var showDelayIntv = 5;//界面显示延时（分钟）
 var remdDelayIntv = 5;//延迟提醒时间间隔（分钟）
 var menalDelayIntv = 3;//界面显示延时（分钟）
 var showDelayId = 0;
@@ -109,6 +110,7 @@ reloadKeyData = function(totalVol,totalTimes,para_cnt){
 	}
 }
 
+
 //导入初始化数据
 var initConfigData = function(){
 	var dbfile,isfirst = confdata.createDb();//安装数据库
@@ -132,7 +134,19 @@ var loadConfigData = function(){
 	**/
 	reloadKeyData(configMap['pervol'],configMap['timepoint'],passedCount['cnt']);
 }
-
+//随机取一条知识库的内容
+var getRandomKnow = function(){
+	math.randomize();
+	var currKnowId = math.random(1,101);//math.randomize();//
+	var knowDesc = null;
+	if(db!=null){
+		var knowTab = db.getTable("SELECT id,kind,desc  FROM knowledge where id="+currKnowId);
+    	for(row,item in knowTab){
+    		knowDesc = item['desc'];
+		}
+	}
+	return knowDesc;
+}
 
 var fakeUpNum = function(showReason){
 	wbLayout.getEle("remindperc").innerHTML ='<div id="num"></div><div id="per">%</div>';
@@ -344,6 +358,15 @@ var createWinTray = function(){
 	//tray.pop(nextRemdStr,frmName,2,0xFFFFFFFF);
 }
 
+//按时间取随机知识库数据
+var getTimerKnow = function(){
+	var tmknw = null;
+	if(nextTimeDist%10==0){
+		tmknw = getRandomKnow();
+	}
+	return tmknw;
+}
+
 //查询第几次提醒，距离下一次提醒时间距离
 var getCurRemind = function(){
 	curId = -1,nextTimeDist=0;
@@ -386,8 +409,8 @@ var getCurRemind = function(){
 		}
 	}
 	//夜晚11.30提醒
-	
 }
+
 //查询是否提醒以及提醒语
 var getCurRemindInfo = function(){
 	var pCurrRemdStr = currRemdTempl;
@@ -407,6 +430,11 @@ var getCurRemindInfo = function(){
 	}else{
 		pCurrRemdStr = restRemStr;//
 		pNextRemdStr = restRemStr;//
+	}
+	
+	var tmknw = getTimerKnow();
+	if(tmknw!=null){
+		pNextRemdStr = tmknw;
 	}
 	currRemdStr = pCurrRemdStr;
 	nextRemdStr = pNextRemdStr;
