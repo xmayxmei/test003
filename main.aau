@@ -102,6 +102,7 @@ reloadKeyData = function(totalVol,totalTimes,para_cnt){
 	if(totalTimes!=null){
 		remdTimeTabStr = totalTimes;
 		remdTimeTab = string.split(remdTimeTabStr,',');
+		remTabCnt= table.count(remdTimeTab);
 	}
 	if(para_cnt!=null){
 		passedId = para_cnt;
@@ -139,21 +140,23 @@ var fakeUpNum = function(showReason){
 	wbLayout.getEle("per").innerHTML = "%";
 	var k = passedId;
 	passedId++;
-	var num = 0;
+	var pernum = 0;
 	//	8 / 12
 	for(i=math.round(k/remTabCnt*100);math.round((k+1)/remTabCnt*100);1){
-		if(i>100){
-			i=100;
-		}
-		num = i;
+		pernum = i;
 		wbLayout.getEle("num").innerHTML = i;
         win.delay(100);
     };
-    if(num==100){
+    if(pernum>100){
+    	pernum = 100;
+    }
+    if(pernum==100){
+    	wbLayout.getEle("num").innerHTML = pernum;
 		wbLayout.getEle("remindtip").innerHTML = taskSuccess;
 		win.delay(5000);
 	}else{
-    	win.delay(1000);
+		wbLayout.getEle("remindtip").innerHTML = perAmtStr;
+    	win.delay(3000);
     }
 }
 //消失
@@ -544,11 +547,11 @@ var taskRun = function(){
 				showDelay--;
 				/**
 				**/
-				console.log("showDelay"+showDelay);
-				console.log("nextTimeDist"+nextTimeDist);
+				//console.log("showDelay"+showDelay);
+				//console.log("nextTimeDist"+nextTimeDist);
 				
 				if(nextTimeDist==0){//正在[手动]显示，时间到了怎么办？直接变化到按钮状态
-					console.log("showReason"+showReason);
+					//console.log("showReason"+showReason);
 					if(showReason=='istime'){
 						isTimeShow();
 					}
@@ -571,10 +574,10 @@ var taskRun = function(){
 				isCurIdDealed = false;//复原
 				/**
 				**/
-				console.log("showReason"+showReason);
-				console.log(isDelayRemd);
-				console.log("nextTimeDist"+nextTimeDist);
-				console.log("curId"+curId);
+				//console.log("showReason"+showReason);
+				//console.log(isDelayRemd);
+				//console.log("nextTimeDist"+nextTimeDist);
+				//console.log("curId"+curId);
 				
 				if(nextTimeDist==0&&curId>0){
 					if(isDelayRemd){
