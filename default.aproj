@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="gb2312"?>
-<project ver="3" name="WaterClock" libEmbed="true" icon="res\logo.ico" ProductName="水宝宝" InternalName="喝水闹钟" FileDescription="DrinkWaterRemind" FileVersion="1.0.0.01" ProductVersion="1.0.0.01" LegalCopyright="Copyright (C) 作者 2014" ui="win" output="WaterClock.exe" CompanyName="水宝宝之喝水闹钟" publishDir="/Publish/">
+<project ver="3" name="WaterClock" libEmbed="true" icon="\res\logo.ico" ProductName="水宝宝" InternalName="喝水闹钟" FileDescription="定时提醒您该喝水啦！" FileVersion="0.0.0.50" ProductVersion="1.0.0.06" LegalCopyright="Copyright (C) 作者 2014" ui="win" output="WaterClock.exe" CompanyName="水宝宝之喝水闹钟" publishDir="/Publish/">
 	<file name="main.aau" path="main.aau"/>
 	<folder name="资源文件" path="res" embed="true">
 		<file name="yy-gaiheshui.mp3" path="res\yy-gaiheshui.mp3" comment="res\yy-gaiheshui.mp3"/>

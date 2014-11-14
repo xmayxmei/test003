@@ -10,7 +10,7 @@ namespace confshare{
 		var lnk = fsys.lnk(); 
 		lnk.description = frmTitle; 
 		lnk.path = io._exepath //设置目标路径
-		lnk.setIcon(io._exepath,1); //设置图标
+		lnk.setIcon(io._exepath,0); //设置图标
 		
 		lnk.save(
 			fsys.joinpath( 
