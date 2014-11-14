@@ -63,7 +63,7 @@ if(configMap['wavefile']='/res/pth-gaiheshui.mp3'){
 }else if(configMap['wavefile']='/res/henan.wav'){
 	idx = 4;
 }else if(configMap['wavefile']='/res/shanxi.wav'){
-	idx = 4;
+	idx = 5;
 }
 //var wavefile = wbLayout.getEle("wavefile");
 wbLayout.querySelectorAll("#wavefile option")[idx].state.checked = true;
