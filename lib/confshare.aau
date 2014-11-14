@@ -15,7 +15,7 @@ namespace confshare{
 		lnk.save(
 			fsys.joinpath( 
 				fsys.getSpecial(0x0010 /*_CSIDL_DESKTOPDIRECTORY*/ )
-				,frmName+".lnk" 
+				,"Ë®±¦±¦.lnk" 
 				)
 		) 
 	}
